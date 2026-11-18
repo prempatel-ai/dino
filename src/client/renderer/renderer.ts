@@ -2,17 +2,18 @@ import type { GameState } from '../../core/types';
 import type { Camera } from './camera';
 import { SpriteAtlas, type SpriteKey } from './sprites';
 import {
-  DAY_PALETTE,
-  NIGHT_PALETTE,
   RETRO_DAY_PALETTE,
   RETRO_NIGHT_PALETTE,
-  interpolatePalette,
   type PaletteTokens,
 } from './palette';
 import { ParallaxLayers } from './layers';
 import { ParticleSystem } from './particles';
 import { Hud } from '../ui/hud';
 import { Overlay } from '../ui/overlay';
+import { BiomeManager } from './biomes';
+import { PropsSystem } from './props';
+import { DinoExpressionSystem } from './expressions';
+import { BadgeSystem } from '../ui/badges';
 
 export class Renderer {
   private ctx: CanvasRenderingContext2D;
@@ -22,17 +23,25 @@ export class Renderer {
   readonly particles: ParticleSystem;
   readonly hud: Hud;
   readonly overlay: Overlay;
+  readonly biomes: BiomeManager;
+  readonly props: PropsSystem;
+  readonly expressions: DinoExpressionSystem;
+  readonly badges: BadgeSystem;
 
   showHitboxes: boolean = false;
   isRetro: boolean = false;
   reducedEffects: boolean = false;
 
-  // Juice & Visual effect state
+  // Visual juice state
   private screenShakeTimeMs: number = 0;
   private screenShakeIntensity: number = 0;
   private flashTimeMs: number = 0;
   private squashStretchX: number = 1;
   private squashStretchY: number = 1;
+
+  // Performance auto-degrade watchdog
+  private slowFrameCounter: number = 0;
+  private autoDegraded: boolean = false;
 
   constructor(canvas: HTMLCanvasElement, camera: Camera) {
     const ctx = canvas.getContext('2d');
@@ -46,6 +55,10 @@ export class Renderer {
     this.particles = new ParticleSystem();
     this.hud = new Hud();
     this.overlay = new Overlay();
+    this.biomes = new BiomeManager();
+    this.props = new PropsSystem();
+    this.expressions = new DinoExpressionSystem();
+    this.badges = new BadgeSystem();
 
     this.camera.onResize(() => {
       this.atlas.updateScale(this.camera.scale, this.camera.dpr);
@@ -54,7 +67,22 @@ export class Renderer {
 
   draw(state: GameState, _alpha: number = 1): void {
     const ctx = this.ctx;
+    const frameMs = 1000 / 60;
     this.atlas.updateScale(this.camera.scale, this.camera.dpr);
+
+    // Update biomes & milestones
+    const { transitioned } = this.biomes.update(state.biomeIndex, frameMs);
+    if (transitioned && !this.isRetro) {
+      this.badges.showBiomeBanner(this.biomes.targetBiome.name);
+    }
+    this.badges.checkMilestone(state.score);
+    this.badges.update(frameMs);
+    this.expressions.update(state, frameMs);
+
+    // Update props / weather
+    if (!this.isRetro && !this.reducedEffects && !this.autoDegraded) {
+      this.props.update(this.biomes.currentBiome.weatherType, state.speed, state.score, 1);
+    }
 
     // Process events from current state
     this.processEvents(state);
@@ -107,26 +135,32 @@ export class Renderer {
     // Mid dunes
     if (!this.isRetro) {
       this.layers.drawMidDunes(ctx, this.camera.logicalWidth, palette);
+      // Ambient Props & Weather
+      if (!this.reducedEffects && !this.autoDegraded) {
+        this.props.draw(ctx, this.isRetro);
+      }
     }
 
     // 3. Draw Ground
     this.drawGround(state, palette.ground);
 
     // 4. Draw Particles
-    if (!this.isRetro && !this.reducedEffects) {
+    if (!this.isRetro && !this.reducedEffects && !this.autoDegraded) {
       this.particles.draw(ctx);
     }
 
     // 5. Draw Obstacles
     this.drawObstacles(state, palette.cactus, palette.dinoBody);
 
-    // 6. Draw Trex
+    // 6. Draw Trex & Expressions
     this.drawTrex(state, palette.dinoBody);
+    this.expressions.drawOverlays(ctx, state, this.isRetro);
 
     // 7. Draw HUD (Scores)
     this.hud.draw(ctx, state, palette);
 
-    // 8. Draw Overlays
+    // 8. Draw Badges & Overlays
+    this.badges.draw(ctx, this.camera.logicalWidth, this.isRetro);
     this.overlay.draw(ctx, state, this.atlas, palette.dinoBody, this.camera.logicalWidth);
 
     // 9. Death White Flash
@@ -139,11 +173,23 @@ export class Renderer {
     }
   }
 
+  recordFrameDuration(durationMs: number): void {
+    if (durationMs > 16.6) {
+      this.slowFrameCounter++;
+      if (this.slowFrameCounter > 120) {
+        // More than 2s of slow frames
+        this.autoDegraded = true;
+      }
+    } else {
+      this.slowFrameCounter = Math.max(0, this.slowFrameCounter - 1);
+    }
+  }
+
   private computePalette(state: GameState): PaletteTokens {
     if (this.isRetro) {
       return state.isNight ? RETRO_NIGHT_PALETTE : RETRO_DAY_PALETTE;
     }
-    return interpolatePalette(DAY_PALETTE, NIGHT_PALETTE, state.nightFade);
+    return this.biomes.getPalette(state.isNight, state.nightFade);
   }
 
   private processEvents(state: GameState): void {
@@ -164,6 +210,10 @@ export class Renderer {
           this.flashTimeMs = 80;
           this.particles.emitDeathBurst(state.trex.x, state.trex.y, '#535353');
         }
+      } else if (event === 'nearMiss') {
+        this.expressions.triggerNearMiss();
+      } else if (event === 'milestone') {
+        this.expressions.triggerMilestone();
       }
     }
 
@@ -171,7 +221,8 @@ export class Renderer {
       state.phase === 'RUNNING' &&
       !state.trex.jumping &&
       !this.isRetro &&
-      !this.reducedEffects
+      !this.reducedEffects &&
+      !this.autoDegraded
     ) {
       this.particles.emitRunDust(state.trex.x, state.trex.y, '#8A8A8A');
     }
@@ -244,6 +295,7 @@ export class Renderer {
 
   private drawObstacles(state: GameState, cactusColor: string, pteroColor: string): void {
     const ctx = this.ctx;
+    const biome = this.biomes.currentBiome.id;
 
     for (const obs of state.obstacles) {
       let spriteKey: SpriteKey;
@@ -251,18 +303,34 @@ export class Renderer {
 
       if (obs.type === 'CACTUS_SMALL') {
         spriteColor = cactusColor;
-        spriteKey = obs.size === 3
-          ? 'cactus-small-3'
-          : obs.size === 2
-          ? 'cactus-small-2'
-          : 'cactus-small-1';
+        if (!this.isRetro && obs.size === 1) {
+          if (biome === 'canyon') spriteKey = 'canyon-small';
+          else if (biome === 'tundra') spriteKey = 'tundra-small';
+          else if (biome === 'volcanic') spriteKey = 'volcanic-small';
+          else if (biome === 'neon') spriteKey = 'neon-small';
+          else spriteKey = 'cactus-small-1';
+        } else {
+          spriteKey = obs.size === 3
+            ? 'cactus-small-3'
+            : obs.size === 2
+            ? 'cactus-small-2'
+            : 'cactus-small-1';
+        }
       } else if (obs.type === 'CACTUS_LARGE') {
         spriteColor = cactusColor;
-        spriteKey = obs.size === 3
-          ? 'cactus-large-3'
-          : obs.size === 2
-          ? 'cactus-large-2'
-          : 'cactus-large-1';
+        if (!this.isRetro && obs.size === 1) {
+          if (biome === 'canyon') spriteKey = 'canyon-large';
+          else if (biome === 'tundra') spriteKey = 'tundra-large';
+          else if (biome === 'volcanic') spriteKey = 'volcanic-large';
+          else if (biome === 'neon') spriteKey = 'neon-large';
+          else spriteKey = 'cactus-large-1';
+        } else {
+          spriteKey = obs.size === 3
+            ? 'cactus-large-3'
+            : obs.size === 2
+            ? 'cactus-large-2'
+            : 'cactus-large-1';
+        }
       } else {
         spriteColor = pteroColor;
         spriteKey = obs.frame === 1 ? 'ptero-2' : 'ptero-1';

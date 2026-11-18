@@ -331,7 +331,7 @@ Same physics as desktop.
 ---
 
 ## T11 — Biomes, skins, creative layer
-Status: TODO | Depends: T10
+Status: DONE | Depends: T10
 
 **CONTEXT**
 DESIGN.md sections 3, 5, 7, 9, 11. Visual and audio only. GAME_SPEC.md physics untouched.

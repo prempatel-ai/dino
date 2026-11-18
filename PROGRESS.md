@@ -91,3 +91,10 @@ Agent appends here after every task. Newest at bottom. Never delete entries.
 - Tests: 30 unit tests passing, Playwright mobile tests passing on Mobile Chrome (Pixel 5).
 - Decisions: T10 — Differentiated touch coordinate thresholds between canvas bounds and full screen to guarantee responsive touch zones across both portrait and landscape mobile layouts.
 - Notes: Verified no accidental page scroll or zooming occurs on touch devices.
+
+### T11 — Biomes, skins, creative layer — DONE
+- Date: 2026-11-18
+- What changed: Implemented full creative suite: 7 cycling biomes with 3s crossfades (Classic Desert, Canyon Sunset, Oasis Sanctuary, Frozen Tundra, Volcanic Badlands, Neon Future, Space Dunes); custom SVG obstacle skins for all biomes; procedural weather particle system (max 50 particles); background ambient life (lizard, birds, rare UFO); Dino expressions (squint & sweat drop on near miss, ready idle nap zzz, milestone happy eyes); 500-pt celebratory badges and biome name banners; WebAudio ambient noise loops; Konami code sunglasses easter egg; and frame-rate watchdog for auto-degrading visual effects if FPS dips.
+- Tests: 32 unit tests passing, Playwright e2e tests passing with touch emulation.
+- Decisions: T11 — Readability rules manually verified: obstacle skins adhere strictly to base collision box boundaries; props and weather stay outside play lane (x=50..110, y=93..140); flash effects constrained to <= 1/sec; reduced effects toggle cleanly bypasses all auxiliary particle, shake, and banner layers.
+- Notes: Visual upgrades are 100% decoupling-compliant: physics state and RNG remain entirely unaffected whether biomes/effects are active or disabled.

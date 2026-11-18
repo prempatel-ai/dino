@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 50" width="25" height="50">
+  <!-- Volcanic Obsidian Pillar: 25x50 -->
+  <g fill="currentColor">
+    <path d="M9 0h6v50H9V0z" />
+    <path d="M1 12h5v22H1V12z M1 34h8v5H1z" />
+    <path d="M15 25h9v5h-9z M19 11h5v16h-5V11z" />
+    <!-- Lava cracks -->
+    <path d="M12 4l3 12-3 10 3 14" stroke="#FF4500" stroke-width="1.2" fill="none" />
+    <path d="M3 18l2 8" stroke="#FFD700" stroke-width="1" fill="none" />
+  </g>
+</svg>

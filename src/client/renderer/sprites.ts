@@ -28,6 +28,15 @@ import moon6Raw from '../../assets/svg/moon-6.svg?raw';
 import starRaw from '../../assets/svg/star.svg?raw';
 import restartRaw from '../../assets/svg/restart.svg?raw';
 
+import canyonSmallRaw from '../../assets/svg/skins/canyon-small.svg?raw';
+import canyonLargeRaw from '../../assets/svg/skins/canyon-large.svg?raw';
+import tundraSmallRaw from '../../assets/svg/skins/tundra-small.svg?raw';
+import tundraLargeRaw from '../../assets/svg/skins/tundra-large.svg?raw';
+import volcanicSmallRaw from '../../assets/svg/skins/volcanic-small.svg?raw';
+import volcanicLargeRaw from '../../assets/svg/skins/volcanic-large.svg?raw';
+import neonSmallRaw from '../../assets/svg/skins/neon-small.svg?raw';
+import neonLargeRaw from '../../assets/svg/skins/neon-large.svg?raw';
+
 export type SpriteKey =
   | 'trex-idle'
   | 'trex-run1'
@@ -52,7 +61,15 @@ export type SpriteKey =
   | 'moon-5'
   | 'moon-6'
   | 'star'
-  | 'restart';
+  | 'restart'
+  | 'canyon-small'
+  | 'canyon-large'
+  | 'tundra-small'
+  | 'tundra-large'
+  | 'volcanic-small'
+  | 'volcanic-large'
+  | 'neon-small'
+  | 'neon-large';
 
 const RAW_SVGS: Record<SpriteKey, string> = {
   'trex-idle': trexIdleRaw,
@@ -79,6 +96,14 @@ const RAW_SVGS: Record<SpriteKey, string> = {
   'moon-6': moon6Raw,
   star: starRaw,
   restart: restartRaw,
+  'canyon-small': canyonSmallRaw,
+  'canyon-large': canyonLargeRaw,
+  'tundra-small': tundraSmallRaw,
+  'tundra-large': tundraLargeRaw,
+  'volcanic-small': volcanicSmallRaw,
+  'volcanic-large': volcanicLargeRaw,
+  'neon-small': neonSmallRaw,
+  'neon-large': neonLargeRaw,
 };
 
 export class SpriteAtlas {
@@ -139,45 +164,5 @@ export class SpriteAtlas {
 
     this.cache.set(cacheKey, canvas);
     return canvas;
-  }
-
-  async preloadAll(colors: string[] = ['#535353', '#E8E8E8', '#4F6F52', '#9FBFA2']): Promise<void> {
-    const promises: Promise<void>[] = [];
-
-    const defaultDims: Partial<Record<SpriteKey, [number, number]>> = {
-      'trex-idle': [44, 47],
-      'trex-run1': [44, 47],
-      'trex-run2': [44, 47],
-      'trex-duck1': [59, 25],
-      'trex-duck2': [59, 25],
-      'trex-dead': [44, 47],
-      'cactus-small-1': [17, 35],
-      'cactus-small-2': [34, 35],
-      'cactus-small-3': [51, 35],
-      'cactus-large-1': [25, 50],
-      'cactus-large-2': [50, 50],
-      'cactus-large-3': [75, 50],
-      'ptero-1': [46, 40],
-      'ptero-2': [46, 40],
-      cloud: [46, 14],
-      restart: [36, 32],
-    };
-
-    for (const color of colors) {
-      for (const [key, [w, h]] of Object.entries(defaultDims)) {
-        promises.push(
-          new Promise((resolve) => {
-            const canvas = this.getSprite(key as SpriteKey, color, w, h);
-            if (canvas) {
-              resolve();
-            } else {
-              resolve();
-            }
-          }),
-        );
-      }
-    }
-
-    await Promise.all(promises);
   }
 }

@@ -7,10 +7,24 @@ export class InputHandler {
   private restartPressed: boolean = false;
 
   private touchStartY: number = 0;
+  private konamiProgress: number = 0;
+  private readonly konamiSequence = [
+    'ArrowUp',
+    'ArrowUp',
+    'ArrowDown',
+    'ArrowDown',
+    'ArrowLeft',
+    'ArrowRight',
+    'ArrowLeft',
+    'ArrowRight',
+    'KeyB',
+    'KeyA',
+  ];
 
   onMuteToggle?: () => void;
   onRetroToggle?: () => void;
   onHitboxToggle?: () => void;
+  onKonamiCode?: () => void;
 
   constructor(targetElement: HTMLElement | Window = window) {
     targetElement.addEventListener('keydown', this.handleKeyDown as EventListener);
@@ -25,6 +39,17 @@ export class InputHandler {
   private handleKeyDown = (e: KeyboardEvent): void => {
     if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
       return;
+    }
+
+    // Check Konami Code
+    if (e.code === this.konamiSequence[this.konamiProgress]) {
+      this.konamiProgress++;
+      if (this.konamiProgress === this.konamiSequence.length) {
+        this.konamiProgress = 0;
+        this.onKonamiCode?.();
+      }
+    } else {
+      this.konamiProgress = e.code === this.konamiSequence[0] ? 1 : 0;
     }
 
     if (e.code === 'Space' || e.code === 'ArrowUp' || e.code === 'KeyW') {
@@ -60,7 +85,6 @@ export class InputHandler {
   };
 
   private handleTouchStart = (e: TouchEvent): void => {
-    // If the tap originated on a UI button, do not capture as jump/duck
     const target = e.target as HTMLElement | null;
     if (target && target.tagName === 'BUTTON') {
       return;
@@ -78,7 +102,6 @@ export class InputHandler {
     const canvas = document.getElementById('game');
     const rect = canvas ? canvas.getBoundingClientRect() : null;
 
-    // Check if touch is in lower portion of play field
     const isLower = rect
       ? touch.clientY > rect.top + rect.height * 0.6
       : touch.clientY > window.innerHeight * 0.6;
@@ -109,7 +132,6 @@ export class InputHandler {
     const diffY = touch.clientY - this.touchStartY;
 
     if (diffY > 25) {
-      // Swiping down forces duck
       this.duckHeld = true;
       this.jumpHeld = false;
     }

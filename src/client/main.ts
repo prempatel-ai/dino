@@ -5,6 +5,7 @@ import { InputHandler } from './input';
 import { GameLoop } from './loop';
 import { SettingsManager } from './ui/settings';
 import { SoundSynth } from './audio/synth';
+import { AmbientAudio } from './audio/ambient';
 import { Storage } from './storage';
 
 function bootstrap(): void {
@@ -15,6 +16,7 @@ function bootstrap(): void {
 
   const settings = new SettingsManager();
   const synth = new SoundSynth(settings.isMuted);
+  const ambient = new AmbientAudio(settings.isMuted);
   const camera = new Camera(canvas);
   const renderer = new Renderer(canvas, camera);
   const input = new InputHandler(window);
@@ -28,6 +30,19 @@ function bootstrap(): void {
   renderer.reducedEffects = settings.reducedEffects;
   renderer.showHitboxes = settings.showHitboxes;
   renderer.overlay.updateButtons(settings.isMuted, settings.isRetro);
+
+  // Audio start on first user interaction
+  let userInteracted = false;
+  const onFirstInteraction = (): void => {
+    if (!userInteracted) {
+      userInteracted = true;
+      ambient.start();
+    }
+  };
+
+  window.addEventListener('keydown', onFirstInteraction, { once: true });
+  window.addEventListener('touchstart', onFirstInteraction, { once: true });
+  window.addEventListener('click', onFirstInteraction, { once: true });
 
   // Audio & events callback
   const handleEvents = (): void => {
@@ -48,6 +63,7 @@ function bootstrap(): void {
   const toggleMute = (): void => {
     const muted = settings.toggleMute();
     synth.setMuted(muted);
+    ambient.setMuted(muted);
     renderer.overlay.updateButtons(muted, settings.isRetro);
   };
   input.onMuteToggle = toggleMute;
@@ -66,10 +82,15 @@ function bootstrap(): void {
     renderer.showHitboxes = settings.toggleHitboxes();
   };
 
+  // Easter egg: Konami code sunglasses
+  input.onKonamiCode = () => {
+    renderer.expressions.hasSunglasses = !renderer.expressions.hasSunglasses;
+    console.log('Easter egg unlocked: Dino Sunglasses!');
+  };
+
   // Create loop with event dispatcher
   const loop = new GameLoop(game, input, renderer);
 
-  // Hook step to dispatch sound events
   const originalStep = game.step.bind(game);
   game.step = (inp, frames = 1) => {
     originalStep(inp, frames);
@@ -78,7 +99,7 @@ function bootstrap(): void {
 
   loop.start();
 
-  console.log('Dino Run engine initialized with audio, HUD, overlays, and storage.');
+  console.log('Dino Run engine initialized with biomes, skins, ambient audio, and creative layer.');
 }
 
 if (document.readyState === 'loading') {

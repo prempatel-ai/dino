@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17 35" width="17" height="35">
+  <!-- Neon Wireframe Cactus: 17x35 -->
+  <g fill="none" stroke="currentColor" stroke-width="1.2">
+    <rect x="5" y="1" width="4" height="33" />
+    <path d="M1 8h3v14H1z" />
+    <path d="M1 22h4" />
+    <path d="M13 5h3v10h-3z" />
+    <path d="M9 15h4" />
+  </g>
+</svg>

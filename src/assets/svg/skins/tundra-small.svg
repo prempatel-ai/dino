@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17 35" width="17" height="35">
+  <!-- Tundra Ice Crystal: 17x35 -->
+  <g fill="currentColor">
+    <!-- Faceted sharp crystal spire -->
+    <path d="M7 0l4 10v25H6V10L7 0z" />
+    <!-- Left shard -->
+    <path d="M1 10l3 5v10H1V10z" opacity="0.85" />
+    <!-- Right shard -->
+    <path d="M13 7l3 6v10h-3V7z" opacity="0.85" />
+    <!-- Crystal facet highlights -->
+    <path d="M7 0l2 12v23h-1V12L7 0z" fill="#FFFFFF" opacity="0.5" />
+  </g>
+</svg>

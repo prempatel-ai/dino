@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 50" width="25" height="50">
+  <!-- Tundra Ice Spire: 25x50 -->
+  <g fill="currentColor">
+    <!-- Tall Ice Column -->
+    <path d="M12 0l4 15v35H8V15L12 0z" />
+    <path d="M1 15l5 6v15H1V15z" opacity="0.8" />
+    <path d="M19 12l5 6v18h-5V12z" opacity="0.8" />
+    <!-- Sharp Glint -->
+    <path d="M12 0l2 18v32h-1V18L12 0z" fill="#FFFFFF" opacity="0.6" />
+  </g>
+</svg>

@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 50" width="25" height="50">
+  <!-- Neon Wireframe Large: 25x50 -->
+  <g fill="none" stroke="currentColor" stroke-width="1.2">
+    <rect x="9" y="1" width="6" height="48" />
+    <path d="M1 12h5v22H1z" />
+    <path d="M1 34h8" />
+    <path d="M19 11h5v16h-5z" />
+    <path d="M15 27h9" />
+  </g>
+</svg>

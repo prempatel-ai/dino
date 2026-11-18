@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17 35" width="17" height="35">
+  <!-- Volcanic Charred Cactus / Spike: 17x35 -->
+  <g fill="currentColor">
+    <path d="M5 0h4v35H5V0z" />
+    <path d="M1 8h3v14H1V8z M1 22h4v3H1z" />
+    <path d="M9 15h5v3H9z M13 5h3v10h-3V5z" />
+    <!-- Lava cracks -->
+    <path d="M7 6l2 8-2 6 2 10" stroke="#FF4500" stroke-width="1" fill="none" />
+  </g>
+</svg>
