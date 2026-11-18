@@ -1,3 +1,8 @@
+/* ==========================================================================
+   Dino Run: Neural Autonomous Agent Station
+   Anti-generic, Human-crafted Research Arcade Aesthetics
+   ========================================================================== */
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -12,30 +17,149 @@ html, body {
   min-height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
-  background: #080b14;
+  background-color: #0b0f19;
   background-image: 
-    radial-gradient(circle at 50% 25%, rgba(30, 41, 59, 0.45) 0%, rgba(8, 11, 20, 0.95) 75%),
-    linear-gradient(to bottom, #080b14, #04060a);
+    radial-gradient(ellipse 900px 360px at 50% 12%, rgba(245, 158, 11, 0.09) 0%, rgba(56, 189, 248, 0.04) 50%, transparent 100%),
+    radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
+  background-size: 100% 100%, 28px 28px;
+  background-position: 0 0, 14px 14px;
   display: flex;
   flex-direction: column;
-  justify-content: flex-start;
   align-items: center;
-  padding: 48px 16px 40px;
-  touch-action: pan-y;
+  padding: 24px 16px 48px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #f1f5f9;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Master Station Layout Shell */
+.station-shell {
+  width: 100%;
+  max-width: 1040px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  margin: 0 auto;
+}
+
+/* Masthead Header */
+.station-masthead {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 8px 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.masthead-left {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.dino-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, #1e293b, #0f172a);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #f59e0b;
+  box-shadow: 
+    0 4px 12px rgba(0, 0, 0, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.15);
+}
+
+.masthead-title-group {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.station-title {
+  font-size: 16px;
+  font-weight: 800;
+  letter-spacing: 0.08em;
   color: #f8fafc;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  line-height: 1.2;
+}
+
+.version-tag {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 1px 6px;
+  border-radius: 4px;
+  background: rgba(16, 185, 129, 0.15);
+  color: #34d399;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.station-subtitle {
+  font-size: 11.5px;
+  color: #94a3b8;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.masthead-right {
+  display: flex;
+  align-items: center;
+}
+
+.status-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  padding: 4px 11px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  font-family: ui-monospace, SF Mono, Menlo, monospace;
+  font-size: 11px;
+  font-weight: 600;
+  color: #cbd5e1;
+}
+
+.status-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 8px #10b981;
+  animation: pulse-dot 2s infinite ease-in-out;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.85); }
+}
+
+/* ==========================================================================
+   Arcade Cabinet Chassis & Game Screen
+   ========================================================================== */
+.cabinet-chassis {
+  width: 100%;
+  position: relative;
+  display: flex;
+  flex-direction: column;
 }
 
 #game-container {
   position: relative;
   width: 100%;
-  max-width: 1000px;
   aspect-ratio: 4 / 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 40px auto 0;
-  overflow: visible; /* CRITICAL: Never clip floating controls */
+  margin-top: 44px; /* Clearance for the integrated toolbar */
+  overflow: visible; /* Never clip floating controls */
 }
 
 #game {
@@ -47,8 +171,10 @@ html, body {
   border-radius: 14px;
   overflow: hidden;
   box-shadow: 
-    0 25px 60px -15px rgba(0, 0, 0, 0.75),
-    0 0 0 1px rgba(255, 255, 255, 0.12);
+    0 24px 60px -15px rgba(0, 0, 0, 0.85),
+    0 0 0 1px rgba(255, 255, 255, 0.12),
+    0 0 50px -10px rgba(245, 158, 11, 0.12);
+  transition: box-shadow 0.3s ease;
 }
 
 #overlay {
@@ -61,18 +187,18 @@ html, body {
   overflow: visible;
 }
 
-/* Modern Frosted Glass Floating Toolbar */
+/* Integrated Control Toolbar */
 .ui-bar {
   position: absolute;
-  bottom: calc(100% + 12px);
+  bottom: calc(100% + 10px);
   left: 0;
   right: 0;
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  padding: 6px 14px;
-  background: rgba(15, 23, 42, 0.88);
+  padding: 6px 12px;
+  background: rgba(15, 23, 42, 0.9);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.14);
@@ -88,44 +214,16 @@ html, body {
 .ui-bar-group {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
-}
-
-.ui-hints {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
-  font-family: ui-monospace, SF Mono, Menlo, monospace;
-  font-size: 11px;
-  color: #94a3b8;
-}
-
-.hint-item {
-  display: inline-flex;
-  align-items: center;
-  gap: 4px;
-}
-
-.kbd {
-  display: inline-block;
-  padding: 1px 6px;
-  background: rgba(255, 255, 255, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 4px;
-  font-family: inherit;
-  font-size: 10px;
-  font-weight: 700;
-  color: #f1f5f9;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
+  gap: 5px;
 }
 
 .ui-btn {
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  height: 28px;
-  padding: 0 10px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
+  height: 30px;
+  padding: 0 11px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   background: rgba(255, 255, 255, 0.05);
   color: #94a3b8;
@@ -137,8 +235,7 @@ html, body {
   outline: none;
   touch-action: manipulation;
   transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1);
-  user-select: none;
-  -webkit-user-select: none;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
 }
 
 .ui-btn * {
@@ -148,21 +245,17 @@ html, body {
 .ui-btn:hover {
   background: rgba(255, 255, 255, 0.12);
   color: #f8fafc;
-  border-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.22);
 }
 
 .ui-btn:active {
-  transform: scale(0.96);
-}
-
-.ui-btn:focus-visible {
-  box-shadow: 0 0 0 2px #38bdf8;
+  transform: translateY(1px);
 }
 
 .ui-btn.is-on {
   color: #38bdf8;
   background: rgba(56, 189, 248, 0.12);
-  border-color: rgba(56, 189, 248, 0.3);
+  border-color: rgba(56, 189, 248, 0.35);
 }
 
 .ui-btn.is-off {
@@ -173,15 +266,15 @@ html, body {
 .ui-btn.is-retro-active {
   background: rgba(245, 158, 11, 0.18);
   color: #fbbf24;
-  border-color: rgba(245, 158, 11, 0.4);
-  box-shadow: 0 0 12px rgba(245, 158, 11, 0.2);
+  border-color: rgba(245, 158, 11, 0.45);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.25);
 }
 
 .ui-btn.is-ai-active {
   background: rgba(16, 185, 129, 0.18);
   color: #34d399;
   border-color: rgba(16, 185, 129, 0.45);
-  box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
+  box-shadow: 0 0 14px rgba(16, 185, 129, 0.3);
 }
 
 .ui-icon {
@@ -196,49 +289,273 @@ html, body {
 
 .ui-divider {
   width: 1px;
-  height: 14px;
+  height: 16px;
   background: rgba(255, 255, 255, 0.15);
-  margin: 0 4px;
+  margin: 0 3px;
 }
 
-@media (max-width: 760px) {
+/* Tactile 3D Keycap Legend */
+.ui-hints {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: ui-monospace, SF Mono, Menlo, monospace;
+  font-size: 11px;
+  color: #94a3b8;
+}
+
+.hint-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+}
+
+.kbd {
+  display: inline-block;
+  padding: 2px 6px;
+  background: linear-gradient(to bottom, #1e293b, #0f172a);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 5px;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  color: #f8fafc;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+}
+
+@media (max-width: 820px) {
   .ui-hints {
     display: none;
   }
 }
 
 /* ==========================================================================
-   Dedicated AI Neural Deck (Pure Handcrafted Aesthetics Matching Reference)
+   Cybernetic Neural Deck & Live Telemetry
    ========================================================================== */
 .neural-deck {
   width: 100%;
-  max-width: 1000px;
-  margin-top: 18px;
-  background: #080c14;
-  background-image: radial-gradient(circle at 50% 50%, rgba(20, 27, 45, 0.5) 0%, rgba(8, 12, 20, 0.95) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  margin-top: 12px;
+  background: #090d16;
+  background-image: 
+    radial-gradient(circle at 50% 30%, rgba(20, 27, 45, 0.6) 0%, rgba(9, 13, 22, 0.98) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.12);
   border-radius: 14px;
   padding: 14px 18px 16px;
   box-shadow: 
-    0 24px 50px -12px rgba(0, 0, 0, 0.7),
+    0 24px 50px -12px rgba(0, 0, 0, 0.75),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-  opacity: 1;
-  transform: translateY(0);
 }
 
 .neural-deck.is-hidden {
-  opacity: 0;
-  transform: translateY(14px) scale(0.98);
-  pointer-events: none;
   display: none;
 }
 
+/* Deck Header & Mode Tabs */
+.deck-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.deck-title-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.deck-indicator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #10b981;
+  box-shadow: 0 0 10px #10b981;
+}
+
+.deck-badge {
+  font-size: 10px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  padding: 2px 7px;
+  border-radius: 4px;
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+  font-family: ui-monospace, SF Mono, Menlo, monospace;
+}
+
+.deck-title {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.05em;
+  color: #e2e8f0;
+  font-family: ui-monospace, SF Mono, Menlo, monospace;
+}
+
+.deck-mode-tabs {
+  display: inline-flex;
+  gap: 4px;
+  background: rgba(15, 23, 42, 0.7);
+  padding: 3px;
+  border-radius: 8px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.deck-tab {
+  padding: 4px 10px;
+  border: none;
+  border-radius: 6px;
+  background: transparent;
+  color: #94a3b8;
+  font-family: ui-monospace, SF Mono, Menlo, monospace;
+  font-size: 10.5px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.16s ease;
+}
+
+.deck-tab:hover {
+  color: #f8fafc;
+  background: rgba(255, 255, 255, 0.06);
+}
+
+.deck-tab.is-active {
+  background: #10b981;
+  color: #04100c;
+  font-weight: 700;
+  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+}
+
+/* Policy Description Banner */
+.deck-policy-banner {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 8px 12px;
+  background: rgba(15, 23, 42, 0.5);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  font-size: 11.5px;
+  color: #cbd5e1;
+}
+
+.badge-naive {
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(245, 158, 11, 0.15);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.3);
+}
+
+.badge-linear {
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(56, 189, 248, 0.15);
+  color: #38bdf8;
+  border: 1px solid rgba(56, 189, 248, 0.3);
+}
+
+.badge-ann {
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(168, 85, 247, 0.15);
+  color: #c084fc;
+  border: 1px solid rgba(168, 85, 247, 0.3);
+}
+
+.badge-evo {
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(236, 72, 153, 0.15);
+  color: #f472b6;
+  border: 1px solid rgba(236, 72, 153, 0.3);
+}
+
+.policy-formula {
+  font-family: ui-monospace, SF Mono, Menlo, monospace;
+  font-weight: 700;
+  color: #f8fafc;
+  background: rgba(0, 0, 0, 0.3);
+  padding: 2px 7px;
+  border-radius: 4px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.policy-note {
+  color: #94a3b8;
+  font-size: 11px;
+}
+
+/* Telemetry Metric Cards */
+.deck-telemetry-row {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 8px;
+}
+
+@media (max-width: 640px) {
+  .deck-telemetry-row {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+.telemetry-card {
+  background: rgba(15, 23, 42, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 8px;
+  padding: 8px 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.telemetry-label {
+  font-size: 9.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  color: #64748b;
+  font-family: ui-monospace, SF Mono, Menlo, monospace;
+}
+
+.telemetry-val {
+  font-size: 13px;
+  font-weight: 700;
+  color: #f1f5f9;
+  font-family: ui-monospace, SF Mono, Menlo, monospace;
+}
+
+.telemetry-val .highlight {
+  color: #34d399;
+}
+
+/* Neural Canvas Container */
 .neural-deck-content {
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
+  background: #060910;
+  border: 1px solid rgba(255, 255, 255, 0.06);
+  border-radius: 10px;
+  padding: 10px 0;
+  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.6);
 }
 
 #neural-canvas {

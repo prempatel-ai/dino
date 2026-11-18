@@ -3,14 +3,53 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <title>Dino Run</title>
-    <script type="module" crossorigin src="./assets/index-CiA4TAM2.js"></script>
-    <link rel="stylesheet" crossorigin href="./assets/index-C2ot_tF3.css">
+    <title>Dino Run // Neural Autonomous Agent Lab</title>
+    <script type="module" crossorigin src="./assets/index-DZzHENb5.js"></script>
+    <link rel="stylesheet" crossorigin href="./assets/index-dlX3KDlA.css">
   </head>
   <body>
-    <div id="game-container">
-      <canvas id="game" width="600" height="150"></canvas>
-      <div id="overlay"></div>
+    <div class="station-shell">
+      <!-- Station Masthead -->
+      <header class="station-masthead">
+        <div class="masthead-left">
+          <div class="dino-avatar" aria-hidden="true">
+            <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor">
+              <rect x="7" y="2" width="10" height="8" rx="1"/>
+              <rect x="5" y="6" width="3" height="4"/>
+              <rect x="15" y="4" width="2" height="2" fill="#0d111c"/>
+              <rect x="9" y="10" width="8" height="6"/>
+              <rect x="5" y="12" width="4" height="4"/>
+              <rect x="3" y="14" width="2" height="4"/>
+              <rect x="9" y="16" width="2" height="5"/>
+              <rect x="14" y="16" width="2" height="5"/>
+            </svg>
+          </div>
+          <div class="masthead-title-group">
+            <h1 class="station-title">DINO RUN <span class="version-tag">NEURAL LAB</span></h1>
+            <p class="station-subtitle">Chromium Autonomous Agent Experiment &middot; 3-Byte Linear to 7&times;8&times;3 MLP</p>
+          </div>
+        </div>
+        <div class="masthead-right">
+          <div class="status-chip">
+            <span class="status-dot"></span>
+            <span class="status-text" id="station-fps-status">60 FPS &middot; SIMULATION READY</span>
+          </div>
+        </div>
+      </header>
+
+      <!-- Main Arcade Cabinet -->
+      <main class="cabinet-chassis">
+        <div id="game-container">
+          <canvas id="game" width="600" height="150"></canvas>
+          <div id="overlay"></div>
+        </div>
+      </main>
+
+      <!-- Neural Telemetry Deck -->
+      <section id="ai-neural-panel" class="neural-deck is-hidden" aria-label="AI Neural Copilot Readout">
+        <!-- Dynamically injected interactive telemetry & neural canvas -->
+      </section>
     </div>
+
   </body>
 </html>

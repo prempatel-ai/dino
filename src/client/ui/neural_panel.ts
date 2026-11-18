@@ -7,6 +7,14 @@ export class NeuralPanel {
   private pulseTime = 0;
   private isVisible = false;
 
+  private policyDescEl: HTMLElement | null = null;
+  private distValEl: HTMLElement | null = null;
+  private speedValEl: HTMLElement | null = null;
+  private benchValEl: HTMLElement | null = null;
+  private tabsContainer: HTMLElement | null = null;
+
+  onModeSelect?: (mode: AIMode) => void;
+
   private readonly inputNodes = [
     { label: 'distance', key: 'dist' },
     { label: 'obs_width', key: 'w' },
@@ -28,28 +36,80 @@ export class NeuralPanel {
   }
 
   private createDom(): void {
-    const existing = document.getElementById('ai-neural-panel');
-    if (existing) existing.remove();
+    let panel = document.getElementById('ai-neural-panel');
+    if (!panel) {
+      panel = document.createElement('section');
+      panel.id = 'ai-neural-panel';
+      const cabinet = document.querySelector('.cabinet-chassis');
+      if (cabinet && cabinet.parentElement) {
+        cabinet.parentElement.appendChild(panel);
+      } else {
+        document.body.appendChild(panel);
+      }
+    }
 
-    const panel = document.createElement('div');
-    panel.id = 'ai-neural-panel';
     panel.className = 'neural-deck is-hidden';
 
     panel.innerHTML = `
+      <div class="deck-header">
+        <div class="deck-title-group">
+          <span class="deck-indicator-dot"></span>
+          <div class="deck-badge">NPU // AGENT COPILOT</div>
+          <span class="deck-title">SYNAPTIC INFERENCE CHAMBER</span>
+        </div>
+        <div class="deck-mode-tabs" role="tablist" aria-label="AI Policy Selector">
+          <button class="deck-tab" data-mode="NAIVE">11&times;S (71%)</button>
+          <button class="deck-tab" data-mode="LINEAR">3-BYTE (100%)</button>
+          <button class="deck-tab" data-mode="ANN">NEURAL NET</button>
+          <button class="deck-tab" data-mode="EVOLUTION">EVOLUTION</button>
+          <button class="deck-tab" data-mode="OFF">STANDBY</button>
+        </div>
+      </div>
+
+      <div class="deck-policy-banner" id="deck-policy-desc">
+        <span class="policy-formula">Loading agent telemetry...</span>
+      </div>
+
+      <div class="deck-telemetry-row">
+        <div class="telemetry-card">
+          <div class="telemetry-label">PERCEPTION DIST</div>
+          <div class="telemetry-val" id="tele-dist">--</div>
+        </div>
+        <div class="telemetry-card">
+          <div class="telemetry-label">DINO SPEED</div>
+          <div class="telemetry-val" id="tele-speed">--</div>
+        </div>
+        <div class="telemetry-card">
+          <div class="telemetry-label">INFERENCE TIME</div>
+          <div class="telemetry-val"><span class="highlight">&lt; 0.1</span> ms</div>
+        </div>
+        <div class="telemetry-card">
+          <div class="telemetry-label">THE REEL BENCHMARK</div>
+          <div class="telemetry-val" id="tele-bench">--</div>
+        </div>
+      </div>
+
       <div class="neural-deck-content">
         <canvas id="neural-canvas" width="640" height="200"></canvas>
       </div>
     `;
 
-    const gameContainer = document.getElementById('game-container');
-    if (gameContainer && gameContainer.parentElement) {
-      gameContainer.parentElement.appendChild(panel);
-    } else {
-      document.body.appendChild(panel);
-    }
-
     this.panelEl = panel;
     this.canvas = panel.querySelector('#neural-canvas') as HTMLCanvasElement;
+    this.policyDescEl = panel.querySelector('#deck-policy-desc');
+    this.distValEl = panel.querySelector('#tele-dist');
+    this.speedValEl = panel.querySelector('#tele-speed');
+    this.benchValEl = panel.querySelector('#tele-bench');
+    this.tabsContainer = panel.querySelector('.deck-mode-tabs');
+
+    this.tabsContainer?.addEventListener('click', (e) => {
+      const target = (e.target as HTMLElement).closest('.deck-tab') as HTMLElement;
+      if (!target) return;
+      const mode = target.getAttribute('data-mode') as AIMode;
+      if (mode && this.onModeSelect) {
+        this.onModeSelect(mode);
+      }
+    });
 
     if (this.canvas) {
       this.ctx = this.canvas.getContext('2d');
@@ -63,7 +123,7 @@ export class NeuralPanel {
   update(
     aiMode: AIMode,
     decision: AIDecision | null,
-    _stats: AIEvaluationStats | null,
+    stats: AIEvaluationStats | null,
     dtMs: number,
   ): void {
     const shouldBeVisible = aiMode !== 'OFF';
@@ -73,6 +133,68 @@ export class NeuralPanel {
         this.panelEl.classList.toggle('is-hidden', !this.isVisible);
         this.panelEl.classList.toggle('is-visible', this.isVisible);
       }
+    }
+
+    // Update active tab buttons
+    if (this.tabsContainer) {
+      const tabs = this.tabsContainer.querySelectorAll('.deck-tab');
+      tabs.forEach((tab) => {
+        const mode = tab.getAttribute('data-mode');
+        tab.classList.toggle('is-active', mode === aiMode);
+      });
+    }
+
+    // Update Policy Description & Reel context
+    if (this.policyDescEl) {
+      if (aiMode === 'NAIVE') {
+        this.policyDescEl.innerHTML = `
+          <span class="badge-naive">STAGE 1 &middot; NAIVE RULE</span>
+          <span class="policy-formula">if (distance &lt; 11 * speed) jump()</span>
+          <span class="policy-note">Reel result: <strong>71%</strong> cleared &bull; Fails against high speeds and multi-cactus clusters.</span>
+        `;
+      } else if (aiMode === 'LINEAR') {
+        this.policyDescEl.innerHTML = `
+          <span class="badge-linear">STAGE 3 &middot; 3-BYTE MODEL</span>
+          <span class="policy-formula">if (distance &lt; 14.5 * speed - 12.9) jump()</span>
+          <span class="policy-note">Reel result: <strong>100%</strong> cleared &bull; 30,000 runs, 0 crashes &bull; 18 bits = 3 Bytes total memory.</span>
+        `;
+      } else if (aiMode === 'ANN') {
+        this.policyDescEl.innerHTML = `
+          <span class="badge-ann">STAGE 2 &middot; NEURAL NETWORK</span>
+          <span class="policy-formula">7 Inputs &rarr; 8 Hidden (ReLU) &rarr; 3 Outputs (Softmax)</span>
+          <span class="policy-note">Autonomous flight &amp; duck dynamics &bull; 100/100 levels cleared &bull; 88 parameters.</span>
+        `;
+      } else if (aiMode === 'EVOLUTION') {
+        const gen = stats?.generation ?? 1;
+        const fit = Math.round(stats?.bestFitness ?? 0);
+        const alive = stats?.aliveCount ?? 1;
+        const pop = stats?.totalPopulation ?? 20;
+        this.policyDescEl.innerHTML = `
+          <span class="badge-evo">NEUROEVOLUTION &middot; GHOST MODE</span>
+          <span class="policy-formula">Gen ${gen} &bull; Peak Fitness ${fit} &bull; Active: ${alive}/${pop}</span>
+          <span class="policy-note">Non-fatal collision trick &bull; Evolves weights continuously without resetting runs.</span>
+        `;
+      }
+    }
+
+    // Update Telemetry Metrics
+    if (this.distValEl) {
+      this.distValEl.textContent = decision?.distance !== undefined && decision.distance < 999
+        ? `${Math.round(decision.distance)} px`
+        : 'IN RANGE';
+    }
+    if (this.speedValEl) {
+      const spd = decision?.networkState?.inputs?.[6] !== undefined
+        ? (decision.networkState.inputs[6] * 13).toFixed(1)
+        : (decision?.features?.[6] !== undefined ? decision.features[6].toFixed(1) : '6.0');
+      this.speedValEl.textContent = `${spd} px/f`;
+    }
+    if (this.benchValEl) {
+      if (aiMode === 'NAIVE') this.benchValEl.textContent = '71 / 100 (FAIL)';
+      else if (aiMode === 'LINEAR') this.benchValEl.textContent = '100 / 100 (PERFECT)';
+      else if (aiMode === 'ANN') this.benchValEl.textContent = '100 / 100 (PASSED)';
+      else if (aiMode === 'EVOLUTION') this.benchValEl.textContent = 'EVOLVING';
+      else this.benchValEl.textContent = '--';
     }
 
     if (!this.isVisible || !this.ctx || !this.canvas) return;
@@ -85,7 +207,6 @@ export class NeuralPanel {
   }
 
   /**
-   * Handcrafted Neural Visualizer mirroring the reference image:
    * Concentric glowing nodes, dense golden synapse filaments, organic photon flow.
    */
   private drawDiagram(netState: NetworkState): void {
@@ -109,9 +230,9 @@ export class NeuralPanel {
     const hiddenX = paddingLeft + innerW * 0.52;
     const outputX = w - paddingRight;
 
-    const numInputs = netState.inputs.length; // 7
-    const numHidden = netState.hidden.length; // 8
-    const numOutputs = netState.outputs.length; // 3
+    const numInputs = netState.inputs.length;
+    const numHidden = netState.hidden.length;
+    const numOutputs = netState.outputs.length;
 
     const inputY = this.getYPositions(paddingTop + 6, innerH - 12, numInputs);
     const hiddenY = this.getYPositions(paddingTop + 4, innerH - 8, numHidden);
@@ -128,7 +249,6 @@ export class NeuralPanel {
         const absW = Math.abs(weight);
         const activation = absW * (0.3 + inVal * 0.7);
 
-        // Filament path
         const cp1x = inputX + (hiddenX - inputX) * 0.42;
         const cp2x = inputX + (hiddenX - inputX) * 0.58;
 
@@ -184,29 +304,24 @@ export class NeuralPanel {
       }
     }
 
-    // 3. Draw Input Nodes (Left Layer) matching reference concentric circles
+    // 3. Draw Input Nodes (Left Layer)
     for (let i = 0; i < numInputs; i++) {
       const iy = inputY[i];
       const val = Math.min(1.0, Math.max(0.0, netState.inputs[i]));
 
-      // Clean label
       ctx.fillStyle = '#cbd5e1';
-      ctx.font = '500 10.5px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+      ctx.font = '500 10.5px ui-monospace, SF Mono, Menlo, monospace';
       ctx.textAlign = 'right';
       ctx.fillText(this.inputNodes[i].label, inputX - 14, iy + 3.5);
 
-      // Outer Disc (light slate/cream)
       ctx.beginPath();
       ctx.arc(inputX, iy, 8.5, 0, Math.PI * 2);
       ctx.fillStyle = '#e2e8f0';
       ctx.fill();
-
-      // Soft rim
       ctx.lineWidth = 1;
       ctx.strokeStyle = '#94a3b8';
       ctx.stroke();
 
-      // Inner Glowing Core (Vibrant lime/neon)
       const coreR = Math.max(2.5, 3.0 + val * 3.5);
       ctx.beginPath();
       ctx.arc(inputX, iy, coreR, 0, Math.PI * 2);
@@ -217,12 +332,11 @@ export class NeuralPanel {
       ctx.shadowBlur = 0;
     }
 
-    // 4. Draw Hidden Neurons (Middle Layer - "thinking")
+    // 4. Draw Hidden Neurons (Middle Layer)
     for (let j = 0; j < numHidden; j++) {
       const hy = hiddenY[j];
       const hVal = Math.min(1.0, Math.max(0.0, netState.hidden[j]));
 
-      // Outer Disc
       ctx.beginPath();
       ctx.arc(hiddenX, hy, 6.5, 0, Math.PI * 2);
       ctx.fillStyle = '#e2e8f0';
@@ -231,7 +345,6 @@ export class NeuralPanel {
       ctx.strokeStyle = '#94a3b8';
       ctx.stroke();
 
-      // Inner Core (Amber / Orange)
       const coreR = Math.max(2.0, 2.2 + hVal * 2.8);
       ctx.beginPath();
       ctx.arc(hiddenX, hy, coreR, 0, Math.PI * 2);
@@ -248,7 +361,6 @@ export class NeuralPanel {
       const isWinner = k === netState.actionIndex;
       const prob = netState.outputs[k] || 0;
 
-      // Outer Disc
       ctx.beginPath();
       ctx.arc(outputX, oy, isWinner ? 9.5 : 7.5, 0, Math.PI * 2);
       ctx.fillStyle = isWinner ? '#f8fafc' : '#e2e8f0';
@@ -257,44 +369,48 @@ export class NeuralPanel {
       ctx.strokeStyle = isWinner ? '#10b981' : '#94a3b8';
       ctx.stroke();
 
-      // Inner Core
+      const coreR = Math.max(2.5, 2.8 + prob * 3.5);
       ctx.beginPath();
-      ctx.arc(outputX, oy, isWinner ? 5.0 : 3.0, 0, Math.PI * 2);
-      ctx.fillStyle = isWinner ? '#10b981' : '#f97316';
-      if (isWinner) {
-        ctx.shadowColor = '#10b981';
-        ctx.shadowBlur = 12;
-      }
+      ctx.arc(outputX, oy, coreR, 0, Math.PI * 2);
+      ctx.fillStyle = isWinner ? '#10b981' : '#f59e0b';
+      ctx.shadowColor = isWinner ? '#10b981' : '#f59e0b';
+      ctx.shadowBlur = isWinner ? 12 : 3;
       ctx.fill();
       ctx.shadowBlur = 0;
 
-      // Right Label with percentage
       ctx.fillStyle = isWinner ? '#34d399' : '#94a3b8';
-      ctx.font = isWinner ? 'bold 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif' : '500 10px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+      ctx.font = isWinner
+        ? '700 11px ui-monospace, SF Mono, Menlo, monospace'
+        : '500 10.5px ui-monospace, SF Mono, Menlo, monospace';
       ctx.textAlign = 'left';
       const pct = Math.round(prob * 100);
-      ctx.fillText(`${this.outputNodes[k].label} ${pct}%`, outputX + 16, oy + 4);
+      ctx.fillText(`${this.outputNodes[k].label} ${pct}%`, outputX + 16, oy + 3.5);
     }
 
-    // 6. Bottom "thinking" label directly matching reference image
-    ctx.fillStyle = '#94a3b8';
-    ctx.font = '500 11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+    // 6. Label "thinking."
+    ctx.fillStyle = '#64748b';
+    ctx.font = '500 11px ui-monospace, SF Mono, Menlo, monospace';
     ctx.textAlign = 'center';
-    const dots = '.'.repeat((Math.floor(this.pulseTime * 2.5) % 3) + 1);
+    const dots = '.'.repeat(1 + (Math.floor(this.pulseTime * 2) % 3));
     ctx.fillText(`thinking${dots}`, hiddenX, h - 8);
   }
 
-  private getYPositions(startY: number, totalH: number, count: number): number[] {
-    const step = totalH / (count - 1);
-    const positions: number[] = [];
+  private getYPositions(top: number, height: number, count: number): number[] {
+    const step = height / (count - 1 || 1);
+    const ys: number[] = [];
     for (let i = 0; i < count; i++) {
-      positions.push(startY + i * step);
+      ys.push(top + i * step);
     }
-    return positions;
+    return ys;
   }
 
   private bezierPoint(p0: number, p1: number, p2: number, p3: number, t: number): number {
     const u = 1 - t;
-    return u * u * u * p0 + 3 * u * u * t * p1 + 3 * u * t * t * p2 + t * t * t * p3;
+    return (
+      u * u * u * p0 +
+      3 * u * u * t * p1 +
+      3 * u * t * t * p2 +
+      t * t * t * p3
+    );
   }
 }

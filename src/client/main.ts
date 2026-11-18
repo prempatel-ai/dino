@@ -90,6 +90,11 @@ function bootstrap(): void {
   input.onAIToggle = toggleAI;
   renderer.overlay.onAIClick = toggleAI;
 
+  neuralPanel.onModeSelect = (mode) => {
+    aiController.setMode(mode);
+    renderer.overlay.updateButtons(settings.isMuted, settings.isRetro, mode);
+  };
+
   input.onHitboxToggle = () => {
     renderer.showHitboxes = settings.toggleHitboxes();
   };
