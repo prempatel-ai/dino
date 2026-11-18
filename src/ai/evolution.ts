@@ -1,4 +1,4 @@
-import { NeuralNetwork } from './ann';
+import { NeuralNetwork, type NetworkWeights } from './ann';
 import type { GameState } from '../core/types';
 import type { AIEvaluationStats, AIDecision } from './types';
 
@@ -146,6 +146,22 @@ export class EvolutionManager {
       bestFitness: Math.round(this.bestFitness),
       crashes: totalCrashes,
     };
+  }
+
+  loadBestWeights(weights: NetworkWeights): void {
+    const target = this.bestAgent || this.population[0];
+    if (target) {
+      target.net.loadWeights(weights);
+    }
+    if (this.population.length > 0) {
+      this.population[0].net.loadWeights(weights);
+      this.population[0].fitness = 1000;
+    }
+  }
+
+  exportBestWeights(): NetworkWeights | null {
+    const best = this.getBestAgent();
+    return best ? best.net.exportWeights() : null;
   }
 
   reset(): void {

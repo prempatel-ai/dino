@@ -121,4 +121,39 @@ describe('AI Policies & ANN Module', () => {
     expect(result.passPercentage).toBeGreaterThanOrEqual(80);
     expect(result.durationMs).toBeGreaterThan(0);
   });
+
+  it('AIController loads custom trained weights for MLP, Linear, and Master Bundle', () => {
+    const controller = new AIController();
+
+    // 1. Test Linear Weights
+    const linRes = controller.loadWeights({ a: 15.2, c: -10.5, duckElev: 75, duckDist: 18 });
+    expect(linRes.success).toBe(true);
+    expect(linRes.modelType).toBe('LINEAR');
+    expect(controller.mode).toBe('LINEAR');
+    expect(MathPolicies.getLinearParameters().a).toBe(15.2);
+    expect(MathPolicies.getLinearParameters().c).toBe(-10.5);
+
+    // 2. Test MLP Weights
+    const dummyMLP = {
+      w1: Array.from({ length: 7 }, () => Array(8).fill(0.1)),
+      b1: Array(8).fill(0.05),
+      w2: Array.from({ length: 8 }, () => Array(3).fill(0.2)),
+      b2: [0.1, 0.5, 0.1],
+    };
+    const mlpRes = controller.loadWeights(dummyMLP);
+    expect(mlpRes.success).toBe(true);
+    expect(mlpRes.modelType).toBe('ANN');
+    expect(controller.mode).toBe('ANN');
+
+    // 3. Test Master Bundle Export and Re-load
+    const exported = controller.exportAllWeights();
+    expect(exported.version).toBe('1.0');
+    expect(exported.linear).toBeDefined();
+    expect(exported.mlp).toBeDefined();
+    expect(exported.neuroevo).toBeDefined();
+
+    const bundleRes = controller.loadWeights(exported);
+    expect(bundleRes.success).toBe(true);
+    expect(bundleRes.modelType).toBe('BUNDLE');
+  });
 });

@@ -1,7 +1,31 @@
 import type { GameState, ObstacleState } from '../core/types';
 import type { AIDecision, NetworkState } from './types';
 
+export interface LinearParameters {
+  a: number; // speed multiplier, e.g. 14.5
+  c: number; // offset, e.g. -12.9
+  duckElev?: number; // pterodactyl duck elevation, e.g. 75
+  duckDist?: number; // pterodactyl duck distance multiplier, e.g. 16
+}
+
 export class MathPolicies {
+  private static linearParams: LinearParameters = {
+    a: 14.5,
+    c: -12.9,
+    duckElev: 75,
+    duckDist: 16,
+  };
+
+  static getLinearParameters(): LinearParameters {
+    return { ...this.linearParams };
+  }
+
+  static setLinearParameters(params: Partial<LinearParameters>): void {
+    this.linearParams = {
+      ...this.linearParams,
+      ...params,
+    };
+  }
   /**
    * Find the nearest incoming obstacle ahead of Dino.
    */
@@ -89,13 +113,14 @@ export class MathPolicies {
     }
 
     const speed = state.speed;
-    const threshold = 14.5 * speed - 12.9;
+    const { a, c, duckElev = 75, duckDist = 16 } = this.linearParams;
+    const threshold = a * speed + c;
 
     let action: 'NONE' | 'JUMP' | 'DUCK' = 'NONE';
 
     // Handle mid-elevation pterodactyls by ducking
-    if (obs.type === 'PTERODACTYL' && obs.y === 75) {
-      if (distance < speed * 16 && distance > -obs.w) {
+    if (obs.type === 'PTERODACTYL' && obs.y === duckElev) {
+      if (distance < speed * duckDist && distance > -obs.w) {
         action = 'DUCK';
       }
     } else if (obs.type === 'PTERODACTYL' && obs.y === 50) {

@@ -95,6 +95,16 @@ function bootstrap(): void {
     renderer.overlay.updateButtons(settings.isMuted, settings.isRetro, mode);
   };
 
+  neuralPanel.onLoadWeights = (payload) => {
+    const res = aiController.loadWeights(payload);
+    renderer.overlay.updateButtons(settings.isMuted, settings.isRetro, aiController.mode);
+    return res;
+  };
+
+  neuralPanel.onExportWeights = () => {
+    return aiController.exportAllWeights();
+  };
+
   input.onHitboxToggle = () => {
     renderer.showHitboxes = settings.toggleHitboxes();
   };

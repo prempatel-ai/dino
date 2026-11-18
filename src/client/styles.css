@@ -525,8 +525,189 @@ html, body {
   text-overflow: ellipsis;
 }
 
+.bench-actions-group {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
 .bench-result strong {
   color: #0f172a;
+}
+
+/* Weights Drawer */
+.deck-weights-drawer {
+  background: #ffffff;
+  border: 1px solid #cbd5e1;
+  border-radius: 8px;
+  padding: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.weights-drawer-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.weights-drawer-title {
+  font-size: 11px;
+  font-weight: 700;
+  color: #0f172a;
+  font-family: ui-monospace, SF Mono, Menlo, monospace;
+}
+
+.weights-close-btn {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  font-weight: 700;
+  color: #64748b;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.weights-close-btn:hover {
+  color: #0f172a;
+}
+
+.weights-drawer-body {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.weights-presets-row {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.weights-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #64748b;
+  font-family: ui-monospace, SF Mono, Menlo, monospace;
+}
+
+.weights-preset-btn {
+  background: #f1f5f9;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
+  font-size: 10.5px;
+  font-weight: 600;
+  color: #334155;
+  padding: 3px 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.weights-preset-btn:hover {
+  background: #e2e8f0;
+  color: #0f172a;
+}
+
+.weights-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.weights-file-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.weights-file-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  color: #1d4ed8;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 4px 10px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.weights-file-label:hover {
+  background: #dbeafe;
+}
+
+.weights-hidden-file {
+  display: none;
+}
+
+.weights-file-hint {
+  font-size: 10.5px;
+  color: #64748b;
+  font-family: ui-monospace, SF Mono, Menlo, monospace;
+}
+
+.weights-textarea {
+  width: 100%;
+  height: 90px;
+  font-family: ui-monospace, SF Mono, Menlo, monospace;
+  font-size: 10.5px;
+  padding: 8px;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  background: #f8fafc;
+  color: #0f172a;
+  resize: vertical;
+}
+
+.weights-textarea:focus {
+  outline: none;
+  border-color: #3b82f6;
+  background: #ffffff;
+}
+
+.weights-footer-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+.weights-apply-btn {
+  background: #0f172a;
+  color: #ffffff;
+  border: none;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 14px;
+  cursor: pointer;
+  transition: background 0.15s ease;
+}
+
+.weights-apply-btn:hover {
+  background: #1e293b;
+}
+
+.weights-status-msg {
+  font-size: 11px;
+  font-family: ui-monospace, SF Mono, Menlo, monospace;
+  color: #64748b;
+}
+
+.weights-status-msg.is-success {
+  color: #059669;
+  font-weight: 600;
+}
+
+.weights-status-msg.is-error {
+  color: #dc2626;
+  font-weight: 600;
 }
 
 /* Neural Canvas Viewport */

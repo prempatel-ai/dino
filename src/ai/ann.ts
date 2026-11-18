@@ -34,6 +34,30 @@ export class NeuralNetwork {
     }
   }
 
+  loadWeights(weights: NetworkWeights): void {
+    if (weights.w1 && weights.w1.length === this.inputSize) {
+      this.w1 = weights.w1.map((row) => [...row]);
+    }
+    if (weights.b1 && weights.b1.length === this.hiddenSize) {
+      this.b1 = [...weights.b1];
+    }
+    if (weights.w2 && weights.w2.length === this.hiddenSize) {
+      this.w2 = weights.w2.map((row) => [...row]);
+    }
+    if (weights.b2 && weights.b2.length === this.outputSize) {
+      this.b2 = [...weights.b2];
+    }
+  }
+
+  exportWeights(): NetworkWeights {
+    return {
+      w1: this.w1.map((row) => [...row]),
+      b1: [...this.b1],
+      w2: this.w2.map((row) => [...row]),
+      b2: [...this.b2],
+    };
+  }
+
   private createDefaultW1(): number[][] {
     // 7 inputs x 8 hidden neurons
     // Inputs: [dist, width, height, elevation, dino_y, dino_v, speed]

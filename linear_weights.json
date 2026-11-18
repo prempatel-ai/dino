@@ -1,0 +1,8 @@
+{
+  "modelType": "LINEAR",
+  "a": 15.5,
+  "c": -10.0,
+  "duckElev": 75,
+  "duckDist": 14.0,
+  "passRate1000": 87.0
+}

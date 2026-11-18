@@ -4,6 +4,12 @@ import { MathPolicies } from './policies';
 import { NeuralNetwork } from './ann';
 import { EvolutionManager } from './evolution';
 
+export interface AILoadResult {
+  success: boolean;
+  modelType: 'LINEAR' | 'ANN' | 'EVOLUTION' | 'BUNDLE' | 'UNKNOWN';
+  message: string;
+}
+
 export class AIController {
   mode: AIMode = 'OFF';
 
@@ -106,5 +112,77 @@ export class AIController {
       return this.evolution.getStats();
     }
     return null;
+  }
+
+  loadWeights(payload: any): AILoadResult {
+    if (!payload || typeof payload !== 'object') {
+      return { success: false, modelType: 'UNKNOWN', message: 'Invalid payload: expected JSON object.' };
+    }
+
+    // Check if master bundle
+    if (payload.mlp || payload.linear || payload.neuroevo) {
+      if (payload.linear) {
+        MathPolicies.setLinearParameters(payload.linear);
+      }
+      if (payload.mlp) {
+        this.ann.loadWeights(payload.mlp);
+      }
+      if (payload.neuroevo) {
+        this.evolution.loadBestWeights(payload.neuroevo);
+      }
+      return {
+        success: true,
+        modelType: 'BUNDLE',
+        message: 'Successfully loaded trained weights bundle for Linear, MLP, and Neuroevolution!',
+      };
+    }
+
+    // Check if MLP weights: w1, b1, w2, b2
+    if (payload.w1 && payload.b1 && payload.w2 && payload.b2) {
+      if (payload.type === 'neuroevo') {
+        this.evolution.loadBestWeights(payload);
+        this.setMode('EVOLUTION');
+        return {
+          success: true,
+          modelType: 'EVOLUTION',
+          message: 'Loaded Neuroevolution elite genome weights into current generation.',
+        };
+      } else {
+        this.ann.loadWeights(payload);
+        this.setMode('ANN');
+        return {
+          success: true,
+          modelType: 'ANN',
+          message: 'Loaded MLP neural network weights and activated ANN mode.',
+        };
+      }
+    }
+
+    // Check if 3-byte linear: a, c
+    if (typeof payload.a === 'number' && typeof payload.c === 'number') {
+      MathPolicies.setLinearParameters(payload);
+      this.setMode('LINEAR');
+      return {
+        success: true,
+        modelType: 'LINEAR',
+        message: `Loaded 3-byte linear parameters: ${payload.a} * speed + (${payload.c}).`,
+      };
+    }
+
+    return {
+      success: false,
+      modelType: 'UNKNOWN',
+      message: 'Unrecognized weight format. Expected w1/w2 matrices or a/c coefficients.',
+    };
+  }
+
+  exportAllWeights(): Record<string, any> {
+    return {
+      version: '1.0',
+      exportedAt: new Date().toISOString(),
+      linear: MathPolicies.getLinearParameters(),
+      mlp: this.ann.exportWeights(),
+      neuroevo: this.evolution.exportBestWeights(),
+    };
   }
 }
