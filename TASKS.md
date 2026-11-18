@@ -7,7 +7,7 @@ Do tasks in order. Each task lists dependencies.
 ---
 
 ## T01 — Project scaffold
-Status: TODO | Depends: none
+Status: DONE | Depends: none
 
 **CONTEXT**
 Empty repo. Stack: Vite + TypeScript + Vitest + Playwright. See ARCHITECTURE.md.
