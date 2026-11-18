@@ -4,6 +4,7 @@ import { MathPolicies } from '../../src/ai/policies';
 import { NeuralNetwork } from '../../src/ai/ann';
 import { EvolutionManager } from '../../src/ai/evolution';
 import { AIController } from '../../src/ai/controller';
+import { LevelBenchmark } from '../../src/ai/benchmark';
 
 describe('AI Policies & ANN Module', () => {
   it('Naive Math Policy detects obstacles and computes 11 * speed threshold', () => {
@@ -110,5 +111,14 @@ describe('AI Policies & ANN Module', () => {
 
     expect(stepsSurvived).toBe(1500);
     expect(game.phase).toBe('RUNNING');
+  });
+
+  it('LevelBenchmark executes batch seeds and returns valid stats', () => {
+    const bench = new LevelBenchmark();
+    const result = bench.run('LINEAR', 10, 300);
+    expect(result.totalLevels).toBe(10);
+    expect(result.passedCount).toBeGreaterThanOrEqual(8);
+    expect(result.passPercentage).toBeGreaterThanOrEqual(80);
+    expect(result.durationMs).toBeGreaterThan(0);
   });
 });

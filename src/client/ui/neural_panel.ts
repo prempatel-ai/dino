@@ -1,4 +1,5 @@
 import type { AIMode, AIDecision, AIEvaluationStats, NetworkState } from '../../ai/types';
+import { LevelBenchmark } from '../../ai/benchmark';
 
 export class NeuralPanel {
   private panelEl: HTMLElement | null = null;
@@ -6,6 +7,7 @@ export class NeuralPanel {
   private ctx: CanvasRenderingContext2D | null = null;
   private pulseTime = 0;
   private isVisible = false;
+  private currentMode: AIMode = 'OFF';
 
   private policyDescEl: HTMLElement | null = null;
   private distValEl: HTMLElement | null = null;
@@ -80,6 +82,14 @@ export class NeuralPanel {
         </div>
       </div>
 
+      <div class="deck-benchmark-bar">
+        <button id="btn-run-benchmark" class="deck-bench-btn" title="Run 1,000-level benchmark across reproducible seeds">
+          <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+          <span class="bench-btn-text">Run 1,000-Level Test Suite</span>
+        </button>
+        <span class="bench-result" id="bench-result-text">Click to simulate and test active policy across 1,000 seeds</span>
+      </div>
+
       <div class="neural-deck-content">
         <canvas id="neural-canvas" width="640" height="200"></canvas>
       </div>
@@ -101,6 +111,26 @@ export class NeuralPanel {
       }
     });
 
+    const benchBtn = panel.querySelector('#btn-run-benchmark') as HTMLButtonElement | null;
+    const benchResultEl = panel.querySelector('#bench-result-text') as HTMLElement | null;
+
+    benchBtn?.addEventListener('click', () => {
+      if (!benchBtn || !benchResultEl) return;
+      benchBtn.disabled = true;
+      const originalText = benchBtn.innerHTML;
+      benchBtn.textContent = 'Simulating 1,000 Levels...';
+      benchResultEl.textContent = 'Running test suite across seeds 1 to 1000...';
+
+      setTimeout(() => {
+        const bench = new LevelBenchmark();
+        const mode = this.currentMode === 'OFF' ? 'LINEAR' : this.currentMode;
+        const res = bench.run(mode, 1000, 1200);
+        benchBtn.disabled = false;
+        benchBtn.innerHTML = originalText;
+        benchResultEl.innerHTML = `<strong>${mode} Result:</strong> Passed <strong>${res.passedCount} / 1000</strong> (${res.passPercentage}%) &bull; Avg Score: ${res.avgScore} pts &bull; Simulated in ${res.durationMs}ms`;
+      }, 50);
+    });
+
     if (this.canvas) {
       this.ctx = this.canvas.getContext('2d');
       const dpr = window.devicePixelRatio || 1;
@@ -116,6 +146,7 @@ export class NeuralPanel {
     stats: AIEvaluationStats | null,
     dtMs: number,
   ): void {
+    this.currentMode = aiMode;
     const shouldBeVisible = aiMode !== 'OFF';
     if (shouldBeVisible !== this.isVisible) {
       this.isVisible = shouldBeVisible;

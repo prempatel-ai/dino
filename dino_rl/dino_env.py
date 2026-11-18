@@ -97,10 +97,11 @@ class DinoEnv(gym.Env):
     DINO_DUCK_W = 59.0
     DINO_DUCK_H = 25.0
 
-    def __init__(self, ghost_mode: bool = False, max_steps: int = 10000):
+    def __init__(self, ghost_mode: bool = False, max_steps: int = 10000, start_speed: float = 6.0):
         super().__init__()
         self.ghost_mode = ghost_mode
         self.max_steps = max_steps
+        self.default_start_speed = start_speed
 
         # 3 actions: 0=None, 1=Jump, 2=Duck
         self.action_space = spaces.Discrete(3)
@@ -130,7 +131,11 @@ class DinoEnv(gym.Env):
         if seed is not None:
             self.rng.seed(seed)
 
-        self.speed = self.SPEED_START
+        start_spd = self.default_start_speed
+        if options and "speed" in options:
+            start_spd = float(options["speed"])
+
+        self.speed = start_spd
         self.distance = 0.0
         self.steps = 0
         self.crashes = 0
@@ -217,16 +222,17 @@ class DinoEnv(gym.Env):
         return self._get_obs(), reward, terminated, truncated, info
 
     def _spawn_obstacle(self):
-        min_gap = round(self.DINO_W * self.speed * 0.6 + 120)
-        self.next_obstacle_dist = self.rng.uniform(min_gap, min_gap + 200)
-
         if self.speed > 8.5 and self.rng.random() < 0.35:
             elevation = self.rng.choice([50.0, 75.0, 100.0])
+            w = 46.0
+            h = 40.0
+            min_gap = round(w * self.speed + 150 * 0.6)
+            self.next_obstacle_dist = self.rng.uniform(min_gap, min_gap * 1.5)
             self.obstacles.append({
                 "x": 600.0,
                 "y": elevation,
-                "w": 46.0,
-                "h": 40.0,
+                "w": w,
+                "h": h,
                 "type": "PTERODACTYL",
                 "boxes": OBSTACLE_BOXES["PTERODACTYL"],
                 "passed": False,
@@ -238,6 +244,10 @@ class DinoEnv(gym.Env):
             unit_w = 25.0 if is_large else 17.0
             h = 50.0 if is_large else 35.0
             y = 90.0 if is_large else 105.0
+            w = unit_w * count
+
+            min_gap = round(w * self.speed + 120 * 0.6)
+            self.next_obstacle_dist = self.rng.uniform(min_gap, min_gap * 1.5)
 
             boxes = []
             for c in range(count):
@@ -253,7 +263,7 @@ class DinoEnv(gym.Env):
             self.obstacles.append({
                 "x": 600.0,
                 "y": y,
-                "w": unit_w * count,
+                "w": w,
                 "h": h,
                 "type": obs_type,
                 "boxes": boxes,
