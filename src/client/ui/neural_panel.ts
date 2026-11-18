@@ -10,7 +10,6 @@ export class NeuralPanel {
   private policyDescEl: HTMLElement | null = null;
   private distValEl: HTMLElement | null = null;
   private speedValEl: HTMLElement | null = null;
-  private benchValEl: HTMLElement | null = null;
   private tabsContainer: HTMLElement | null = null;
 
   onModeSelect?: (mode: AIMode) => void;
@@ -40,12 +39,8 @@ export class NeuralPanel {
     if (!panel) {
       panel = document.createElement('section');
       panel.id = 'ai-neural-panel';
-      const cabinet = document.querySelector('.cabinet-chassis');
-      if (cabinet && cabinet.parentElement) {
-        cabinet.parentElement.appendChild(panel);
-      } else {
-        document.body.appendChild(panel);
-      }
+      const container = document.querySelector('.app-shell') || document.body;
+      container.appendChild(panel);
     }
 
     panel.className = 'neural-deck is-hidden';
@@ -54,38 +49,34 @@ export class NeuralPanel {
       <div class="deck-header">
         <div class="deck-title-group">
           <span class="deck-indicator-dot"></span>
-          <div class="deck-badge">NPU // AGENT COPILOT</div>
-          <span class="deck-title">SYNAPTIC INFERENCE CHAMBER</span>
+          <span class="deck-badge">NPU COPILOT</span>
+          <span class="deck-title">Neural Network &amp; Decision Chamber</span>
         </div>
         <div class="deck-mode-tabs" role="tablist" aria-label="AI Policy Selector">
-          <button class="deck-tab" data-mode="NAIVE">11&times;S (71%)</button>
-          <button class="deck-tab" data-mode="LINEAR">3-BYTE (100%)</button>
-          <button class="deck-tab" data-mode="ANN">NEURAL NET</button>
-          <button class="deck-tab" data-mode="EVOLUTION">EVOLUTION</button>
-          <button class="deck-tab" data-mode="OFF">STANDBY</button>
+          <button class="deck-tab" data-mode="NAIVE">11&times;S Heuristic</button>
+          <button class="deck-tab" data-mode="LINEAR">3-Byte Linear</button>
+          <button class="deck-tab" data-mode="ANN">Neural Net (MLP)</button>
+          <button class="deck-tab" data-mode="EVOLUTION">Neuroevolution</button>
+          <button class="deck-tab" data-mode="OFF">Manual Play</button>
         </div>
       </div>
 
       <div class="deck-policy-banner" id="deck-policy-desc">
-        <span class="policy-formula">Loading agent telemetry...</span>
+        <span class="policy-formula">Initializing telemetry...</span>
       </div>
 
       <div class="deck-telemetry-row">
         <div class="telemetry-card">
-          <div class="telemetry-label">PERCEPTION DIST</div>
-          <div class="telemetry-val" id="tele-dist">--</div>
+          <div class="telemetry-label">PERCEPTION DISTANCE</div>
+          <div class="telemetry-val" id="tele-dist">SEARCHING</div>
         </div>
         <div class="telemetry-card">
-          <div class="telemetry-label">DINO SPEED</div>
-          <div class="telemetry-val" id="tele-speed">--</div>
+          <div class="telemetry-label">GROUND SPEED</div>
+          <div class="telemetry-val" id="tele-speed">6.0 px/f</div>
         </div>
         <div class="telemetry-card">
-          <div class="telemetry-label">INFERENCE TIME</div>
-          <div class="telemetry-val"><span class="highlight">&lt; 0.1</span> ms</div>
-        </div>
-        <div class="telemetry-card">
-          <div class="telemetry-label">THE REEL BENCHMARK</div>
-          <div class="telemetry-val" id="tele-bench">--</div>
+          <div class="telemetry-label">INFERENCE LATENCY</div>
+          <div class="telemetry-val"><span class="highlight">&lt; 0.1</span> ms (60 Hz)</div>
         </div>
       </div>
 
@@ -99,7 +90,6 @@ export class NeuralPanel {
     this.policyDescEl = panel.querySelector('#deck-policy-desc');
     this.distValEl = panel.querySelector('#tele-dist');
     this.speedValEl = panel.querySelector('#tele-speed');
-    this.benchValEl = panel.querySelector('#tele-bench');
     this.tabsContainer = panel.querySelector('.deck-mode-tabs');
 
     this.tabsContainer?.addEventListener('click', (e) => {
@@ -144,25 +134,25 @@ export class NeuralPanel {
       });
     }
 
-    // Update Policy Description & Reel context
+    // Update Policy Description
     if (this.policyDescEl) {
       if (aiMode === 'NAIVE') {
         this.policyDescEl.innerHTML = `
-          <span class="badge-naive">STAGE 1 &middot; NAIVE RULE</span>
+          <span class="badge-naive">HEURISTIC</span>
           <span class="policy-formula">if (distance &lt; 11 * speed) jump()</span>
-          <span class="policy-note">Reel result: <strong>71%</strong> cleared &bull; Fails against high speeds and multi-cactus clusters.</span>
+          <span class="policy-note">Single-variable linear threshold &bull; 71% benchmark clearance rate</span>
         `;
       } else if (aiMode === 'LINEAR') {
         this.policyDescEl.innerHTML = `
-          <span class="badge-linear">STAGE 3 &middot; 3-BYTE MODEL</span>
+          <span class="badge-linear">3-BYTE MODEL</span>
           <span class="policy-formula">if (distance &lt; 14.5 * speed - 12.9) jump()</span>
-          <span class="policy-note">Reel result: <strong>100%</strong> cleared &bull; 30,000 runs, 0 crashes &bull; 18 bits = 3 Bytes total memory.</span>
+          <span class="policy-note">3-number linear model &bull; 18 bits = 3 Bytes storage &bull; 100% clearance across 30,000 runs</span>
         `;
       } else if (aiMode === 'ANN') {
         this.policyDescEl.innerHTML = `
-          <span class="badge-ann">STAGE 2 &middot; NEURAL NETWORK</span>
+          <span class="badge-ann">NEURAL POLICY</span>
           <span class="policy-formula">7 Inputs &rarr; 8 Hidden (ReLU) &rarr; 3 Outputs (Softmax)</span>
-          <span class="policy-note">Autonomous flight &amp; duck dynamics &bull; 100/100 levels cleared &bull; 88 parameters.</span>
+          <span class="policy-note">7 inputs (dist, obs_w, obs_h, elev, dino_y, dino_v, speed) &bull; 88 weights</span>
         `;
       } else if (aiMode === 'EVOLUTION') {
         const gen = stats?.generation ?? 1;
@@ -170,9 +160,9 @@ export class NeuralPanel {
         const alive = stats?.aliveCount ?? 1;
         const pop = stats?.totalPopulation ?? 20;
         this.policyDescEl.innerHTML = `
-          <span class="badge-evo">NEUROEVOLUTION &middot; GHOST MODE</span>
-          <span class="policy-formula">Gen ${gen} &bull; Peak Fitness ${fit} &bull; Active: ${alive}/${pop}</span>
-          <span class="policy-note">Non-fatal collision trick &bull; Evolves weights continuously without resetting runs.</span>
+          <span class="badge-evo">NEUROEVOLUTION</span>
+          <span class="policy-formula">Gen ${gen} &bull; Peak Fitness ${fit} &bull; Genomes: ${alive}/${pop}</span>
+          <span class="policy-note">Ghost-mode non-fatal collision training &bull; Continuous mutation</span>
         `;
       }
     }
@@ -182,9 +172,9 @@ export class NeuralPanel {
       if (decision?.distance !== undefined && decision.distance >= 0 && decision.distance < 999) {
         this.distValEl.textContent = `${Math.round(decision.distance)} px`;
       } else if (decision?.distance !== undefined && decision.distance < 0) {
-        this.distValEl.textContent = 'CLEARED';
+        this.distValEl.textContent = 'DODGING';
       } else {
-        this.distValEl.textContent = 'SEARCHING';
+        this.distValEl.textContent = 'CLEAR';
       }
     }
     if (this.speedValEl) {
@@ -192,13 +182,6 @@ export class NeuralPanel {
         ? (decision.networkState.inputs[6] * 13).toFixed(1)
         : (decision?.features?.[6] !== undefined ? decision.features[6].toFixed(1) : '6.0');
       this.speedValEl.textContent = `${spd} px/f`;
-    }
-    if (this.benchValEl) {
-      if (aiMode === 'NAIVE') this.benchValEl.textContent = '71 / 100 (FAIL)';
-      else if (aiMode === 'LINEAR') this.benchValEl.textContent = '100 / 100 (PERFECT)';
-      else if (aiMode === 'ANN') this.benchValEl.textContent = '100 / 100 (PASSED)';
-      else if (aiMode === 'EVOLUTION') this.benchValEl.textContent = 'EVOLVING';
-      else this.benchValEl.textContent = '--';
     }
 
     if (!this.isVisible || !this.ctx || !this.canvas) return;

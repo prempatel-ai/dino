@@ -5,20 +5,12 @@ export class SettingsManager {
   isMuted: boolean;
   reducedEffects: boolean;
   showHitboxes: boolean;
-  theme: 'light' | 'dark';
 
   constructor() {
     this.isRetro = Storage.getBoolean('dino_retro', false);
     this.isMuted = Storage.getBoolean('dino_muted', false);
     this.reducedEffects = Storage.getBoolean('dino_reduced_effects', false);
     this.showHitboxes = false;
-    this.theme = (Storage.getString('dino_theme', 'light') as 'light' | 'dark') || 'light';
-  }
-
-  toggleTheme(): 'light' | 'dark' {
-    this.theme = this.theme === 'light' ? 'dark' : 'light';
-    Storage.setString('dino_theme', this.theme);
-    return this.theme;
   }
 
   toggleRetro(): boolean {

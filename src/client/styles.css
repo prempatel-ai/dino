@@ -1,6 +1,6 @@
 /* ==========================================================================
    Dino Run: Neural Autonomous Agent Station
-   Crisp Light Theme (Default) + Seamless Dark Theme Switcher
+   Clean, Modern Light Minimalist Design
    ========================================================================== */
 
 * {
@@ -12,9 +12,6 @@
   -webkit-touch-callout: none;
 }
 
-/* --------------------------------------------------------------------------
-   Global Shell & Atmosphere (Light Theme Default)
-   -------------------------------------------------------------------------- */
 html, body {
   width: 100%;
   min-height: 100%;
@@ -22,182 +19,170 @@ html, body {
   overflow-y: auto;
   background-color: #f6f6f2;
   background-image: 
-    radial-gradient(ellipse 900px 360px at 50% 12%, rgba(245, 158, 11, 0.08) 0%, rgba(14, 165, 233, 0.04) 50%, transparent 100%),
-    radial-gradient(rgba(15, 23, 42, 0.06) 1px, transparent 1px);
-  background-size: 100% 100%, 28px 28px;
-  background-position: 0 0, 14px 14px;
+    radial-gradient(ellipse 900px 360px at 50% 10%, rgba(245, 158, 11, 0.07) 0%, rgba(14, 165, 233, 0.03) 60%, transparent 100%),
+    radial-gradient(rgba(15, 23, 42, 0.05) 1px, transparent 1px);
+  background-size: 100% 100%, 24px 24px;
+  background-position: 0 0, 12px 12px;
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 24px 16px 48px;
+  padding: 20px 16px 40px;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   color: #0f172a;
   -webkit-font-smoothing: antialiased;
-  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
-body.theme-dark {
-  background-color: #0b0f19;
-  background-image: 
-    radial-gradient(ellipse 900px 360px at 50% 12%, rgba(245, 158, 11, 0.09) 0%, rgba(56, 189, 248, 0.04) 50%, transparent 100%),
-    radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1px);
-  color: #f1f5f9;
-}
-
-/* Master Station Layout Shell */
-.station-shell {
+/* Master App Container */
+.app-shell {
   width: 100%;
-  max-width: 1040px;
+  max-width: 980px;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 14px;
   margin: 0 auto;
 }
 
-/* --------------------------------------------------------------------------
-   Station Masthead Header
-   -------------------------------------------------------------------------- */
-.station-masthead {
+/* ==========================================================================
+   Top Navigation Bar (Clean & Professional)
+   ========================================================================== */
+.app-nav {
   width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 4px 8px 12px;
-  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
-  transition: border-color 0.3s ease;
+  padding: 10px 16px;
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 12px;
+  box-shadow: 
+    0 4px 16px -2px rgba(15, 23, 42, 0.04),
+    0 1px 2px rgba(15, 23, 42, 0.02);
 }
 
-body.theme-dark .station-masthead {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.masthead-left {
+.nav-brand {
   display: flex;
   align-items: center;
-  gap: 14px;
+  gap: 10px;
 }
 
-.dino-avatar {
-  width: 40px;
-  height: 40px;
-  border-radius: 10px;
-  background: #ffffff;
-  border: 1px solid rgba(15, 23, 42, 0.1);
+.nav-logo {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: #0f172a;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #d97706;
-  box-shadow: 
-    0 4px 12px rgba(15, 23, 42, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
-  transition: all 0.3s ease;
-}
-
-body.theme-dark .dino-avatar {
-  background: linear-gradient(135deg, #1e293b, #0f172a);
-  border: 1px solid rgba(255, 255, 255, 0.14);
   color: #f59e0b;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.15);
 }
 
-.masthead-title-group {
-  display: flex;
-  flex-direction: column;
-  gap: 2px;
-}
-
-.station-title {
-  font-size: 16px;
-  font-weight: 800;
-  letter-spacing: 0.08em;
-  color: #0f172a;
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  line-height: 1.2;
-}
-
-body.theme-dark .station-title {
-  color: #f8fafc;
-}
-
-.version-tag {
-  font-size: 9.5px;
+.nav-title {
+  font-size: 15px;
   font-weight: 700;
-  letter-spacing: 0.06em;
-  padding: 1px 6px;
-  border-radius: 4px;
-  background: #ecfdf5;
-  color: #047857;
-  border: 1px solid #a7f3d0;
+  letter-spacing: -0.01em;
+  color: #0f172a;
 }
 
-body.theme-dark .version-tag {
-  background: rgba(16, 185, 129, 0.15);
-  color: #34d399;
-  border-color: rgba(16, 185, 129, 0.3);
-}
-
-.station-subtitle {
-  font-size: 11.5px;
-  color: #64748b;
-  font-weight: 500;
-  letter-spacing: 0.01em;
-}
-
-body.theme-dark .station-subtitle {
-  color: #94a3b8;
-}
-
-.masthead-right {
-  display: flex;
-  align-items: center;
-}
-
-.status-chip {
-  display: inline-flex;
-  align-items: center;
-  gap: 7px;
-  padding: 4px 11px;
-  background: #ffffff;
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 20px;
-  font-family: ui-monospace, SF Mono, Menlo, monospace;
+.nav-badge {
   font-size: 11px;
   font-weight: 600;
+  padding: 2px 7px;
+  border-radius: 6px;
+  background: #f1f5f9;
+  color: #475569;
+  border: 1px solid #e2e8f0;
+}
+
+.nav-actions {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.nav-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  background: #ffffff;
   color: #334155;
-  box-shadow: 0 2px 6px rgba(15, 23, 42, 0.04);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  outline: none;
+  transition: all 0.15s ease;
+  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
 }
 
-body.theme-dark .status-chip {
-  background: rgba(15, 23, 42, 0.7);
-  border-color: rgba(255, 255, 255, 0.1);
-  color: #cbd5e1;
-  box-shadow: none;
+.nav-btn * {
+  pointer-events: none;
 }
 
-.status-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #10b981;
-  box-shadow: 0 0 8px #10b981;
-  animation: pulse-dot 2s infinite ease-in-out;
+.nav-btn:hover {
+  background: #f8fafc;
+  color: #0f172a;
+  border-color: #cbd5e1;
 }
 
-@keyframes pulse-dot {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.85); }
+.nav-btn:active {
+  transform: translateY(1px);
 }
 
-/* --------------------------------------------------------------------------
-   Arcade Cabinet Chassis & Game Screen
-   -------------------------------------------------------------------------- */
-.cabinet-chassis {
+.nav-btn.is-on {
+  color: #0284c7;
+  background: #f0f9ff;
+  border-color: #bae6fd;
+}
+
+.nav-btn.is-off {
+  color: #94a3b8;
+  opacity: 0.85;
+}
+
+.nav-btn.is-retro-active {
+  background: #fffbeb;
+  color: #b45309;
+  border-color: #fde68a;
+  box-shadow: 0 0 10px rgba(245, 158, 11, 0.15);
+}
+
+.nav-btn.is-ai-active {
+  background: #ecfdf5;
+  color: #047857;
+  border-color: #6ee7b7;
+  box-shadow: 0 0 10px rgba(16, 185, 129, 0.2);
+}
+
+.nav-icon {
+  display: block;
+  flex-shrink: 0;
+  stroke: currentColor;
+}
+
+.btn-label {
+  line-height: 1;
+}
+
+/* ==========================================================================
+   Main Game Viewport Card
+   ========================================================================== */
+.game-card {
   width: 100%;
-  position: relative;
+  background: #ffffff;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+  border-radius: 14px;
+  padding: 12px;
+  box-shadow: 
+    0 12px 32px -8px rgba(15, 23, 42, 0.08),
+    0 1px 3px rgba(15, 23, 42, 0.03);
   display: flex;
   flex-direction: column;
+  gap: 10px;
 }
 
 #game-container {
@@ -207,8 +192,9 @@ body.theme-dark .status-chip {
   display: flex;
   justify-content: center;
   align-items: center;
-  margin-top: 44px;
-  overflow: visible;
+  border-radius: 10px;
+  overflow: hidden;
+  background: #f7f7f2;
 }
 
 #game {
@@ -217,20 +203,6 @@ body.theme-dark .status-chip {
   display: block;
   image-rendering: pixelated;
   touch-action: none;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 
-    0 20px 48px -12px rgba(15, 23, 42, 0.15),
-    0 0 0 1px rgba(15, 23, 42, 0.06),
-    0 0 40px -10px rgba(245, 158, 11, 0.12);
-  transition: box-shadow 0.3s ease;
-}
-
-body.theme-dark #game {
-  box-shadow: 
-    0 24px 60px -15px rgba(0, 0, 0, 0.85),
-    0 0 0 1px rgba(255, 255, 255, 0.12),
-    0 0 50px -10px rgba(245, 158, 11, 0.12);
 }
 
 #overlay {
@@ -240,244 +212,69 @@ body.theme-dark #game {
   width: 100%;
   height: 100%;
   pointer-events: none;
-  overflow: visible;
 }
 
-/* --------------------------------------------------------------------------
-   Integrated Control Toolbar
-   -------------------------------------------------------------------------- */
-.ui-bar {
-  position: absolute;
-  bottom: calc(100% + 10px);
-  left: 0;
-  right: 0;
+/* Subtle Controls Legend Under Canvas */
+.game-controls-legend {
+  width: 100%;
   display: flex;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
-  gap: 12px;
-  padding: 6px 12px;
-  background: rgba(255, 255, 255, 0.94);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 12px;
-  box-shadow: 
-    0 8px 24px -4px rgba(15, 23, 42, 0.08),
-    0 1px 3px rgba(15, 23, 42, 0.04);
-  pointer-events: auto;
-  z-index: 50;
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-body.theme-dark .ui-bar {
-  background: rgba(15, 23, 42, 0.9);
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  box-shadow: 
-    0 8px 24px -4px rgba(0, 0, 0, 0.5),
-    0 1px 2px rgba(0, 0, 0, 0.3);
-}
-
-.ui-bar-group {
-  display: inline-flex;
-  align-items: center;
-  gap: 5px;
-}
-
-.ui-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  height: 30px;
-  padding: 0 11px;
-  border: 1px solid rgba(15, 23, 42, 0.08);
-  border-radius: 8px;
-  background: rgba(15, 23, 42, 0.03);
-  color: #475569;
-  font-family: ui-monospace, SF Mono, Menlo, monospace;
-  font-size: 11px;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  cursor: pointer;
-  outline: none;
-  touch-action: manipulation;
-  transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1);
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.04);
-}
-
-body.theme-dark .ui-btn {
-  border-color: rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
-  color: #94a3b8;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-}
-
-.ui-btn * {
-  pointer-events: none;
-}
-
-.ui-btn:hover {
-  background: rgba(15, 23, 42, 0.07);
-  color: #0f172a;
-  border-color: rgba(15, 23, 42, 0.16);
-}
-
-body.theme-dark .ui-btn:hover {
-  background: rgba(255, 255, 255, 0.12);
-  color: #f8fafc;
-  border-color: rgba(255, 255, 255, 0.22);
-}
-
-.ui-btn:active {
-  transform: translateY(1px);
-}
-
-.ui-btn.is-on {
-  color: #0284c7;
-  background: #f0f9ff;
-  border-color: #bae6fd;
-}
-
-body.theme-dark .ui-btn.is-on {
-  color: #38bdf8;
-  background: rgba(56, 189, 248, 0.12);
-  border-color: rgba(56, 189, 248, 0.35);
-}
-
-.ui-btn.is-off {
-  color: #94a3b8;
-  opacity: 0.85;
-}
-
-.ui-btn.is-retro-active {
-  background: #fffbeb;
-  color: #b45309;
-  border-color: #fde68a;
-  box-shadow: 0 0 10px rgba(245, 158, 11, 0.15);
-}
-
-body.theme-dark .ui-btn.is-retro-active {
-  background: rgba(245, 158, 11, 0.18);
-  color: #fbbf24;
-  border-color: rgba(245, 158, 11, 0.45);
-  box-shadow: 0 0 12px rgba(245, 158, 11, 0.25);
-}
-
-.ui-btn.is-ai-active {
-  background: #ecfdf5;
-  color: #047857;
-  border-color: #6ee7b7;
-  box-shadow: 0 0 12px rgba(16, 185, 129, 0.2);
-}
-
-body.theme-dark .ui-btn.is-ai-active {
-  background: rgba(16, 185, 129, 0.18);
-  color: #34d399;
-  border-color: rgba(16, 185, 129, 0.45);
-  box-shadow: 0 0 14px rgba(16, 185, 129, 0.3);
-}
-
-.ui-icon {
-  display: block;
-  flex-shrink: 0;
-  stroke: currentColor;
-}
-
-.btn-text {
-  line-height: 1;
-}
-
-.ui-divider {
-  width: 1px;
-  height: 16px;
-  background: rgba(15, 23, 42, 0.1);
-  margin: 0 3px;
-}
-
-body.theme-dark .ui-divider {
-  background: rgba(255, 255, 255, 0.15);
-}
-
-/* Tactile 3D Keycap Legend */
-.ui-hints {
-  display: inline-flex;
-  align-items: center;
-  gap: 12px;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 4px 0 2px;
   font-family: ui-monospace, SF Mono, Menlo, monospace;
   font-size: 11px;
   color: #64748b;
 }
 
-body.theme-dark .ui-hints {
-  color: #94a3b8;
-}
-
-.hint-item {
+.legend-key {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
+  gap: 4px;
 }
 
-.kbd {
+.legend-key kbd {
   display: inline-block;
-  padding: 2px 6px;
-  background: linear-gradient(to bottom, #ffffff, #f1f5f9);
-  border: 1px solid rgba(15, 23, 42, 0.14);
-  border-bottom: 2px solid rgba(15, 23, 42, 0.25);
-  border-radius: 5px;
+  padding: 1px 5px;
+  background: #f8fafc;
+  border: 1px solid #cbd5e1;
+  border-radius: 4px;
   font-family: inherit;
   font-size: 10px;
   font-weight: 700;
   color: #0f172a;
-  box-shadow: 0 1px 2px rgba(15, 23, 42, 0.06);
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.05);
 }
 
-body.theme-dark .kbd {
-  background: linear-gradient(to bottom, #1e293b, #0f172a);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-bottom: 2px solid rgba(255, 255, 255, 0.3);
-  color: #f8fafc;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+.legend-dot {
+  color: #cbd5e1;
+  font-size: 10px;
 }
 
-@media (max-width: 860px) {
-  .ui-hints {
-    display: none;
-  }
-}
-
-/* --------------------------------------------------------------------------
-   Neural Deck & Live Telemetry
-   -------------------------------------------------------------------------- */
+/* ==========================================================================
+   Neural Deck & Decision Chamber
+   ========================================================================== */
 .neural-deck {
   width: 100%;
-  margin-top: 12px;
   background: #ffffff;
   border: 1px solid rgba(15, 23, 42, 0.08);
   border-radius: 14px;
   padding: 14px 18px 16px;
   box-shadow: 
-    0 20px 40px -12px rgba(15, 23, 42, 0.08),
-    inset 0 1px 0 rgba(255, 255, 255, 0.8);
+    0 12px 32px -8px rgba(15, 23, 42, 0.06),
+    0 1px 2px rgba(15, 23, 42, 0.03);
   display: flex;
   flex-direction: column;
   gap: 12px;
-  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-body.theme-dark .neural-deck {
-  background: #090d16;
-  background-image: radial-gradient(circle at 50% 30%, rgba(20, 27, 45, 0.6) 0%, rgba(9, 13, 22, 0.98) 100%);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  box-shadow: 
-    0 24px 50px -12px rgba(0, 0, 0, 0.75),
-    inset 0 1px 0 rgba(255, 255, 255, 0.08);
+  transition: all 0.25s ease;
 }
 
 .neural-deck.is-hidden {
   display: none;
 }
 
-/* Deck Header & Mode Tabs */
+/* Header & Policy Selector Tabs */
 .deck-header {
   display: flex;
   justify-content: space-between;
@@ -485,11 +282,7 @@ body.theme-dark .neural-deck {
   flex-wrap: wrap;
   gap: 10px;
   padding-bottom: 10px;
-  border-bottom: 1px solid rgba(15, 23, 42, 0.08);
-}
-
-body.theme-dark .deck-header {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  border-bottom: 1px solid #f1f5f9;
 }
 
 .deck-title-group {
@@ -499,17 +292,17 @@ body.theme-dark .deck-header {
 }
 
 .deck-indicator-dot {
-  width: 8px;
-  height: 8px;
+  width: 7px;
+  height: 7px;
   border-radius: 50%;
   background: #10b981;
-  box-shadow: 0 0 10px #10b981;
+  box-shadow: 0 0 6px #10b981;
 }
 
 .deck-badge {
   font-size: 10px;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.04em;
   padding: 2px 7px;
   border-radius: 4px;
   background: #f0f9ff;
@@ -518,22 +311,11 @@ body.theme-dark .deck-header {
   font-family: ui-monospace, SF Mono, Menlo, monospace;
 }
 
-body.theme-dark .deck-badge {
-  background: rgba(56, 189, 248, 0.15);
-  color: #38bdf8;
-  border-color: rgba(56, 189, 248, 0.3);
-}
-
 .deck-title {
   font-size: 12px;
   font-weight: 700;
-  letter-spacing: 0.05em;
+  letter-spacing: -0.01em;
   color: #0f172a;
-  font-family: ui-monospace, SF Mono, Menlo, monospace;
-}
-
-body.theme-dark .deck-title {
-  color: #e2e8f0;
 }
 
 .deck-mode-tabs {
@@ -545,26 +327,17 @@ body.theme-dark .deck-title {
   border: 1px solid #e2e8f0;
 }
 
-body.theme-dark .deck-mode-tabs {
-  background: rgba(15, 23, 42, 0.7);
-  border-color: rgba(255, 255, 255, 0.08);
-}
-
 .deck-tab {
   padding: 4px 10px;
   border: none;
   border-radius: 6px;
   background: transparent;
   color: #64748b;
-  font-family: ui-monospace, SF Mono, Menlo, monospace;
-  font-size: 10.5px;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  font-size: 11px;
   font-weight: 600;
   cursor: pointer;
-  transition: all 0.16s ease;
-}
-
-body.theme-dark .deck-tab {
-  color: #94a3b8;
+  transition: all 0.15s ease;
 }
 
 .deck-tab:hover {
@@ -572,21 +345,11 @@ body.theme-dark .deck-tab {
   background: rgba(15, 23, 42, 0.06);
 }
 
-body.theme-dark .deck-tab:hover {
-  color: #f8fafc;
-  background: rgba(255, 255, 255, 0.06);
-}
-
 .deck-tab.is-active {
   background: #10b981;
   color: #ffffff;
   font-weight: 700;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.35);
-}
-
-body.theme-dark .deck-tab.is-active {
-  color: #04100c;
-  box-shadow: 0 2px 8px rgba(16, 185, 129, 0.4);
+  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.35);
 }
 
 /* Policy Description Banner */
@@ -603,12 +366,6 @@ body.theme-dark .deck-tab.is-active {
   color: #334155;
 }
 
-body.theme-dark .deck-policy-banner {
-  background: rgba(15, 23, 42, 0.5);
-  border-color: rgba(255, 255, 255, 0.06);
-  color: #cbd5e1;
-}
-
 .badge-naive {
   font-size: 9.5px;
   font-weight: 700;
@@ -617,12 +374,6 @@ body.theme-dark .deck-policy-banner {
   background: #fffbeb;
   color: #b45309;
   border: 1px solid #fde68a;
-}
-
-body.theme-dark .badge-naive {
-  background: rgba(245, 158, 11, 0.15);
-  color: #f59e0b;
-  border-color: rgba(245, 158, 11, 0.3);
 }
 
 .badge-linear {
@@ -635,12 +386,6 @@ body.theme-dark .badge-naive {
   border: 1px solid #bae6fd;
 }
 
-body.theme-dark .badge-linear {
-  background: rgba(56, 189, 248, 0.15);
-  color: #38bdf8;
-  border-color: rgba(56, 189, 248, 0.3);
-}
-
 .badge-ann {
   font-size: 9.5px;
   font-weight: 700;
@@ -649,12 +394,6 @@ body.theme-dark .badge-linear {
   background: #faf5ff;
   color: #7e22ce;
   border: 1px solid #e9d5ff;
-}
-
-body.theme-dark .badge-ann {
-  background: rgba(168, 85, 247, 0.15);
-  color: #c084fc;
-  border-color: rgba(168, 85, 247, 0.3);
 }
 
 .badge-evo {
@@ -667,12 +406,6 @@ body.theme-dark .badge-ann {
   border: 1px solid #fbcfe8;
 }
 
-body.theme-dark .badge-evo {
-  background: rgba(236, 72, 153, 0.15);
-  color: #f472b6;
-  border-color: rgba(236, 72, 153, 0.3);
-}
-
 .policy-formula {
   font-family: ui-monospace, SF Mono, Menlo, monospace;
   font-weight: 700;
@@ -683,31 +416,21 @@ body.theme-dark .badge-evo {
   border: 1px solid #cbd5e1;
 }
 
-body.theme-dark .policy-formula {
-  color: #f8fafc;
-  background: rgba(0, 0, 0, 0.3);
-  border-color: rgba(255, 255, 255, 0.08);
-}
-
 .policy-note {
   color: #64748b;
   font-size: 11px;
 }
 
-body.theme-dark .policy-note {
-  color: #94a3b8;
-}
-
 /* Telemetry Metric Cards */
 .deck-telemetry-row {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
+  grid-template-columns: repeat(3, 1fr);
   gap: 8px;
 }
 
-@media (max-width: 640px) {
+@media (max-width: 600px) {
   .deck-telemetry-row {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: 1fr;
   }
 }
 
@@ -721,15 +444,10 @@ body.theme-dark .policy-note {
   gap: 3px;
 }
 
-body.theme-dark .telemetry-card {
-  background: rgba(15, 23, 42, 0.45);
-  border-color: rgba(255, 255, 255, 0.06);
-}
-
 .telemetry-label {
   font-size: 9.5px;
   font-weight: 700;
-  letter-spacing: 0.06em;
+  letter-spacing: 0.05em;
   color: #64748b;
   font-family: ui-monospace, SF Mono, Menlo, monospace;
 }
@@ -741,19 +459,11 @@ body.theme-dark .telemetry-card {
   font-family: ui-monospace, SF Mono, Menlo, monospace;
 }
 
-body.theme-dark .telemetry-val {
-  color: #f1f5f9;
-}
-
 .telemetry-val .highlight {
   color: #059669;
 }
 
-body.theme-dark .telemetry-val .highlight {
-  color: #34d399;
-}
-
-/* Neural Canvas Container */
+/* Neural Canvas Viewport */
 .neural-deck-content {
   width: 100%;
   display: flex;
@@ -764,12 +474,6 @@ body.theme-dark .telemetry-val .highlight {
   border-radius: 10px;
   padding: 10px 0;
   box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.5);
-}
-
-body.theme-dark .neural-deck-content {
-  background: #060910;
-  border-color: rgba(255, 255, 255, 0.06);
-  box-shadow: inset 0 2px 10px rgba(0, 0, 0, 0.6);
 }
 
 #neural-canvas {
