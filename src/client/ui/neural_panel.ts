@@ -179,9 +179,13 @@ export class NeuralPanel {
 
     // Update Telemetry Metrics
     if (this.distValEl) {
-      this.distValEl.textContent = decision?.distance !== undefined && decision.distance < 999
-        ? `${Math.round(decision.distance)} px`
-        : 'IN RANGE';
+      if (decision?.distance !== undefined && decision.distance >= 0 && decision.distance < 999) {
+        this.distValEl.textContent = `${Math.round(decision.distance)} px`;
+      } else if (decision?.distance !== undefined && decision.distance < 0) {
+        this.distValEl.textContent = 'CLEARED';
+      } else {
+        this.distValEl.textContent = 'SEARCHING';
+      }
     }
     if (this.speedValEl) {
       const spd = decision?.networkState?.inputs?.[6] !== undefined
