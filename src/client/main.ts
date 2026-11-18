@@ -33,7 +33,21 @@ function bootstrap(): void {
   renderer.isRetro = settings.isRetro;
   renderer.reducedEffects = settings.reducedEffects;
   renderer.showHitboxes = settings.showHitboxes;
-  renderer.overlay.updateButtons(settings.isMuted, settings.isRetro, aiController.mode);
+
+  const applyTheme = (theme: 'light' | 'dark'): void => {
+    document.body.classList.toggle('theme-dark', theme === 'dark');
+    document.body.classList.toggle('theme-light', theme === 'light');
+    renderer.overlay.updateButtons(settings.isMuted, settings.isRetro, aiController.mode, theme);
+  };
+
+  applyTheme(settings.theme);
+
+  const toggleTheme = (): void => {
+    const theme = settings.toggleTheme();
+    applyTheme(theme);
+  };
+  input.onThemeToggle = toggleTheme;
+  renderer.overlay.onThemeClick = toggleTheme;
 
   // Audio start on first user interaction
   let userInteracted = false;
@@ -68,7 +82,7 @@ function bootstrap(): void {
     const muted = settings.toggleMute();
     synth.setMuted(muted);
     ambient.setMuted(muted);
-    renderer.overlay.updateButtons(muted, settings.isRetro, aiController.mode);
+    renderer.overlay.updateButtons(muted, settings.isRetro, aiController.mode, settings.theme);
   };
   input.onMuteToggle = toggleMute;
   renderer.overlay.onMuteClick = toggleMute;
@@ -77,7 +91,7 @@ function bootstrap(): void {
   const toggleRetro = (): void => {
     const retro = settings.toggleRetro();
     renderer.isRetro = retro;
-    renderer.overlay.updateButtons(settings.isMuted, retro, aiController.mode);
+    renderer.overlay.updateButtons(settings.isMuted, retro, aiController.mode, settings.theme);
   };
   input.onRetroToggle = toggleRetro;
   renderer.overlay.onRetroClick = toggleRetro;
@@ -85,14 +99,14 @@ function bootstrap(): void {
   // AI Auto-Pilot mode handlers (Cycle: OFF -> NAIVE -> LINEAR -> ANN -> EVOLUTION)
   const toggleAI = (): void => {
     const mode = aiController.cycleMode();
-    renderer.overlay.updateButtons(settings.isMuted, settings.isRetro, mode);
+    renderer.overlay.updateButtons(settings.isMuted, settings.isRetro, mode, settings.theme);
   };
   input.onAIToggle = toggleAI;
   renderer.overlay.onAIClick = toggleAI;
 
   neuralPanel.onModeSelect = (mode) => {
     aiController.setMode(mode);
-    renderer.overlay.updateButtons(settings.isMuted, settings.isRetro, mode);
+    renderer.overlay.updateButtons(settings.isMuted, settings.isRetro, mode, settings.theme);
   };
 
   input.onHitboxToggle = () => {

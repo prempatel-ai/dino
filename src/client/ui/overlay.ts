@@ -7,11 +7,13 @@ export class Overlay {
   private muteBtn: HTMLButtonElement | null = null;
   private retroBtn: HTMLButtonElement | null = null;
   private aiBtn: HTMLButtonElement | null = null;
+  private themeBtn: HTMLButtonElement | null = null;
   private uiBar: HTMLElement | null = null;
 
   onMuteClick?: () => void;
   onRetroClick?: () => void;
   onAIClick?: () => void;
+  onThemeClick?: () => void;
 
   constructor() {
     this.overlayEl = document.getElementById('overlay');
@@ -24,6 +26,21 @@ export class Overlay {
     this.overlayEl.innerHTML = `
       <div class="ui-bar" role="toolbar" aria-label="Game controls">
         <div class="ui-bar-group">
+          <button id="btn-theme" class="ui-btn" aria-label="Toggle light or dark theme" title="Toggle Theme (T)">
+            <svg class="ui-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <span class="btn-text">THEME: LIGHT</span>
+          </button>
+          <div class="ui-divider"></div>
           <button id="btn-mute" class="ui-btn is-on" aria-label="Toggle sound" title="Toggle SFX (M)">
             <svg class="ui-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
@@ -56,6 +73,7 @@ export class Overlay {
           <span class="hint-item"><kbd class="kbd">SPACE</kbd> / <kbd class="kbd">↑</kbd> Jump</span>
           <span class="hint-item"><kbd class="kbd">↓</kbd> Duck</span>
           <span class="hint-item"><kbd class="kbd">A</kbd> AI Mode</span>
+          <span class="hint-item"><kbd class="kbd">T</kbd> Theme</span>
           <span class="hint-item"><kbd class="kbd">R</kbd> Retro</span>
           <span class="hint-item"><kbd class="kbd">M</kbd> Mute</span>
         </div>
@@ -63,9 +81,15 @@ export class Overlay {
     `;
 
     this.uiBar = this.overlayEl.querySelector('.ui-bar');
+    this.themeBtn = document.getElementById('btn-theme') as HTMLButtonElement;
     this.muteBtn = document.getElementById('btn-mute') as HTMLButtonElement;
     this.retroBtn = document.getElementById('btn-retro') as HTMLButtonElement;
     this.aiBtn = document.getElementById('btn-ai') as HTMLButtonElement;
+
+    this.themeBtn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      this.onThemeClick?.();
+    });
 
     this.muteBtn?.addEventListener('click', (e) => {
       e.stopPropagation();
@@ -83,7 +107,14 @@ export class Overlay {
     });
   }
 
-  updateButtons(isMuted: boolean, isRetro: boolean, aiMode: AIMode = 'OFF'): void {
+  updateButtons(isMuted: boolean, isRetro: boolean, aiMode: AIMode = 'OFF', theme: 'light' | 'dark' = 'light'): void {
+    if (this.themeBtn) {
+      const isLight = theme === 'light';
+      const icon = isLight
+        ? '<circle cx="12" cy="12" r="5"></circle><line x1="12" y1="1" x2="12" y2="3"></line><line x1="12" y1="21" x2="12" y2="23"></line><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line><line x1="1" y1="12" x2="3" y2="12"></line><line x1="21" y1="12" x2="23" y2="12"></line><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>'
+        : '<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>';
+      this.themeBtn.innerHTML = `<svg class="ui-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon}</svg><span class="btn-text">THEME: ${theme.toUpperCase()}</span>`;
+    }
     if (this.muteBtn) {
       const icon = isMuted
         ? '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>'

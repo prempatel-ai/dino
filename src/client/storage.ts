@@ -44,4 +44,13 @@ export class Storage {
   static setBoolean(key: string, value: boolean): void {
     this.setItem(key, value ? 'true' : 'false');
   }
+
+  static getString(key: string, defaultValue: string = ''): string {
+    const val = this.getItem(key);
+    return val !== null ? val : defaultValue;
+  }
+
+  static setString(key: string, value: string): void {
+    this.setItem(key, value);
+  }
 }
