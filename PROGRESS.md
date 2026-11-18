@@ -35,3 +35,10 @@ Agent appends here after every task. Newest at bottom. Never delete entries.
 - Tests: 9 unit tests passing (full hold apex = 2, airFrames = 35 at speed 6), all typecheck, build, and lint checks green.
 - Decisions: T02 — Preserved duck input during airborne state as pending duck so landing smoothly transitions to ducking if down key remains held.
 - Notes: Full jump holds, early release hops, speed drops, and ground ducks match GAME_SPEC.md.
+
+### T03 — Core: Obstacles and horizon — DONE
+- Date: 2026-11-18
+- What changed: Implemented `src/core/obstacle.ts` and `src/core/horizon.ts` with exact obstacle configs, grouping rules, pterodactyl speed threshold and flight heights, dynamic gap calculation, 3000 ms clear time before first obstacle, ground offset scrolling, cloud management, and obstacle duplication capping.
+- Tests: 18 unit tests passing across all suites; typecheck, test, build, lint all green.
+- Decisions: T03 — Preserved entire obstacle history in horizon for deterministic auditability and verified duplication limit <= 2.
+- Notes: Gap equations and obstacle spawn thresholds verified against Chromium values.

@@ -71,7 +71,7 @@ No DOM. No `Math.random`. Frames not ms.
 ---
 
 ## T03 — Core: Obstacles and horizon
-Status: TODO | Depends: T01
+Status: DONE | Depends: T01
 
 **CONTEXT**
 GAME_SPEC.md sections 5, 6, 9.
