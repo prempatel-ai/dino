@@ -23,33 +23,42 @@ export class Overlay {
 
     this.overlayEl.innerHTML = `
       <div class="ui-bar" role="toolbar" aria-label="Game controls">
-        <button id="btn-mute" class="ui-btn is-on" aria-label="Toggle sound" title="Toggle SFX (M)">
-          <svg class="ui-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
-            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
-          </svg>
-          <span class="btn-text">SFX: ON</span>
-        </button>
-        <div class="ui-divider"></div>
-        <button id="btn-retro" class="ui-btn" aria-label="Toggle retro mode" title="Toggle Visual Mode (R)">
-          <svg class="ui-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <circle cx="12" cy="12" r="4"></circle>
-            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
-          </svg>
-          <span class="btn-text">RETRO: OFF</span>
-        </button>
-        <div class="ui-divider"></div>
-        <button id="btn-ai" class="ui-btn" aria-label="Toggle AI policy" title="Toggle AI Auto-Pilot (A)">
-          <svg class="ui-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-            <rect x="3" y="11" width="18" height="10" rx="2"></rect>
-            <circle cx="12" cy="5" r="2"></circle>
-            <path d="M12 7v4"></path>
-            <circle cx="8" cy="16" r="1" fill="currentColor"></circle>
-            <circle cx="16" cy="16" r="1" fill="currentColor"></circle>
-          </svg>
-          <span class="btn-text">AI: OFF</span>
-        </button>
+        <div class="ui-bar-group">
+          <button id="btn-mute" class="ui-btn is-on" aria-label="Toggle sound" title="Toggle SFX (M)">
+            <svg class="ui-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+            </svg>
+            <span class="btn-text">SFX: ON</span>
+          </button>
+          <div class="ui-divider"></div>
+          <button id="btn-retro" class="ui-btn" aria-label="Toggle retro mode" title="Toggle Visual Mode (R)">
+            <svg class="ui-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="4"></circle>
+              <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+            </svg>
+            <span class="btn-text">RETRO: OFF</span>
+          </button>
+          <div class="ui-divider"></div>
+          <button id="btn-ai" class="ui-btn" aria-label="Toggle AI policy" title="Toggle AI Auto-Pilot (A)">
+            <svg class="ui-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <rect x="3" y="11" width="18" height="10" rx="2"></rect>
+              <circle cx="12" cy="5" r="2"></circle>
+              <path d="M12 7v4"></path>
+              <circle cx="8" cy="16" r="1" fill="currentColor"></circle>
+              <circle cx="16" cy="16" r="1" fill="currentColor"></circle>
+            </svg>
+            <span class="btn-text">AI: OFF</span>
+          </button>
+        </div>
+        <div class="ui-hints">
+          <span class="hint-item"><kbd class="kbd">SPACE</kbd> / <kbd class="kbd">↑</kbd> Jump</span>
+          <span class="hint-item"><kbd class="kbd">↓</kbd> Duck</span>
+          <span class="hint-item"><kbd class="kbd">A</kbd> AI Mode</span>
+          <span class="hint-item"><kbd class="kbd">R</kbd> Retro</span>
+          <span class="hint-item"><kbd class="kbd">M</kbd> Mute</span>
+        </div>
       </div>
     `;
 

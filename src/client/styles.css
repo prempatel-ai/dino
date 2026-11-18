@@ -9,7 +9,7 @@
 
 html, body {
   width: 100%;
-  height: 100%;
+  min-height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
   background: #080b14;
@@ -18,10 +18,10 @@ html, body {
     linear-gradient(to bottom, #080b14, #04060a);
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  padding: 28px 16px;
-  touch-action: none;
+  padding: 48px 16px 40px;
+  touch-action: pan-y;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
   color: #f8fafc;
 }
@@ -29,18 +29,13 @@ html, body {
 #game-container {
   position: relative;
   width: 100%;
-  max-width: 1100px;
-  max-height: calc(100vh - 300px);
+  max-width: 1000px;
   aspect-ratio: 4 / 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  margin: 0 auto;
-  border-radius: 14px;
-  overflow: hidden;
-  box-shadow: 
-    0 25px 60px -15px rgba(0, 0, 0, 0.75),
-    0 0 0 1px rgba(255, 255, 255, 0.12);
+  margin: 40px auto 0;
+  overflow: visible; /* CRITICAL: Never clip floating controls */
 }
 
 #game {
@@ -49,6 +44,11 @@ html, body {
   display: block;
   image-rendering: pixelated;
   touch-action: none;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 
+    0 25px 60px -15px rgba(0, 0, 0, 0.75),
+    0 0 0 1px rgba(255, 255, 255, 0.12);
 }
 
 #overlay {
@@ -58,77 +58,78 @@ html, body {
   width: 100%;
   height: 100%;
   pointer-events: none;
+  overflow: visible;
 }
 
 /* Modern Frosted Glass Floating Toolbar */
 .ui-bar {
   position: absolute;
   bottom: calc(100% + 12px);
-  left: 12px;
-  display: inline-flex;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 3px;
-  padding: 3px 5px;
-  background: rgba(255, 255, 255, 0.78);
+  gap: 12px;
+  padding: 6px 14px;
+  background: rgba(15, 23, 42, 0.88);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
-  border: 1px solid rgba(255, 255, 255, 0.9);
-  border-radius: 20px;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 12px;
   box-shadow: 
-    0 4px 16px -2px rgba(15, 23, 42, 0.08),
-    0 1px 3px rgba(15, 23, 42, 0.04),
-    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+    0 8px 24px -4px rgba(0, 0, 0, 0.5),
+    0 1px 2px rgba(0, 0, 0, 0.3);
   pointer-events: auto;
-  z-index: 10;
+  z-index: 50;
   transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.ui-bar:hover {
-  background: rgba(255, 255, 255, 0.92);
-  box-shadow: 
-    0 6px 20px -2px rgba(15, 23, 42, 0.12),
-    0 2px 6px rgba(15, 23, 42, 0.06);
+.ui-bar-group {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.ui-bar.night {
-  background: rgba(15, 23, 42, 0.75);
-  border-color: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
-}
-
-.ui-bar.night .ui-btn {
+.ui-hints {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  font-family: ui-monospace, SF Mono, Menlo, monospace;
+  font-size: 11px;
   color: #94a3b8;
 }
 
-.ui-bar.night .ui-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #f8fafc;
+.hint-item {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
 }
 
-.ui-bar.night .ui-btn.is-on {
-  color: #38bdf8;
-}
-
-.ui-bar.night .ui-btn.is-retro-active {
-  background: rgba(56, 189, 248, 0.2);
-  color: #38bdf8;
-}
-
-.ui-bar.night .ui-divider {
-  background: rgba(255, 255, 255, 0.12);
+.kbd {
+  display: inline-block;
+  padding: 1px 6px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 10px;
+  font-weight: 700;
+  color: #f1f5f9;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.4);
 }
 
 .ui-btn {
   display: inline-flex;
   align-items: center;
-  gap: 5px;
-  height: 26px;
-  padding: 0 9px;
-  border: none;
-  border-radius: 13px;
-  background: transparent;
-  color: #475569;
-  font-family: inherit;
+  gap: 6px;
+  height: 28px;
+  padding: 0 10px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #94a3b8;
+  font-family: ui-monospace, SF Mono, Menlo, monospace;
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.02em;
@@ -145,12 +146,13 @@ html, body {
 }
 
 .ui-btn:hover {
-  background: rgba(15, 23, 42, 0.06);
-  color: #0f172a;
+  background: rgba(255, 255, 255, 0.12);
+  color: #f8fafc;
+  border-color: rgba(255, 255, 255, 0.2);
 }
 
 .ui-btn:active {
-  transform: scale(0.95);
+  transform: scale(0.96);
 }
 
 .ui-btn:focus-visible {
@@ -158,40 +160,28 @@ html, body {
 }
 
 .ui-btn.is-on {
-  color: #0284c7;
+  color: #38bdf8;
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.3);
 }
 
 .ui-btn.is-off {
-  color: #94a3b8;
-  opacity: 0.75;
+  color: #64748b;
+  opacity: 0.8;
 }
 
 .ui-btn.is-retro-active {
-  background: #0284c7;
-  color: #ffffff;
-  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.3);
-}
-
-.ui-btn.is-retro-active:hover {
-  background: #0369a1;
-  color: #ffffff;
+  background: rgba(245, 158, 11, 0.18);
+  color: #fbbf24;
+  border-color: rgba(245, 158, 11, 0.4);
+  box-shadow: 0 0 12px rgba(245, 158, 11, 0.2);
 }
 
 .ui-btn.is-ai-active {
-  background: #10b981;
-  color: #ffffff;
-  box-shadow: 0 2px 6px rgba(16, 185, 129, 0.35);
-}
-
-.ui-btn.is-ai-active:hover {
-  background: #059669;
-  color: #ffffff;
-}
-
-.ui-bar.night .ui-btn.is-ai-active {
-  background: rgba(16, 185, 129, 0.25);
+  background: rgba(16, 185, 129, 0.18);
   color: #34d399;
-  border: 1px solid rgba(52, 211, 153, 0.4);
+  border-color: rgba(16, 185, 129, 0.45);
+  box-shadow: 0 0 12px rgba(16, 185, 129, 0.25);
 }
 
 .ui-icon {
@@ -206,20 +196,14 @@ html, body {
 
 .ui-divider {
   width: 1px;
-  height: 12px;
-  background: rgba(15, 23, 42, 0.12);
-  margin: 0 2px;
+  height: 14px;
+  background: rgba(255, 255, 255, 0.15);
+  margin: 0 4px;
 }
 
-/* Fallback for ultra-compact viewports: tuck into middle sky clear of Dino's jump lane */
-@media (max-height: 260px) {
-  #game-container {
-    max-height: 100vh;
-  }
-  .ui-bar {
-    bottom: auto;
-    top: 8px;
-    left: 140px; /* Dino jumps at x=50..94, so x=140px is completely clear */
+@media (max-width: 760px) {
+  .ui-hints {
+    display: none;
   }
 }
 
@@ -228,13 +212,13 @@ html, body {
    ========================================================================== */
 .neural-deck {
   width: 100%;
-  max-width: 1100px;
-  margin-top: 14px;
+  max-width: 1000px;
+  margin-top: 18px;
   background: #080c14;
   background-image: radial-gradient(circle at 50% 50%, rgba(20, 27, 45, 0.5) 0%, rgba(8, 12, 20, 0.95) 100%);
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 14px;
-  padding: 12px 16px 14px;
+  padding: 14px 18px 16px;
   box-shadow: 
     0 24px 50px -12px rgba(0, 0, 0, 0.7),
     inset 0 1px 0 rgba(255, 255, 255, 0.08);
