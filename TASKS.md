@@ -235,7 +235,7 @@ Each SVG < 3 KB. No external images.
 ---
 
 ## T08 — Modern visuals
-Status: TODO | Depends: T07
+Status: DONE | Depends: T07
 
 **CONTEXT**
 ASSETS.md palette, parallax, night, retro mode. DESIGN.md sections 2, 4, 5, 8 (dino expressions, ambient life, juice, readability rules).

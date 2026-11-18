@@ -70,3 +70,10 @@ Agent appends here after every task. Newest at bottom. Never delete entries.
 - Tests: 28 unit tests passing, Playwright e2e smoke test verified sprite loading and rendering.
 - Decisions: T07 — Bundled SVGs via Vite raw imports to guarantee zero network latency and synchronous offline canvas availability.
 - Notes: Verified exact alignment of SVG silhouettes with collision boxes from GAME_SPEC.md.
+
+### T08 — Modern visuals — DONE
+- Date: 2026-11-18
+- What changed: Implemented `src/client/renderer/palette.ts` (day, night, and retro palette tokens with hex lerp interpolation), `src/client/renderer/layers.ts` (far and mid dunes parallax layers with smooth curves), `src/client/renderer/particles.ts` (pre-allocated 100-particle pool for running dust, landing burst, and death burst), `src/client/ui/settings.ts`, and `src/client/storage.ts`. Enhanced renderer with jump squash/stretch, decaying screen shake, death flash, and retro mode toggle (R key).
+- Tests: 29 unit tests passing including `effects_equivalence.test.ts` (verifying identical simulation state with visual effects on vs off); Playwright smoke test passing.
+- Decisions: T08 — Applied squash/stretch and screen shake purely via canvas context matrix transformations so physics and core state remain completely untouched.
+- Notes: Pre-allocated object pools ensure zero garbage collection churn during active 60 FPS gameplay.
