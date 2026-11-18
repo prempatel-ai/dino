@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9 9" width="9" height="9">
-  <!-- Star: 9x9 -->
-  <path d="M4 0h1v9H4V0z M0 4h9v1H0V4z" fill="currentColor" />
-  <rect x="3" y="3" width="3" height="3" fill="#FFFFFF" opacity="0.6" />
+  <!-- Modern 4-point twinkle star -->
+  <path d="M 4.5 0 Q 4.5 4.5 0 4.5 Q 4.5 4.5 4.5 9 Q 4.5 4.5 9 4.5 Q 4.5 4.5 4.5 0 Z" fill="#FFFFFF" opacity="0.9" />
+  <circle cx="4.5" cy="4.5" r="1.2" fill="#FFFFFF" />
 </svg>

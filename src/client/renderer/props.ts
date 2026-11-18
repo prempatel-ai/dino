@@ -124,7 +124,9 @@ export class PropsSystem {
       const p = this.weatherParticles[i];
       ctx.globalAlpha = p.alpha;
       ctx.fillStyle = p.color;
-      ctx.fillRect(Math.round(p.x), Math.round(p.y), p.size, p.size);
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, Math.max(0.6, p.size / 2), 0, Math.PI * 2);
+      ctx.fill();
     }
 
     // Draw Ambient Lizard

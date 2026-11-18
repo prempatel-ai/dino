@@ -9,7 +9,13 @@ export class ParallaxLayers {
     this.midOffset = (this.midOffset + 0.3 * speed * frames) % 600;
   }
 
-  drawSky(ctx: CanvasRenderingContext2D, width: number, height: number, palette: PaletteTokens): void {
+  drawSky(
+    ctx: CanvasRenderingContext2D,
+    width: number,
+    height: number,
+    palette: PaletteTokens,
+    nightFade: number = 0,
+  ): void {
     const gradient = ctx.createLinearGradient(0, 0, 0, height);
     gradient.addColorStop(0, palette.skyTop);
     gradient.addColorStop(0.7, palette.skyBottom);
@@ -17,28 +23,30 @@ export class ParallaxLayers {
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, width, height);
 
-    // Modern Sun glow for day mode
-    if (!palette.skyTop.startsWith('#0') && !palette.skyTop.startsWith('#1')) {
+    // Modern daytime sun: positioned at (390, 26) well clear of HUD, fades out completely as night falls
+    const sunAlpha = Math.max(0, 1 - nightFade * 1.5);
+    if (sunAlpha > 0.01) {
       ctx.save();
-      const sunGrad = ctx.createRadialGradient(480, 28, 4, 480, 28, 36);
+      ctx.globalAlpha = sunAlpha;
+      const sunGrad = ctx.createRadialGradient(390, 26, 4, 390, 26, 32);
       sunGrad.addColorStop(0, 'rgba(255, 235, 180, 0.7)');
-      sunGrad.addColorStop(0.3, 'rgba(255, 215, 140, 0.3)');
+      sunGrad.addColorStop(0.35, 'rgba(255, 215, 140, 0.25)');
       sunGrad.addColorStop(1, 'rgba(255, 200, 100, 0)');
       ctx.fillStyle = sunGrad;
       ctx.beginPath();
-      ctx.arc(480, 28, 36, 0, Math.PI * 2);
+      ctx.arc(390, 26, 32, 0, Math.PI * 2);
       ctx.fill();
 
       // Sun core
       ctx.fillStyle = 'rgba(255, 250, 230, 0.9)';
       ctx.beginPath();
-      ctx.arc(480, 28, 10, 0, Math.PI * 2);
+      ctx.arc(390, 26, 9, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
     }
   }
 
-  drawFarDunes(ctx: CanvasRenderingContext2D, width: number, palette: PaletteTokens): void {
+  drawFarDunes(ctx: CanvasRenderingContext2D, width: number, palette: PaletteTokens, nightFade: number = 0): void {
     ctx.save();
     const offset = this.farOffset;
 
@@ -62,14 +70,15 @@ export class ParallaxLayers {
     ctx.fill();
 
     // Subtle edge rim light on far dunes
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+    const rimAlpha = Math.max(0.02, 0.1 * (1 - nightFade * 0.7));
+    ctx.strokeStyle = `rgba(255, 255, 255, ${rimAlpha})`;
     ctx.lineWidth = 1;
     ctx.stroke();
 
     ctx.restore();
   }
 
-  drawMidDunes(ctx: CanvasRenderingContext2D, width: number, palette: PaletteTokens): void {
+  drawMidDunes(ctx: CanvasRenderingContext2D, width: number, palette: PaletteTokens, nightFade: number = 0): void {
     ctx.save();
     const offset = this.midOffset;
 
@@ -94,7 +103,8 @@ export class ParallaxLayers {
     ctx.fill();
 
     // Dune ridge line highlight
-    ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+    const rimAlpha = Math.max(0.02, 0.08 * (1 - nightFade * 0.7));
+    ctx.strokeStyle = `rgba(255, 255, 255, ${rimAlpha})`;
     ctx.lineWidth = 1;
     ctx.stroke();
 

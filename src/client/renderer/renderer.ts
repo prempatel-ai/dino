@@ -110,7 +110,7 @@ export class Renderer {
       ctx.fillStyle = palette.skyTop;
       ctx.fillRect(0, 0, this.camera.logicalWidth, this.camera.logicalHeight);
     } else {
-      this.layers.drawSky(ctx, this.camera.logicalWidth, this.camera.logicalHeight, palette);
+      this.layers.drawSky(ctx, this.camera.logicalWidth, this.camera.logicalHeight, palette, state.nightFade);
 
       // Night celestial elements
       if (state.isNight || state.nightFade > 0.05) {
@@ -121,20 +121,25 @@ export class Renderer {
       }
 
       // Parallax dunes
-      this.layers.drawFarDunes(ctx, this.camera.logicalWidth, palette);
+      this.layers.drawFarDunes(ctx, this.camera.logicalWidth, palette, state.nightFade);
     }
 
     // 2. Draw Clouds
     for (const cloud of state.clouds) {
+      ctx.save();
+      if (!this.isRetro && (state.isNight || state.nightFade > 0.1)) {
+        ctx.globalAlpha = Math.max(0.3, 1 - state.nightFade * 0.55);
+      }
       const sprite = this.atlas.getSprite('cloud', palette.skyBottom, 46, 14);
       if (sprite) {
         ctx.drawImage(sprite, cloud.x, cloud.y, 46, 14);
       }
+      ctx.restore();
     }
 
     // Mid dunes
     if (!this.isRetro) {
-      this.layers.drawMidDunes(ctx, this.camera.logicalWidth, palette);
+      this.layers.drawMidDunes(ctx, this.camera.logicalWidth, palette, state.nightFade);
       // Ambient Props & Weather
       if (!this.reducedEffects && !this.autoDegraded) {
         this.props.draw(ctx, this.isRetro);
@@ -257,29 +262,53 @@ export class Renderer {
 
   private drawNightSky(state: GameState): void {
     const ctx = this.ctx;
-    const starColor = '#E8E8E8';
+    const starColor = '#FFFFFF';
     const starSprite = this.atlas.getSprite('star', starColor, 9, 9);
-    const starCoords = [
-      [80, 25],
-      [160, 45],
-      [240, 20],
-      [320, 50],
-      [420, 30],
-      [510, 40],
-      [570, 22],
+
+    // Twinkling celestial stars
+    const starCoords: [number, number, boolean][] = [
+      [35, 20, false],
+      [75, 14, true],
+      [115, 32, false],
+      [160, 18, true],
+      [210, 38, false],
+      [255, 15, true],
+      [395, 22, true],
+      [435, 36, false],
+      [515, 16, true],
+      [570, 34, false],
     ];
 
-    if (starSprite) {
-      for (const [sx, sy] of starCoords) {
-        ctx.drawImage(starSprite, sx, sy, 9, 9);
+    for (const [sx, sy, isSparkle] of starCoords) {
+      if (isSparkle && starSprite) {
+        ctx.drawImage(starSprite, sx - 4, sy - 4, 8, 8);
+      } else {
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.85)';
+        ctx.beginPath();
+        ctx.arc(sx, sy, 1.2, 0, Math.PI * 2);
+        ctx.fill();
       }
     }
 
+    // Modern Celestial Moon: centered in tranquil sky at x=330, y=24, well clear of HUD (x=480) & Dino (x=50..94)
     const moonKey = `moon-${state.moonPhase % 7}` as SpriteKey;
-    const moonSprite = this.atlas.getSprite(moonKey, '#F0F0E6', 20, 40);
+    const moonSprite = this.atlas.getSprite(moonKey, '#F8FAFC', 32, 32);
+
+    // Ethereal lunar aura
+    ctx.save();
+    const aura = ctx.createRadialGradient(330, 24, 6, 330, 24, 34);
+    aura.addColorStop(0, 'rgba(240, 248, 255, 0.35)');
+    aura.addColorStop(0.4, 'rgba(186, 230, 253, 0.12)');
+    aura.addColorStop(1, 'rgba(186, 230, 253, 0)');
+    ctx.fillStyle = aura;
+    ctx.beginPath();
+    ctx.arc(330, 24, 34, 0, Math.PI * 2);
+    ctx.fill();
+
     if (moonSprite) {
-      ctx.drawImage(moonSprite, 460, 20, 20, 40);
+      ctx.drawImage(moonSprite, 314, 8, 32, 32);
     }
+    ctx.restore();
   }
 
   private drawGround(state: GameState, groundColor: string): void {
@@ -305,15 +334,19 @@ export class Renderer {
 
     // Modern mode: Layered textured terrain floor
     ctx.save();
-    // 1. Bedrock base fill below ground line
+    const isNight = state.isNight || state.nightFade > 0.25;
+
+    // 1. Bedrock base fill below ground line: rich deep terrain
     const terrainGrad = ctx.createLinearGradient(0, 127, 0, 150);
-    terrainGrad.addColorStop(0, groundColor);
-    terrainGrad.addColorStop(1, '#0F172A');
+    const topGround = isNight ? '#221930' : groundColor;
+    const bottomGround = isNight ? '#100B17' : '#0F172A';
+    terrainGrad.addColorStop(0, topGround);
+    terrainGrad.addColorStop(1, bottomGround);
     ctx.fillStyle = terrainGrad;
     ctx.fillRect(0, 127, width, 23);
 
     // 2. Horizon line with soft ambient edge
-    ctx.strokeStyle = groundColor;
+    ctx.strokeStyle = isNight ? '#5A4A70' : groundColor;
     ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.moveTo(0, 127.5);
@@ -322,21 +355,23 @@ export class Renderer {
 
     // 3. Ground details: smooth desert pebbles & sand ripple accents
     const groundOffset = state.groundOffset % 60;
+    const pebbleLight = isNight ? 'rgba(255, 255, 255, 0.12)' : 'rgba(255, 255, 255, 0.22)';
+    const pebbleDark = isNight ? 'rgba(0, 0, 0, 0.35)' : 'rgba(0, 0, 0, 0.28)';
     for (let x = -groundOffset; x < width + 60; x += 60) {
       // Pebble 1
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.22)';
+      ctx.fillStyle = pebbleLight;
       ctx.beginPath();
       ctx.ellipse(x + 14, 131, 2, 1, 0, 0, Math.PI * 2);
       ctx.fill();
 
       // Pebble 2
-      ctx.fillStyle = 'rgba(0, 0, 0, 0.28)';
+      ctx.fillStyle = pebbleDark;
       ctx.beginPath();
       ctx.ellipse(x + 38, 134, 2.5, 1.2, 0, 0, Math.PI * 2);
       ctx.fill();
 
       // Sand ripple
-      ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+      ctx.fillStyle = isNight ? 'rgba(255, 255, 255, 0.05)' : 'rgba(255, 255, 255, 0.1)';
       ctx.fillRect(x + 22, 138, 8, 1);
       ctx.fillRect(x + 46, 142, 6, 1);
     }

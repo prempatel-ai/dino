@@ -139,4 +139,18 @@ Agent appends here after every task. Newest at bottom. Never delete entries.
 - Decisions: Relocated toolbar outside the canvas viewport boundary so Dino's full jump arc reaches its apex (`y=2`) with zero occlusion.
 - Notes: Live preview running on localhost:3000.
 
+### Visuals — Modern Night Mode Overhaul — DONE
+- Date: 2026-11-18
+- What changed:
+  - Authored 7 complete modern circular 40x40 Moon SVGs (`moon-0` through `moon-6`) with crater relief, replacing the previous sliced half-capsule shapes.
+  - Relocated Moon to tranquil center sky (`x=330, y=24`) with soft ethereal lunar aura, eliminating overlap with the HUD score (`x=480..590`) and Dino (`x=50..94`).
+  - Fixed daytime sun glow in `layers.ts` to cleanly fade out to 0 opacity during nightfall (`nightFade`), preventing double sun/moon collision.
+  - Upgraded night sky with modern 4-point sparkle stars (`star.svg`) and pinpoint star field.
+  - Softened nocturnal clouds with moonlight transparency (`alpha ~ 0.45`), avoiding daytime white cloud jarring contrast.
+  - Overhauled biome night palettes to deep midnight tones with high-contrast, luminous Dino silhouettes (`#F8FAFC`/`#F5EEF8`), eliminating washed-out pastel ground fills.
+  - Refined weather particle rendering in `props.ts` using smooth circular arcs instead of harsh square rects.
+- Tests: 38 unit & snapshot tests passing; Playwright desktop and mobile e2e tests passing; typecheck, build, and lint green.
+- Decisions: Anchored night celestial coordinates away from score HUD while preserving 100% core physics independence.
+- Notes: Live preview running on localhost:3000.
+
 COMPLETE
