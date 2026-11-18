@@ -19,10 +19,10 @@ export class InputHandler {
     targetElement.addEventListener('touchstart', this.handleTouchStart as EventListener, { passive: false });
     targetElement.addEventListener('touchend', this.handleTouchEnd as EventListener, { passive: false });
     targetElement.addEventListener('touchmove', this.handleTouchMove as EventListener, { passive: false });
+    targetElement.addEventListener('touchcancel', this.handleTouchEnd as EventListener, { passive: false });
   }
 
   private handleKeyDown = (e: KeyboardEvent): void => {
-    // Avoid interfering with browser dev tools
     if (e.key === 'F12' || (e.ctrlKey && e.shiftKey && e.key === 'I')) {
       return;
     }
@@ -60,17 +60,32 @@ export class InputHandler {
   };
 
   private handleTouchStart = (e: TouchEvent): void => {
-    e.preventDefault();
+    // If the tap originated on a UI button, do not capture as jump/duck
+    const target = e.target as HTMLElement | null;
+    if (target && target.tagName === 'BUTTON') {
+      return;
+    }
+
+    if (e.cancelable) {
+      e.preventDefault();
+    }
+
     if (e.touches.length === 0) return;
 
     const touch = e.touches[0];
     this.touchStartY = touch.clientY;
 
-    const screenHeight = window.innerHeight;
-    const isLowerHalf = touch.clientY > screenHeight * 0.65;
+    const canvas = document.getElementById('game');
+    const rect = canvas ? canvas.getBoundingClientRect() : null;
 
-    if (isLowerHalf) {
+    // Check if touch is in lower portion of play field
+    const isLower = rect
+      ? touch.clientY > rect.top + rect.height * 0.6
+      : touch.clientY > window.innerHeight * 0.6;
+
+    if (isLower) {
       this.duckHeld = true;
+      this.jumpHeld = false;
     } else {
       this.jumpPressed = true;
       this.jumpHeld = true;
@@ -79,21 +94,37 @@ export class InputHandler {
   };
 
   private handleTouchMove = (e: TouchEvent): void => {
-    e.preventDefault();
+    const target = e.target as HTMLElement | null;
+    if (target && target.tagName === 'BUTTON') {
+      return;
+    }
+
+    if (e.cancelable) {
+      e.preventDefault();
+    }
+
     if (e.touches.length === 0) return;
 
     const touch = e.touches[0];
     const diffY = touch.clientY - this.touchStartY;
 
-    // Swipe down initiates duck
-    if (diffY > 30) {
+    if (diffY > 25) {
+      // Swiping down forces duck
       this.duckHeld = true;
       this.jumpHeld = false;
     }
   };
 
   private handleTouchEnd = (e: TouchEvent): void => {
-    e.preventDefault();
+    const target = e.target as HTMLElement | null;
+    if (target && target.tagName === 'BUTTON') {
+      return;
+    }
+
+    if (e.cancelable) {
+      e.preventDefault();
+    }
+
     this.jumpHeld = false;
     this.duckHeld = false;
   };
@@ -106,7 +137,6 @@ export class InputHandler {
       restartPressed: this.restartPressed,
     };
 
-    // Reset single-frame action triggers
     this.jumpPressed = false;
     this.restartPressed = false;
 

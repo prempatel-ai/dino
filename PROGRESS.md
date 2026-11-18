@@ -84,3 +84,10 @@ Agent appends here after every task. Newest at bottom. Never delete entries.
 - Tests: 30 unit tests passing, Playwright e2e test passing.
 - Decisions: T09 — AudioContext created only upon first user interaction to comply with modern browser autoplay policies.
 - Notes: High scores and settings persist safely and gracefully fall back to an in-memory dictionary if localStorage is restricted.
+
+### T10 — Mobile and responsive — DONE
+- Date: 2026-11-18
+- What changed: Enhanced `styles.css` with `touch-action: none` and centered responsive letterboxing; upgraded `src/client/input.ts` to support multitouch, touch tap-to-jump, lower-half hold to duck, downward swipe to duck, and tap to restart. Added mobile UI button tap handling. Added Playwright mobile emulation tests in `tests/e2e/mobile.spec.ts`.
+- Tests: 30 unit tests passing, Playwright mobile tests passing on Mobile Chrome (Pixel 5).
+- Decisions: T10 — Differentiated touch coordinate thresholds between canvas bounds and full screen to guarantee responsive touch zones across both portrait and landscape mobile layouts.
+- Notes: Verified no accidental page scroll or zooming occurs on touch devices.

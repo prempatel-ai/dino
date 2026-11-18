@@ -301,7 +301,7 @@ No audio before user input. Score caps at 99999.
 ---
 
 ## T10 — Mobile and responsive
-Status: TODO | Depends: T09
+Status: DONE | Depends: T09
 
 **CONTEXT**
 product.md section 9.
