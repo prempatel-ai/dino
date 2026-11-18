@@ -137,7 +137,7 @@ Pure functions.
 ---
 
 ## T05 — Core: Score, speed, day/night, game state machine
-Status: TODO | Depends: T02, T03, T04
+Status: DONE | Depends: T02, T03, T04
 
 **CONTEXT**
 GAME_SPEC.md sections 3, 4, 8.

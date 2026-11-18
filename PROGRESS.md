@@ -49,3 +49,10 @@ Agent appends here after every task. Newest at bottom. Never delete entries.
 - Tests: 23 unit tests passing; verified direct hit, jump apex clearance over small and large cacti, ducking under mid-level pterodactyl, and outer-overlap-subbox-miss edge cases.
 - Decisions: T04 — Implemented pure `boxCompare`, `checkCollision`, and `isNearMiss` helpers without mutations or allocations.
 - Notes: Hitboxes match GAME_SPEC.md section 7 exactly.
+
+### T05 — Core: Score, speed, day/night, game state machine — DONE
+- Date: 2026-11-18
+- What changed: Implemented `src/core/score.ts`, `src/core/daynight.ts`, and `src/core/game.ts`. Assembled the complete headless 60 FPS deterministic game state machine (BOOT/READY/INTRO/RUNNING/CRASHED) with speed acceleration (up to 13), milestone flash events, day/night palette cycles, and 750 ms restart lock.
+- Tests: 28 unit tests passing; verified deterministic replay over 5000 steps, automated unassisted crash, milestone events, and restart locking.
+- Decisions: T05 — Emitted discrete step events (`jump`, `land`, `crash`, `milestone`, `nearMiss`, `highScore`, `biomeChange`) for clean client-side audio and particle reaction without coupling.
+- Notes: Headless core is completely pure, deterministic, and free of DOM/canvas dependencies.

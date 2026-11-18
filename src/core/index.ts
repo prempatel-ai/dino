@@ -5,3 +5,6 @@ export * from './trex';
 export * from './obstacle';
 export * from './horizon';
 export * from './collision';
+export * from './score';
+export * from './daynight';
+export * from './game';
