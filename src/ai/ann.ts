@@ -1,5 +1,5 @@
 import type { GameState, ObstacleState } from '../core/types';
-import type { AIDecision } from './types';
+import type { AIDecision, NetworkState } from './types';
 import { MathPolicies } from './policies';
 
 export interface NetworkWeights {
@@ -88,7 +88,7 @@ export class NeuralNetwork {
   /**
    * Forward pass: 7 inputs -> ReLU hidden -> 3 output logits
    */
-  predict(inputs: number[]): { actionIndex: number; logits: number[]; confidence: number } {
+  predict(inputs: number[]): NetworkState {
     // Hidden layer with ReLU
     const hidden = new Array(this.hiddenSize).fill(0);
     for (let j = 0; j < this.hiddenSize; j++) {
@@ -125,26 +125,32 @@ export class NeuralNetwork {
     }
 
     return {
-      actionIndex,
+      inputs,
+      hidden,
+      outputs: probs,
       logits,
+      actionIndex,
       confidence: probs[actionIndex],
+      w1: this.w1,
+      w2: this.w2,
     };
   }
 
   evaluate(state: GameState): AIDecision {
     const { features, obs, distance } = NeuralNetwork.extractFeatures(state);
-    const prediction = this.predict(features);
+    const networkState = this.predict(features);
 
     let action: 'NONE' | 'JUMP' | 'DUCK' = 'NONE';
-    if (prediction.actionIndex === 1) action = 'JUMP';
-    else if (prediction.actionIndex === 2) action = 'DUCK';
+    if (networkState.actionIndex === 1) action = 'JUMP';
+    else if (networkState.actionIndex === 2) action = 'DUCK';
 
     return {
       action,
       targetObs: obs || undefined,
       distance: obs ? distance : undefined,
       features,
-      confidence: prediction.confidence,
+      confidence: networkState.confidence,
+      networkState,
     };
   }
 

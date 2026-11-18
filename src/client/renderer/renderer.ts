@@ -15,6 +15,7 @@ import { BiomeManager } from './biomes';
 import { PropsSystem } from './props';
 import { DinoExpressionSystem } from './expressions';
 import { BadgeSystem } from '../ui/badges';
+import { NeuralVisualizer } from './neural_viz';
 
 export class Renderer {
   private ctx: CanvasRenderingContext2D;
@@ -28,6 +29,7 @@ export class Renderer {
   readonly props: PropsSystem;
   readonly expressions: DinoExpressionSystem;
   readonly badges: BadgeSystem;
+  readonly neuralViz: NeuralVisualizer;
 
   showHitboxes: boolean = false;
   isRetro: boolean = false;
@@ -60,6 +62,7 @@ export class Renderer {
     this.props = new PropsSystem();
     this.expressions = new DinoExpressionSystem();
     this.badges = new BadgeSystem();
+    this.neuralViz = new NeuralVisualizer();
 
     this.camera.onResize(() => {
       this.atlas.updateScale(this.camera.scale, this.camera.dpr);
@@ -85,6 +88,7 @@ export class Renderer {
     this.badges.checkMilestone(state.score);
     this.badges.update(frameMs);
     this.expressions.update(state, frameMs);
+    this.neuralViz.update(frameMs);
 
     // Update props / weather
     if (!this.isRetro && !this.reducedEffects && !this.autoDegraded) {
@@ -179,6 +183,12 @@ export class Renderer {
 
     // 8. Draw Badges & Overlays
     this.badges.draw(ctx, this.camera.logicalWidth, this.isRetro);
+
+    // Live Neural Network Brain Visualizer (Matching reference image)
+    if (aiMode !== 'OFF' && decision?.networkState) {
+      this.neuralViz.draw(ctx, decision.networkState, 230, 8, 225, 84);
+    }
+
     this.overlay.draw(
       ctx,
       state,
