@@ -12,26 +12,35 @@ html, body {
   height: 100%;
   overflow-x: hidden;
   overflow-y: auto;
-  background-color: #f7f7f2;
+  background: #080b14;
+  background-image: 
+    radial-gradient(circle at 50% 25%, rgba(30, 41, 59, 0.45) 0%, rgba(8, 11, 20, 0.95) 75%),
+    linear-gradient(to bottom, #080b14, #04060a);
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  padding: 24px 16px;
+  padding: 28px 16px;
   touch-action: none;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+  color: #f8fafc;
 }
 
 #game-container {
   position: relative;
   width: 100%;
-  max-width: 1200px;
-  max-height: calc(100vh - 280px);
+  max-width: 1100px;
+  max-height: calc(100vh - 300px);
   aspect-ratio: 4 / 1;
   display: flex;
   justify-content: center;
   align-items: center;
   margin: 0 auto;
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 
+    0 25px 60px -15px rgba(0, 0, 0, 0.75),
+    0 0 0 1px rgba(255, 255, 255, 0.12);
 }
 
 #game {
@@ -215,106 +224,33 @@ html, body {
 }
 
 /* ==========================================================================
-   Dedicated AI Neural Processing Unit (NPU) Dashboard
+   Dedicated AI Neural Deck (Pure Handcrafted Aesthetics Matching Reference)
    ========================================================================== */
-.neural-panel {
+.neural-deck {
   width: 100%;
-  max-width: 680px;
-  margin-top: 10px;
-  background: rgba(15, 23, 42, 0.94);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 16px;
-  padding: 12px 18px 14px;
+  max-width: 1100px;
+  margin-top: 14px;
+  background: #080c14;
+  background-image: radial-gradient(circle at 50% 50%, rgba(20, 27, 45, 0.5) 0%, rgba(8, 12, 20, 0.95) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 14px;
+  padding: 12px 16px 14px;
   box-shadow: 
-    0 24px 48px -12px rgba(0, 0, 0, 0.55),
-    0 0 0 1px rgba(255, 255, 255, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.12);
+    0 24px 50px -12px rgba(0, 0, 0, 0.7),
+    inset 0 1px 0 rgba(255, 255, 255, 0.08);
   transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
   opacity: 1;
   transform: translateY(0);
-  z-index: 20;
 }
 
-.neural-panel.is-hidden {
+.neural-deck.is-hidden {
   opacity: 0;
   transform: translateY(14px) scale(0.98);
   pointer-events: none;
   display: none;
 }
 
-.neural-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 8px;
-  padding-bottom: 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.neural-title {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  color: #f8fafc;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.03em;
-  text-transform: uppercase;
-}
-
-.neural-icon {
-  color: #34d399;
-}
-
-.neural-badge {
-  background: rgba(16, 185, 129, 0.18);
-  color: #34d399;
-  border: 1px solid rgba(52, 211, 153, 0.35);
-  font-size: 9px;
-  font-weight: 700;
-  padding: 1.5px 7px;
-  border-radius: 10px;
-  letter-spacing: 0.03em;
-}
-
-.neural-telemetry {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.telemetry-pill {
-  font-family: ui-monospace, SF Mono, Menlo, monospace;
-  font-size: 9.5px;
-  font-weight: 600;
-  color: #94a3b8;
-  padding: 2.5px 8px;
-  background: rgba(255, 255, 255, 0.06);
-  border-radius: 6px;
-  transition: all 0.15s ease;
-}
-
-.telemetry-pill.is-active.jump {
-  color: #ffffff;
-  background: #ef4444;
-  box-shadow: 0 0 12px rgba(239, 68, 68, 0.5);
-}
-
-.telemetry-pill.is-active.duck {
-  color: #0f172a;
-  background: #f59e0b;
-  box-shadow: 0 0 12px rgba(245, 158, 11, 0.5);
-}
-
-.telemetry-pill.is-active.run {
-  color: #ffffff;
-  background: #10b981;
-  box-shadow: 0 0 12px rgba(16, 185, 129, 0.5);
-}
-
-.neural-canvas-container {
+.neural-deck-content {
   width: 100%;
   display: flex;
   justify-content: center;
@@ -323,7 +259,7 @@ html, body {
 
 #neural-canvas {
   width: 100%;
-  max-width: 540px;
-  height: 175px;
+  max-width: 640px;
+  height: 200px;
   display: block;
 }
