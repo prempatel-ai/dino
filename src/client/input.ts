@@ -84,9 +84,13 @@ export class InputHandler {
     }
   };
 
+  private isButtonTarget(target: HTMLElement | null): boolean {
+    return !!(target && (target.tagName === 'BUTTON' || target.closest?.('button')));
+  }
+
   private handleTouchStart = (e: TouchEvent): void => {
     const target = e.target as HTMLElement | null;
-    if (target && target.tagName === 'BUTTON') {
+    if (this.isButtonTarget(target)) {
       return;
     }
 
@@ -118,7 +122,7 @@ export class InputHandler {
 
   private handleTouchMove = (e: TouchEvent): void => {
     const target = e.target as HTMLElement | null;
-    if (target && target.tagName === 'BUTTON') {
+    if (this.isButtonTarget(target)) {
       return;
     }
 
@@ -139,7 +143,7 @@ export class InputHandler {
 
   private handleTouchEnd = (e: TouchEvent): void => {
     const target = e.target as HTMLElement | null;
-    if (target && target.tagName === 'BUTTON') {
+    if (this.isButtonTarget(target)) {
       return;
     }
 

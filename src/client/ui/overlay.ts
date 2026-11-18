@@ -5,6 +5,7 @@ export class Overlay {
   private overlayEl: HTMLElement | null;
   private muteBtn: HTMLButtonElement | null = null;
   private retroBtn: HTMLButtonElement | null = null;
+  private uiBar: HTMLElement | null = null;
 
   onMuteClick?: () => void;
   onRetroClick?: () => void;
@@ -18,16 +19,27 @@ export class Overlay {
     if (!this.overlayEl) return;
 
     this.overlayEl.innerHTML = `
-      <div class="ui-bar" style="position: absolute; top: 10px; left: 10px; display: flex; gap: 8px; pointer-events: auto; z-index: 10;">
-        <button id="btn-mute" aria-label="Toggle sound" style="cursor: pointer; background: rgba(0,0,0,0.06); border: 1px solid rgba(0,0,0,0.15); border-radius: 16px; padding: 4px 10px; font-family: inherit; font-size: 11px; font-weight: bold; color: inherit;">
-          SFX: ON
+      <div class="ui-bar" role="toolbar" aria-label="Game controls">
+        <button id="btn-mute" class="ui-btn is-on" aria-label="Toggle sound" title="Toggle SFX (M)">
+          <svg class="ui-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>
+          </svg>
+          <span class="btn-text">SFX: ON</span>
         </button>
-        <button id="btn-retro" aria-label="Toggle retro mode" style="cursor: pointer; background: rgba(0,0,0,0.06); border: 1px solid rgba(0,0,0,0.15); border-radius: 16px; padding: 4px 10px; font-family: inherit; font-size: 11px; font-weight: bold; color: inherit;">
-          RETRO
+        <div class="ui-divider"></div>
+        <button id="btn-retro" class="ui-btn" aria-label="Toggle retro mode" title="Toggle Visual Mode (R)">
+          <svg class="ui-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="12" r="4"></circle>
+            <path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>
+          </svg>
+          <span class="btn-text">RETRO: OFF</span>
         </button>
       </div>
     `;
 
+    this.uiBar = this.overlayEl.querySelector('.ui-bar');
     this.muteBtn = document.getElementById('btn-mute') as HTMLButtonElement;
     this.retroBtn = document.getElementById('btn-retro') as HTMLButtonElement;
 
@@ -44,12 +56,27 @@ export class Overlay {
 
   updateButtons(isMuted: boolean, isRetro: boolean): void {
     if (this.muteBtn) {
-      this.muteBtn.textContent = isMuted ? 'SFX: OFF' : 'SFX: ON';
-      this.muteBtn.style.opacity = isMuted ? '0.6' : '1';
+      const icon = isMuted
+        ? '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><line x1="23" y1="9" x2="17" y2="15"></line><line x1="17" y1="9" x2="23" y2="15"></line>'
+        : '<polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon><path d="M15.54 8.46a5 5 0 0 1 0 7.07"></path><path d="M19.07 4.93a10 10 0 0 1 0 14.14"></path>';
+      
+      this.muteBtn.innerHTML = `<svg class="ui-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon}</svg><span class="btn-text">${isMuted ? 'SFX: OFF' : 'SFX: ON'}</span>`;
+      this.muteBtn.classList.toggle('is-off', isMuted);
+      this.muteBtn.classList.toggle('is-on', !isMuted);
     }
     if (this.retroBtn) {
-      this.retroBtn.textContent = isRetro ? 'RETRO: ON' : 'RETRO: OFF';
-      this.retroBtn.style.opacity = isRetro ? '1' : '0.6';
+      const icon = isRetro
+        ? '<rect x="2" y="6" width="20" height="12" rx="2"></rect><circle cx="6" cy="12" r="1.5" fill="currentColor"></circle><circle cx="10" cy="12" r="1.5" fill="currentColor"></circle><line x1="15" y1="9" x2="19" y2="9"></line><line x1="17" y1="13" x2="17" y2="17"></line>'
+        : '<circle cx="12" cy="12" r="4"></circle><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"></path>';
+
+      this.retroBtn.innerHTML = `<svg class="ui-icon" viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">${icon}</svg><span class="btn-text">${isRetro ? 'RETRO: ON' : 'RETRO: OFF'}</span>`;
+      this.retroBtn.classList.toggle('is-retro-active', isRetro);
+    }
+  }
+
+  setNightTheme(isNight: boolean): void {
+    if (this.uiBar) {
+      this.uiBar.classList.toggle('night', isNight);
     }
   }
 
@@ -60,6 +87,8 @@ export class Overlay {
     textColor: string,
     width: number,
   ): void {
+    this.setNightTheme(state.isNight);
+
     ctx.save();
 
     if (state.phase === 'READY') {

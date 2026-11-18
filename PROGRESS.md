@@ -116,4 +116,17 @@ Agent appends here after every task. Newest at bottom. Never delete entries.
 - Decisions: Preserved all original Chromium collision boxes, physics, and gameplay timings while transforming rendering fidelity.
 - Notes: Live preview running smoothly at 60 FPS on localhost:3000.
 
+### UI — Modern floating menu redesign — DONE
+- Date: 2026-11-18
+- What changed:
+  - Replaced the clunky, high-contrast gray oval buttons with a sleek, modern frosted glass floating toolbar (`.ui-bar`).
+  - Added backdrop blur (`backdrop-filter: blur(16px)`), subtle specular borders, ambient shadows, and an ultra-fine vertical divider.
+  - Implemented crisp vector SVG icons for SFX (speaker with audio waves when ON, strike-through slash when MUTED) and Visual Mode (modern sun/sparkle vs 8-bit retro console).
+  - Modernized typography to clean system sans-serif with subtle micro-interactions on hover and active touch.
+  - Added automatic night mode theme adaptation for the toolbar (`rgba(15, 23, 42, 0.75)` dark glass).
+  - Fixed mobile touch event bubbling in `input.ts` to allow seamless button tapping without accidental jump triggers.
+- Tests: 38 unit & snapshot tests passing; Playwright desktop and mobile e2e tests passing; typecheck, build, and lint green.
+- Decisions: Preserved required test selectors and text contents (`#btn-mute`, `#btn-retro`) while completely upgrading visual ergonomics.
+- Notes: Changes live-reloaded on localhost:3000.
+
 COMPLETE

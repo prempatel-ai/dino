@@ -16,7 +16,7 @@ html, body {
   justify-content: center;
   align-items: center;
   touch-action: none;
-  font-family: ui-monospace, "SF Mono", Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
 #game-container {
@@ -48,23 +48,136 @@ html, body {
   pointer-events: none;
 }
 
-.ui-bar button {
-  min-height: 36px;
-  min-width: 36px;
-  touch-action: manipulation;
-  cursor: pointer;
-  background: rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 18px;
-  padding: 6px 14px;
-  font-family: inherit;
-  font-size: 12px;
-  font-weight: bold;
-  color: #333333;
-  transition: background 0.15s ease, transform 0.1s ease;
+/* Modern Frosted Glass Floating Toolbar */
+.ui-bar {
+  position: absolute;
+  top: 10px;
+  left: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 3px;
+  padding: 3px 5px;
+  background: rgba(255, 255, 255, 0.78);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(255, 255, 255, 0.9);
+  border-radius: 20px;
+  box-shadow: 
+    0 4px 16px -2px rgba(15, 23, 42, 0.08),
+    0 1px 3px rgba(15, 23, 42, 0.04),
+    inset 0 1px 0 rgba(255, 255, 255, 0.6);
+  pointer-events: auto;
+  z-index: 10;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-.ui-bar button:active {
+.ui-bar:hover {
+  background: rgba(255, 255, 255, 0.92);
+  box-shadow: 
+    0 6px 20px -2px rgba(15, 23, 42, 0.12),
+    0 2px 6px rgba(15, 23, 42, 0.06);
+}
+
+.ui-bar.night {
+  background: rgba(15, 23, 42, 0.75);
+  border-color: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+}
+
+.ui-bar.night .ui-btn {
+  color: #94a3b8;
+}
+
+.ui-bar.night .ui-btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  color: #f8fafc;
+}
+
+.ui-bar.night .ui-btn.is-on {
+  color: #38bdf8;
+}
+
+.ui-bar.night .ui-btn.is-retro-active {
+  background: rgba(56, 189, 248, 0.2);
+  color: #38bdf8;
+}
+
+.ui-bar.night .ui-divider {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+.ui-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  height: 26px;
+  padding: 0 9px;
+  border: none;
+  border-radius: 13px;
+  background: transparent;
+  color: #475569;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  cursor: pointer;
+  outline: none;
+  touch-action: manipulation;
+  transition: all 0.16s cubic-bezier(0.16, 1, 0.3, 1);
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.ui-btn * {
+  pointer-events: none;
+}
+
+.ui-btn:hover {
+  background: rgba(15, 23, 42, 0.06);
+  color: #0f172a;
+}
+
+.ui-btn:active {
   transform: scale(0.95);
-  background: rgba(0, 0, 0, 0.18);
+}
+
+.ui-btn:focus-visible {
+  box-shadow: 0 0 0 2px #38bdf8;
+}
+
+.ui-btn.is-on {
+  color: #0284c7;
+}
+
+.ui-btn.is-off {
+  color: #94a3b8;
+  opacity: 0.75;
+}
+
+.ui-btn.is-retro-active {
+  background: #0284c7;
+  color: #ffffff;
+  box-shadow: 0 2px 6px rgba(2, 132, 199, 0.3);
+}
+
+.ui-btn.is-retro-active:hover {
+  background: #0369a1;
+  color: #ffffff;
+}
+
+.ui-icon {
+  display: block;
+  flex-shrink: 0;
+  stroke: currentColor;
+}
+
+.btn-text {
+  line-height: 1;
+}
+
+.ui-divider {
+  width: 1px;
+  height: 12px;
+  background: rgba(15, 23, 42, 0.12);
+  margin: 0 2px;
 }
