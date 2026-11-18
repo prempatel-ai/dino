@@ -1,22 +1,32 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 75 50" width="75" height="50">
-  <!-- Cactus Large 3: 75x50 -->
-  <g fill="currentColor">
+  <defs>
+    <linearGradient id="cactusLgGrad3" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4F7A54" />
+      <stop offset="50%" stop-color="#385C3D" />
+      <stop offset="100%" stop-color="#254229" />
+    </linearGradient>
+  </defs>
+  <!-- Modern Vector Large Saguaro 3-Cluster (75x50) -->
+  <g>
     <!-- Unit 1 -->
-    <path d="M9 0h6v50H9V0z" />
-    <path d="M1 12h5v22H1V12z M1 34h8v5H1z" />
-    <path d="M15 25h9v5h-9z M19 11h5v16h-5V11z" />
-    <rect x="12" y="2" width="1" height="46" fill="#FFFFFF" opacity="0.25" />
+    <rect x="8.5" y="2" width="7" height="48" rx="3.5" fill="url(#cactusLgGrad3)" />
+    <path d="M 1.5 15 Q 1.5 12, 4.5 12 Q 7 12, 7 15 L 7 28 Q 7 32, 9.5 32 L 9.5 37 Q 5.5 37, 4 35 Q 1.5 31, 1.5 25 Z" fill="url(#cactusLgGrad3)" />
+    <path d="M 23.5 14 Q 23.5 11, 20.5 11 Q 18 11, 18 14 L 18 22 Q 18 26, 15 26 L 15 31 Q 19 31, 21 29 Q 23.5 26, 23.5 20 Z" fill="url(#cactusLgGrad3)" />
+    <line x1="11" y1="4" x2="11" y2="48" stroke="#88B88E" stroke-width="0.9" opacity="0.6" stroke-linecap="round" />
+    <circle cx="12" cy="2" r="2.2" fill="#FF2A7A" />
 
     <!-- Unit 2 -->
-    <path d="M34 2h6v48h-6V2z" />
-    <path d="M26 14h5v20h-5V14z M26 34h8v5h-8z" />
-    <path d="M40 26h9v5h-9z M44 13h5v15h-5V13z" />
-    <rect x="37" y="4" width="1" height="44" fill="#FFFFFF" opacity="0.25" />
+    <rect x="33.5" y="4" width="7" height="46" rx="3.5" fill="url(#cactusLgGrad3)" />
+    <path d="M 26.5 17 Q 26.5 14, 29.5 14 Q 32 14, 32 17 L 32 29 Q 32 33, 34.5 33 L 34.5 38 Q 30.5 38, 29 36 Q 26.5 32, 26.5 26 Z" fill="url(#cactusLgGrad3)" />
+    <path d="M 48.5 15 Q 48.5 12, 45.5 12 Q 43 12, 43 15 L 43 23 Q 43 27, 40 27 L 40 32 Q 44 32, 46 30 Q 48.5 27, 48.5 21 Z" fill="url(#cactusLgGrad3)" />
+    <line x1="36" y1="6" x2="36" y2="48" stroke="#88B88E" stroke-width="0.9" opacity="0.6" stroke-linecap="round" />
+    <circle cx="37" cy="4" r="2.2" fill="#FF9F1C" />
 
     <!-- Unit 3 -->
-    <path d="M59 1h6v49h-6V1z" />
-    <path d="M51 13h5v21h-5V13z M51 34h8v5h-8z" />
-    <path d="M65 25h9v5h-9z M69 12h5v15h-5V12z" />
-    <rect x="62" y="3" width="1" height="45" fill="#FFFFFF" opacity="0.25" />
+    <rect x="58.5" y="3" width="7" height="47" rx="3.5" fill="url(#cactusLgGrad3)" />
+    <path d="M 51.5 16 Q 51.5 13, 54.5 13 Q 57 13, 57 16 L 57 28 Q 57 32, 59.5 32 L 59.5 37 Q 55.5 37, 54 35 Q 51.5 31, 51.5 25 Z" fill="url(#cactusLgGrad3)" />
+    <path d="M 73.5 14 Q 73.5 11, 70.5 11 Q 68 11, 68 14 L 68 22 Q 68 26, 65 26 L 65 31 Q 69 31, 71 29 Q 73.5 26, 73.5 20 Z" fill="url(#cactusLgGrad3)" />
+    <line x1="61" y1="5" x2="61" y2="48" stroke="#88B88E" stroke-width="0.9" opacity="0.6" stroke-linecap="round" />
+    <circle cx="62" cy="3" r="2.2" fill="#FF2A7A" />
   </g>
 </svg>

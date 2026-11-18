@@ -1,24 +1,45 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 47" width="44" height="47">
-  <!-- Trex Idle: 44x47 -->
-  <g fill="currentColor">
-    <!-- Head & Snout (x:22..39, y:0..16) -->
-    <path d="M22 0h17v3h2v10h-2v3H22V0z" />
-    <!-- Eye cutout -->
-    <rect x="25" y="2" width="2" height="2" fill="#F7F7F2" class="dino-eye" />
-    <!-- Teeth / Mouth slit -->
-    <path d="M29 11h9v2H29z" fill="#F7F7F2" opacity="0.3" />
-    <!-- Neck & Chest -->
-    <rect x="22" y="16" width="6" height="5" />
-    <!-- Body & Back (x:1..31, y:18..34) -->
-    <path d="M1 18h30v9H28v5H21v3H9v-5H5v-4H1V18z" />
-    <!-- Belly soft tone highlight -->
-    <path d="M16 22h10v6H16z" fill="#FFFFFF" opacity="0.15" />
-    <!-- Arms -->
-    <path d="M29 20h4v2h-2v2h-2z" />
-    <!-- Legs & Feet (standing) -->
+  <defs>
+    <linearGradient id="dinoGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5A5A5A" />
+      <stop offset="100%" stop-color="#383838" />
+    </linearGradient>
+    <linearGradient id="bellyGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#808080" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.1" />
+    </linearGradient>
+  </defs>
+  <!-- Trex Modern Vector Idle (44x47) -->
+  <g>
+    <!-- Tail (x: 1..14, y: 19..30) -->
+    <path d="M1 21 Q 4 19, 12 21 Q 14 26, 12 30 Q 7 28, 1 21 Z" fill="url(#dinoGrad)" />
+    <!-- Back & Torso -->
+    <path d="M10 20 Q 14 18, 22 18 L 22 24 Q 28 24, 28 28 Q 28 34, 21 34 Q 13 34, 10 26 Z" fill="url(#dinoGrad)" />
+    <!-- Belly highlight patch -->
+    <path d="M14 22 Q 18 20, 22 22 Q 22 28, 20 31 Q 16 31, 14 26 Z" fill="url(#bellyGrad)" />
+    <!-- Spinal Dorsal Ridges -->
+    <polygon points="12,18 14,16 16,18" fill="#FF8C00" opacity="0.8" />
+    <polygon points="17,17 19,15 21,17" fill="#FF8C00" opacity="0.8" />
+    <!-- Neck & Head (x: 22..39, y: 0..16) -->
+    <path d="M22 18 L 22 8 Q 22 2, 28 1 L 38 1 Q 41 1, 41 5 L 41 11 Q 41 14, 37 14 L 33 14 L 33 16 L 27 16 L 26 21 Z" fill="url(#dinoGrad)" />
+    <!-- Snout & Jaw line -->
+    <path d="M29 11 L 39 11" stroke="#222" stroke-width="1.2" stroke-linecap="round" />
+    <!-- Eye with Specular Glint -->
+    <circle cx="28" cy="5" r="2.5" fill="#FFFFFF" />
+    <circle cx="28.5" cy="5" r="1.5" fill="#1A1A1A" />
+    <circle cx="29" cy="4.2" r="0.6" fill="#FFFFFF" />
+    <!-- Cheek Blush -->
+    <ellipse cx="27" cy="8.5" rx="1.5" ry="1" fill="#FF6B6B" opacity="0.4" />
+    <!-- Cute Arm with Claws -->
+    <path d="M28 22 Q 33 22, 33 24 L 31 26 Q 28 25, 27 23 Z" fill="#404040" />
+    <circle cx="33" cy="24.5" r="0.8" fill="#FFF" opacity="0.7" />
+    <!-- Legs & Paws (standing) -->
     <!-- Left Leg -->
-    <path d="M12 34h4v7h3v2h-7v-9z" />
+    <path d="M13 33 Q 16 33, 16 38 L 16 43 L 19 43 L 19 45 L 12 45 L 12 38 Q 12 34, 13 33 Z" fill="#3D3D3D" />
     <!-- Right Leg -->
-    <path d="M20 34h4v7h3v2h-7v-9z" />
+    <path d="M20 33 Q 23 33, 23 38 L 23 43 L 26 43 L 26 45 L 19 45 L 19 38 Q 19 34, 20 33 Z" fill="#484848" />
+    <!-- Claws -->
+    <circle cx="18.5" cy="44.5" r="0.6" fill="#FFF" opacity="0.6" />
+    <circle cx="25.5" cy="44.5" r="0.6" fill="#FFF" opacity="0.6" />
   </g>
 </svg>

@@ -1,14 +1,27 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 50" width="25" height="50">
-  <!-- Cactus Large 1: 25x50 -->
-  <g fill="currentColor">
-    <!-- Main stem (x:8..15, y:0..50) -->
-    <path d="M9 0h6v50H9V0z" />
-    <!-- Left branch (x:0..7, y:12..50) -->
-    <path d="M1 12h5v22H1V12z M1 34h8v5H1z" />
-    <!-- Right branch (x:13..23, y:10..48) -->
-    <path d="M15 25h9v5h-9z M19 11h5v16h-5V11z" />
-    <!-- Modern rib highlight -->
-    <rect x="12" y="2" width="1" height="46" fill="#FFFFFF" opacity="0.25" />
-    <rect x="3" y="14" width="1" height="18" fill="#FFFFFF" opacity="0.2" />
+  <defs>
+    <linearGradient id="cactusLgGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4F7A54" />
+      <stop offset="50%" stop-color="#385C3D" />
+      <stop offset="100%" stop-color="#254229" />
+    </linearGradient>
+  </defs>
+  <!-- Modern Vector Large Saguaro (25x50) -->
+  <g>
+    <!-- Main Trunk (x: 8..15, y: 0..50) -->
+    <rect x="8.5" y="2" width="7" height="48" rx="3.5" fill="url(#cactusLgGrad1)" />
+    <!-- Left Branch (x: 0..7, y: 12..38) -->
+    <path d="M 1.5 15 Q 1.5 12, 4.5 12 Q 7 12, 7 15 L 7 28 Q 7 32, 9.5 32 L 9.5 37 Q 5.5 37, 4 35 Q 1.5 31, 1.5 25 Z" fill="url(#cactusLgGrad1)" />
+    <!-- Right Branch (x: 15..24, y: 10..32) -->
+    <path d="M 23.5 14 Q 23.5 11, 20.5 11 Q 18 11, 18 14 L 18 22 Q 18 26, 15 26 L 15 31 Q 19 31, 21 29 Q 23.5 26, 23.5 20 Z" fill="url(#cactusLgGrad1)" />
+    <!-- Vertical Rib Texture Highlights -->
+    <line x1="11" y1="4" x2="11" y2="48" stroke="#88B88E" stroke-width="0.9" opacity="0.6" stroke-linecap="round" />
+    <line x1="13" y1="4" x2="13" y2="48" stroke="#88B88E" stroke-width="0.9" opacity="0.3" stroke-linecap="round" />
+    <line x1="4" y1="14" x2="4" y2="28" stroke="#88B88E" stroke-width="0.7" opacity="0.5" stroke-linecap="round" />
+    <line x1="21" y1="13" x2="21" y2="22" stroke="#88B88E" stroke-width="0.7" opacity="0.5" stroke-linecap="round" />
+    <!-- Desert Flower Crown -->
+    <circle cx="12" cy="2" r="2.2" fill="#FF2A7A" />
+    <circle cx="12" cy="2" r="0.9" fill="#FFD700" />
+    <circle cx="4.5" cy="12" r="1.4" fill="#FF2A7A" opacity="0.8" />
   </g>
 </svg>

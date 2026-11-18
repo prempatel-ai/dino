@@ -149,12 +149,18 @@ export class Renderer {
       this.particles.draw(ctx);
     }
 
+    // Modern Speed Lines
+    this.drawSpeedLines(state);
+
     // 5. Draw Obstacles
     this.drawObstacles(state, palette.cactus, palette.dinoBody);
 
     // 6. Draw Trex & Expressions
     this.drawTrex(state, palette.dinoBody);
     this.expressions.drawOverlays(ctx, state, this.isRetro);
+
+    // Subtle Modern Cinematic Vignette
+    this.drawVignette();
 
     // 7. Draw HUD (Scores)
     this.hud.draw(ctx, state, palette);
@@ -278,24 +284,93 @@ export class Renderer {
 
   private drawGround(state: GameState, groundColor: string): void {
     const ctx = this.ctx;
+    const width = this.camera.logicalWidth;
+
+    if (this.isRetro) {
+      ctx.strokeStyle = groundColor;
+      ctx.lineWidth = 1;
+      ctx.beginPath();
+      ctx.moveTo(0, 127.5);
+      ctx.lineTo(width, 127.5);
+      ctx.stroke();
+
+      ctx.fillStyle = groundColor;
+      const groundOffset = state.groundOffset % 40;
+      for (let x = -groundOffset; x < width; x += 40) {
+        ctx.fillRect(x, 130, 4, 1.5);
+        ctx.fillRect(x + 18, 134, 6, 1.5);
+      }
+      return;
+    }
+
+    // Modern mode: Layered textured terrain floor
+    ctx.save();
+    // 1. Bedrock base fill below ground line
+    const terrainGrad = ctx.createLinearGradient(0, 127, 0, 150);
+    terrainGrad.addColorStop(0, groundColor);
+    terrainGrad.addColorStop(1, '#0F172A');
+    ctx.fillStyle = terrainGrad;
+    ctx.fillRect(0, 127, width, 23);
+
+    // 2. Horizon line with soft ambient edge
     ctx.strokeStyle = groundColor;
-    ctx.lineWidth = 1;
+    ctx.lineWidth = 1.5;
     ctx.beginPath();
     ctx.moveTo(0, 127.5);
-    ctx.lineTo(this.camera.logicalWidth, 127.5);
+    ctx.lineTo(width, 127.5);
     ctx.stroke();
 
-    ctx.fillStyle = groundColor;
-    const groundOffset = state.groundOffset % 40;
-    for (let x = -groundOffset; x < this.camera.logicalWidth; x += 40) {
-      ctx.fillRect(x, 130, 4, 1.5);
-      ctx.fillRect(x + 18, 134, 6, 1.5);
+    // 3. Ground details: smooth desert pebbles & sand ripple accents
+    const groundOffset = state.groundOffset % 60;
+    for (let x = -groundOffset; x < width + 60; x += 60) {
+      // Pebble 1
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.22)';
+      ctx.beginPath();
+      ctx.ellipse(x + 14, 131, 2, 1, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Pebble 2
+      ctx.fillStyle = 'rgba(0, 0, 0, 0.28)';
+      ctx.beginPath();
+      ctx.ellipse(x + 38, 134, 2.5, 1.2, 0, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Sand ripple
+      ctx.fillStyle = 'rgba(255, 255, 255, 0.1)';
+      ctx.fillRect(x + 22, 138, 8, 1);
+      ctx.fillRect(x + 46, 142, 6, 1);
     }
+    ctx.restore();
+  }
+
+  private drawDropShadow(centerX: number, groundY: number, radiusX: number, radiusY: number, opacity: number): void {
+    const ctx = this.ctx;
+    ctx.save();
+    ctx.fillStyle = `rgba(0, 0, 0, ${opacity})`;
+    ctx.beginPath();
+    ctx.ellipse(centerX, groundY, Math.max(1, radiusX), Math.max(0.5, radiusY), 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.restore();
   }
 
   private drawObstacles(state: GameState, cactusColor: string, pteroColor: string): void {
     const ctx = this.ctx;
     const biome = this.biomes.currentBiome.id;
+
+    // Modern dynamic drop shadows for obstacles
+    if (!this.isRetro) {
+      for (const obs of state.obstacles) {
+        if (obs.type === 'CACTUS_SMALL' || obs.type === 'CACTUS_LARGE') {
+          this.drawDropShadow(obs.x + obs.w / 2, 139, obs.w * 0.42, 2.5, 0.22);
+        } else {
+          // Pterodactyl aerial shadow cast on ground
+          const heightAboveGround = Math.max(0, 140 - (obs.y + obs.h));
+          const shadowScale = Math.max(0.3, 1 - heightAboveGround / 100);
+          const shadowOpacity = Math.max(0.04, 0.16 * shadowScale);
+          this.drawDropShadow(obs.x + obs.w / 2, 139, (obs.w * 0.45) * shadowScale, 2 * shadowScale, shadowOpacity);
+        }
+      }
+    }
 
     for (const obs of state.obstacles) {
       let spriteKey: SpriteKey;
@@ -358,6 +433,14 @@ export class Renderer {
     const ctx = this.ctx;
     const trex = state.trex;
 
+    // Modern dynamic drop shadow on the ground for Trex
+    if (!this.isRetro) {
+      const heightDelta = Math.max(0, 93 - trex.y);
+      const shadowScale = Math.max(0.32, 1 - heightDelta / 110);
+      const shadowOpacity = Math.max(0.04, 0.24 * shadowScale);
+      this.drawDropShadow(trex.x + trex.w / 2, 139, (trex.w * 0.42) * shadowScale, 2.5 * shadowScale, shadowOpacity);
+    }
+
     let spriteKey: SpriteKey = 'trex-idle';
 
     if (state.phase === 'CRASHED') {
@@ -394,5 +477,45 @@ export class Renderer {
       ctx.lineWidth = 1;
       ctx.strokeRect(trex.x, trex.y, trex.w, trex.h);
     }
+  }
+
+  private drawSpeedLines(state: GameState): void {
+    if (this.isRetro || state.speed < 9.5 || state.phase !== 'RUNNING') return;
+    const ctx = this.ctx;
+    ctx.save();
+    const alpha = Math.min(0.2, (state.speed - 9.5) * 0.05);
+    ctx.strokeStyle = `rgba(255, 255, 255, ${alpha})`;
+    ctx.lineWidth = 1;
+    const time = (state.distance * 8) % 600;
+
+    const lines = [
+      { y: 35, len: 45, offset: (time * 1.5) % 600 },
+      { y: 60, len: 65, offset: (time * 1.8 + 200) % 600 },
+      { y: 85, len: 35, offset: (time * 1.2 + 400) % 600 },
+      { y: 110, len: 50, offset: (time * 2.0 + 100) % 600 },
+    ];
+
+    for (const l of lines) {
+      const x = 600 - l.offset;
+      ctx.beginPath();
+      ctx.moveTo(x, l.y);
+      ctx.lineTo(x + l.len, l.y);
+      ctx.stroke();
+    }
+    ctx.restore();
+  }
+
+  private drawVignette(): void {
+    if (this.isRetro || this.reducedEffects) return;
+    const ctx = this.ctx;
+    ctx.save();
+    const w = this.camera.logicalWidth;
+    const h = this.camera.logicalHeight;
+    const grad = ctx.createRadialGradient(w / 2, h / 2, h * 0.7, w / 2, h / 2, w * 0.65);
+    grad.addColorStop(0, 'rgba(0, 0, 0, 0)');
+    grad.addColorStop(1, 'rgba(0, 0, 0, 0.22)');
+    ctx.fillStyle = grad;
+    ctx.fillRect(0, 0, w, h);
+    ctx.restore();
   }
 }

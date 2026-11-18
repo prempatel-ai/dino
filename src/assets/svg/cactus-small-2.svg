@@ -1,16 +1,27 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 34 35" width="34" height="35">
-  <!-- Cactus Small 2: 34x35 -->
-  <g fill="currentColor">
-    <!-- Unit 1 -->
-    <path d="M5 0h4v35H5V0z" />
-    <path d="M1 8h3v14H1V8z M1 22h4v3H1z" />
-    <path d="M9 15h5v3H9z M13 5h3v10h-3V5z" />
-    <rect x="7" y="2" width="1" height="31" fill="#FFFFFF" opacity="0.2" />
+  <defs>
+    <linearGradient id="cactusSmGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4F7A54" />
+      <stop offset="50%" stop-color="#3D6342" />
+      <stop offset="100%" stop-color="#2C4B30" />
+    </linearGradient>
+  </defs>
+  <!-- Modern Vector Small Cactus 2-Cluster (34x35) -->
+  <g>
+    <!-- Cactus 1 -->
+    <rect x="4.5" y="1" width="5.5" height="34" rx="2.7" fill="url(#cactusSmGrad2)" />
+    <path d="M 1 10 Q 1 7, 3.5 7 Q 4.5 7, 4.5 10 L 4.5 19 Q 4.5 22, 6 22 L 6 25 Q 3.5 25, 2.5 23 Q 1 20, 1 16 Z" fill="url(#cactusSmGrad2)" />
+    <path d="M 14.5 8 Q 14.5 5, 12.5 5 Q 11 5, 11 8 L 11 14 Q 11 17, 9 17 L 9 20 Q 12 20, 13 18 Q 14.5 16, 14.5 12 Z" fill="url(#cactusSmGrad2)" />
+    <line x1="6.5" y1="3" x2="6.5" y2="33" stroke="#88B88E" stroke-width="0.8" opacity="0.6" stroke-linecap="round" />
+    <circle cx="7.2" cy="1.2" r="1.8" fill="#FF2A7A" />
+    <circle cx="7.2" cy="1.2" r="0.7" fill="#FFD700" />
 
-    <!-- Unit 2 -->
-    <path d="M22 2h4v33h-4V2z" />
-    <path d="M18 10h3v12h-3v-12z M18 22h4v3h-4z" />
-    <path d="M26 13h5v3h-5z M30 7h3v8h-3V7z" />
-    <rect x="24" y="4" width="1" height="29" fill="#FFFFFF" opacity="0.2" />
+    <!-- Cactus 2 (slightly offset height for organic variety) -->
+    <rect x="21" y="3" width="5.5" height="32" rx="2.7" fill="url(#cactusSmGrad2)" />
+    <path d="M 17.5 11 Q 17.5 8, 19.5 8 Q 20.5 8, 20.5 11 L 20.5 19 Q 20.5 22, 22 22 L 22 24.5 Q 19.5 24.5, 18.5 22.5 Q 17.5 20, 17.5 16 Z" fill="url(#cactusSmGrad2)" />
+    <path d="M 31 10 Q 31 7, 29 7 Q 27.5 7, 27.5 10 L 27.5 15 Q 27.5 18, 26 18 L 26 21 Q 29 21, 30 19 Q 31 17, 31 13 Z" fill="url(#cactusSmGrad2)" />
+    <line x1="23.2" y1="5" x2="23.2" y2="33" stroke="#88B88E" stroke-width="0.8" opacity="0.6" stroke-linecap="round" />
+    <circle cx="23.7" cy="3.2" r="1.8" fill="#FF9F1C" />
+    <circle cx="23.7" cy="3.2" r="0.7" fill="#FFF" />
   </g>
 </svg>

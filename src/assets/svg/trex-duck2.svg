@@ -1,18 +1,33 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 59 25" width="59" height="25">
-  <!-- Trex Duck 2: 59x25 -->
-  <g fill="currentColor">
-    <!-- Body horizontal silhouette -->
-    <path d="M1 4h32v4h6v2h17v2h3v7h-2v4H39v-4h-8v-3H16v-4H1V4z" />
-    <!-- Head & Eye -->
-    <rect x="42" y="4" width="2" height="2" fill="#F7F7F2" class="dino-eye" />
-    <path d="M47 11h9v2H47z" fill="#F7F7F2" opacity="0.3" />
-    <!-- Belly highlight -->
-    <path d="M20 7h15v5H20z" fill="#FFFFFF" opacity="0.15" />
-    <!-- Arms -->
-    <path d="M37 13h4v2h-2v2h-2z" />
-    <!-- Left Leg -->
-    <path d="M22 17h4v4h-4z M21 21h3v2h-3z" />
-    <!-- Right Leg -->
-    <path d="M30 17h4v6h3v2h-7v-8z" />
+  <defs>
+    <linearGradient id="duckGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#4A4A4A" />
+      <stop offset="100%" stop-color="#383838" />
+    </linearGradient>
+  </defs>
+  <!-- Trex Modern Vector Duck 2 (59x25) -->
+  <g>
+    <!-- Tail (lowered streamlined) -->
+    <path d="M1 9 Q 6 6, 16 7 Q 16 14, 12 16 Q 6 15, 1 9 Z" fill="url(#duckGrad2)" />
+    <!-- Horizontal Streamlined Body -->
+    <path d="M14 7 Q 26 5, 38 6 L 38 9 Q 44 9, 56 9 Q 58 9, 58 13 L 58 17 Q 58 19, 55 19 L 42 19 L 36 21 L 24 21 Q 16 21, 14 14 Z" fill="url(#duckGrad2)" />
+    <!-- Belly streamline highlight -->
+    <path d="M22 10 Q 34 8, 44 10 Q 44 16, 36 17 Q 24 17, 22 14 Z" fill="#FFFFFF" opacity="0.15" />
+    <!-- Dorsal ridge -->
+    <polygon points="20,6 22,4 24,6" fill="#FF8C00" opacity="0.8" />
+    <polygon points="26,5 28,3 30,5" fill="#FF8C00" opacity="0.8" />
+    <!-- Goggles Strap / Eye -->
+    <rect x="42" y="7" width="12" height="2" fill="#222" opacity="0.5" />
+    <!-- Focused Eye with spec glint -->
+    <circle cx="47" cy="11" r="2.2" fill="#FFFFFF" />
+    <circle cx="47.6" cy="11" r="1.3" fill="#1A1A1A" />
+    <circle cx="48" cy="10.3" r="0.5" fill="#FFFFFF" />
+    <!-- Snout line -->
+    <path d="M49 16 L 57 16" stroke="#222" stroke-width="1" stroke-linecap="round" />
+    <!-- Arm tucked back -->
+    <path d="M36 14 Q 41 14, 40 16 L 37 17 Z" fill="#3D3D3D" />
+    <!-- Duck Run Legs: Inverted stride -->
+    <path d="M22 17 Q 25 17, 24 20 L 21 22 L 23 22 L 20 23 Z" fill="#383838" />
+    <path d="M30 17 Q 34 17, 34 21 L 37 21 L 37 23 L 30 23 Z" fill="#444" />
   </g>
 </svg>

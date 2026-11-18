@@ -106,4 +106,14 @@ Agent appends here after every task. Newest at bottom. Never delete entries.
 - Decisions: T12 — Golden snapshots and bot tests locked in with deterministic seeds to prevent mechanical regressions in future iterations.
 - Notes: Project meets all acceptance criteria.
 
+### Polish — Modern graphics visual overhaul — DONE
+- Date: 2026-11-18
+- What changed:
+  - Authored premium modern vector SVGs: Organic Trex anatomy (idle, run1, run2, duck1, duck2, dead) with muscular contouring, glossy eye glints, and expressive poses; lush saguaro cacti with desert blossoms, vertical fluting, and depth gradients; sleek aerodynamic pterodactyl with bone-ribbed gradient wings; fluffy multi-tone cloud puffs; and neon/metallic glossy restart icon.
+  - Upgraded `ParallaxLayers`: Added glowing desert sun halo with atmospheric corona, layered rolling dunes with cubic bezier ridges, and rim lighting.
+  - Enhanced `Renderer`: Added dynamic ground drop shadows for Trex and obstacles (Trex shadow dynamically scales down in size and opacity with jump elevation); layered desert floor terrain gradient with pebble texture accents; high-velocity wind speed streaks when speed exceeds 9.5; and subtle cinematic vignette framing.
+- Tests: 38 unit & snapshot tests passing; all desktop and mobile Playwright e2e tests passing; typecheck, build, and lint green.
+- Decisions: Preserved all original Chromium collision boxes, physics, and gameplay timings while transforming rendering fidelity.
+- Notes: Live preview running smoothly at 60 FPS on localhost:3000.
+
 COMPLETE

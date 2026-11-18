@@ -12,52 +12,92 @@ export class ParallaxLayers {
   drawSky(ctx: CanvasRenderingContext2D, width: number, height: number, palette: PaletteTokens): void {
     const gradient = ctx.createLinearGradient(0, 0, 0, height);
     gradient.addColorStop(0, palette.skyTop);
-    gradient.addColorStop(1, palette.skyBottom);
+    gradient.addColorStop(0.7, palette.skyBottom);
+    gradient.addColorStop(1, palette.ground);
     ctx.fillStyle = gradient;
     ctx.fillRect(0, 0, width, height);
+
+    // Modern Sun glow for day mode
+    if (!palette.skyTop.startsWith('#0') && !palette.skyTop.startsWith('#1')) {
+      ctx.save();
+      const sunGrad = ctx.createRadialGradient(480, 28, 4, 480, 28, 36);
+      sunGrad.addColorStop(0, 'rgba(255, 235, 180, 0.7)');
+      sunGrad.addColorStop(0.3, 'rgba(255, 215, 140, 0.3)');
+      sunGrad.addColorStop(1, 'rgba(255, 200, 100, 0)');
+      ctx.fillStyle = sunGrad;
+      ctx.beginPath();
+      ctx.arc(480, 28, 36, 0, Math.PI * 2);
+      ctx.fill();
+
+      // Sun core
+      ctx.fillStyle = 'rgba(255, 250, 230, 0.9)';
+      ctx.beginPath();
+      ctx.arc(480, 28, 10, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
   }
 
   drawFarDunes(ctx: CanvasRenderingContext2D, width: number, palette: PaletteTokens): void {
     ctx.save();
-    ctx.fillStyle = palette.farDunes;
-
     const offset = this.farOffset;
+
+    // Atmospheric far dune gradient
+    const duneGrad = ctx.createLinearGradient(0, 85, 0, 127);
+    duneGrad.addColorStop(0, palette.farDunes);
+    duneGrad.addColorStop(1, palette.midDunes);
+    ctx.fillStyle = duneGrad;
+
     ctx.beginPath();
     ctx.moveTo(0, 127);
 
-    // Draw smooth repeating gentle rolling dunes
-    for (let x = -offset; x <= width + 600 - offset; x += 300) {
-      ctx.quadraticCurveTo(x + 75, 100, x + 150, 115);
-      ctx.quadraticCurveTo(x + 225, 105, x + 300, 127);
+    // Draw smooth repeating gentle rolling dunes with cubic beziers
+    for (let x = -offset - 300; x <= width + 600; x += 300) {
+      ctx.bezierCurveTo(x + 80, 96, x + 180, 114, x + 300, 127);
     }
 
     ctx.lineTo(width, 127);
     ctx.lineTo(0, 127);
     ctx.closePath();
     ctx.fill();
+
+    // Subtle edge rim light on far dunes
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.12)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
     ctx.restore();
   }
 
   drawMidDunes(ctx: CanvasRenderingContext2D, width: number, palette: PaletteTokens): void {
     ctx.save();
-    ctx.fillStyle = palette.midDunes;
-
     const offset = this.midOffset;
+
+    // Mid dunes gradient
+    const midGrad = ctx.createLinearGradient(0, 105, 0, 127);
+    midGrad.addColorStop(0, palette.midDunes);
+    midGrad.addColorStop(1, palette.ground);
+    ctx.fillStyle = midGrad;
+
     ctx.beginPath();
     ctx.moveTo(0, 127);
 
-    // Draw sharper mid-ground desert dunes
-    for (let x = -offset; x <= width + 600 - offset; x += 200) {
-      ctx.lineTo(x + 40, 118);
-      ctx.lineTo(x + 100, 112);
-      ctx.lineTo(x + 160, 122);
-      ctx.lineTo(x + 200, 127);
+    // Draw sharper layered desert ridges
+    for (let x = -offset - 200; x <= width + 400; x += 200) {
+      ctx.quadraticCurveTo(x + 50, 112, x + 100, 116);
+      ctx.quadraticCurveTo(x + 150, 120, x + 200, 127);
     }
 
     ctx.lineTo(width, 127);
     ctx.lineTo(0, 127);
     ctx.closePath();
     ctx.fill();
+
+    // Dune ridge line highlight
+    ctx.strokeStyle = 'rgba(255, 255, 255, 0.08)';
+    ctx.lineWidth = 1;
+    ctx.stroke();
+
     ctx.restore();
   }
 

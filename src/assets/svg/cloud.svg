@@ -1,9 +1,20 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46 14" width="46" height="14">
-  <!-- Cloud: 46x14 -->
-  <g fill="currentColor">
-    <!-- Puffy pixel-crisp cloud segments -->
-    <path d="M12 2h14v12H12V2z M18 0h12v14H18V0z M28 4h12v10H28V4z M4 6h12v8H4V6z M0 9h8v5H0V9z M38 8h8v6h-8V8z" />
-    <!-- Fluffy highlight -->
-    <rect x="18" y="1" width="10" height="2" fill="#FFFFFF" opacity="0.3" />
-  </g>
+  <defs>
+    <linearGradient id="cloudGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.95" />
+      <stop offset="60%" stop-color="#E2E8F0" stop-opacity="0.8" />
+      <stop offset="100%" stop-color="#CBD5E1" stop-opacity="0.6" />
+    </linearGradient>
+    <linearGradient id="cloudUnder" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94A3B8" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#64748B" stop-opacity="0.5" />
+    </linearGradient>
+  </defs>
+  <!-- Underside shadow puff -->
+  <path d="M 6 12 C 4 12 1 12 1 10 C 1 8 4 7 7 8 C 9 5 15 4 19 6 C 22 3 31 3 35 6 C 39 4 44 6 45 9 C 46 11 43 13 39 13 Z" fill="url(#cloudUnder)" />
+  <!-- Main cloud body -->
+  <path d="M 6 11 C 3 11 1 9.5 1 8 C 1 6.5 3.5 5.5 6.5 6 C 8 3.5 13.5 2.5 17.5 4.5 C 20.5 1.5 29 1.5 33 4.5 C 37 2.5 42 4.5 43.5 7 C 45.5 8.5 44 11 40 11 Z" fill="url(#cloudGrad)" />
+  <!-- Upper highlight puffs -->
+  <ellipse cx="25" cy="4" rx="7" ry="2.5" fill="#FFFFFF" opacity="0.6" />
+  <ellipse cx="14" cy="5.5" rx="4.5" ry="2" fill="#FFFFFF" opacity="0.5" />
 </svg>

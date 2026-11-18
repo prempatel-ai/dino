@@ -1,20 +1,43 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 47" width="44" height="47">
-  <!-- Trex Run 2: 44x47 -->
-  <g fill="currentColor">
-    <!-- Head & Snout -->
-    <path d="M22 0h17v3h2v10h-2v3H22V0z" />
-    <rect x="25" y="2" width="2" height="2" fill="#F7F7F2" class="dino-eye" />
-    <path d="M29 11h9v2H29z" fill="#F7F7F2" opacity="0.3" />
-    <!-- Neck & Chest -->
-    <rect x="22" y="16" width="6" height="5" />
-    <!-- Body & Back -->
-    <path d="M1 18h30v9H28v5H21v3H9v-5H5v-4H1V18z" />
-    <path d="M16 22h10v6H16z" fill="#FFFFFF" opacity="0.15" />
-    <!-- Arm -->
-    <path d="M29 20h4v2h-2v2h-2z" />
-    <!-- Leg 1: Forward step -->
-    <path d="M13 34h4v9h4v2h-8v-2h2v-9z" />
-    <!-- Leg 2: Trailing -->
-    <path d="M21 34h4v5h-4z M20 39h3v2h-3z" />
+  <defs>
+    <linearGradient id="dinoRun2Grad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#5A5A5A" />
+      <stop offset="100%" stop-color="#383838" />
+    </linearGradient>
+    <linearGradient id="bellyRun2Grad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="#808080" stop-opacity="0.3" />
+      <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.1" />
+    </linearGradient>
+  </defs>
+  <!-- Trex Modern Vector Run 2 (44x47) -->
+  <g>
+    <!-- Tail (dynamic upward angle) -->
+    <path d="M1 20 Q 4 18, 12 21 Q 14 26, 12 30 Q 7 27, 1 20 Z" fill="url(#dinoRun2Grad)" />
+    <!-- Back & Torso -->
+    <path d="M10 20 Q 14 18, 22 18 L 22 24 Q 28 24, 28 28 Q 28 34, 21 34 Q 13 34, 10 26 Z" fill="url(#dinoRun2Grad)" />
+    <!-- Belly patch -->
+    <path d="M14 22 Q 18 20, 22 22 Q 22 28, 20 31 Q 16 31, 14 26 Z" fill="url(#bellyRun2Grad)" />
+    <!-- Spinal Ridges -->
+    <polygon points="12,17 14,15 16,17" fill="#FF8C00" opacity="0.8" />
+    <polygon points="17,16 19,14 21,16" fill="#FF8C00" opacity="0.8" />
+    <!-- Neck & Head -->
+    <path d="M22 18 L 22 8 Q 22 2, 28 1 L 38 1 Q 41 1, 41 5 L 41 11 Q 41 14, 37 14 L 33 14 L 33 16 L 27 16 L 26 21 Z" fill="url(#dinoRun2Grad)" />
+    <!-- Mouth -->
+    <path d="M29 11 L 39 11" stroke="#222" stroke-width="1.2" stroke-linecap="round" />
+    <!-- Eye focused on road -->
+    <circle cx="28.5" cy="5" r="2.5" fill="#FFFFFF" />
+    <circle cx="29.2" cy="5" r="1.5" fill="#1A1A1A" />
+    <circle cx="29.7" cy="4.2" r="0.6" fill="#FFFFFF" />
+    <!-- Cheek Blush -->
+    <ellipse cx="27" cy="8.5" rx="1.5" ry="1" fill="#FF6B6B" opacity="0.4" />
+    <!-- Arm swinging -->
+    <path d="M28 22 Q 33 23, 32 25 L 30 26 Q 28 25, 27 23 Z" fill="#404040" />
+    <circle cx="32.5" cy="25.5" r="0.8" fill="#FFF" opacity="0.7" />
+    <!-- Run Stride 2: Legs Inverted -->
+    <!-- Front Leg Stepping Forward -->
+    <path d="M13 33 Q 17 33, 17 38 L 18 43 L 21 43 L 21 45 L 14 45 L 14 41 Q 13 36, 13 33 Z" fill="#484848" />
+    <circle cx="20.5" cy="44.5" r="0.6" fill="#FFF" opacity="0.6" />
+    <!-- Back Leg Trailing -->
+    <path d="M21 33 Q 24 33, 23 38 L 20 41 L 22 41 L 22 42 L 17 42 L 18 39 Q 20 34, 21 33 Z" fill="#3A3A3A" />
   </g>
 </svg>
