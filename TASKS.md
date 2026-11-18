@@ -105,7 +105,7 @@ Randomness only via injected RNG.
 ---
 
 ## T04 — Core: Collision
-Status: TODO | Depends: T02, T03
+Status: DONE | Depends: T02, T03
 
 **CONTEXT**
 GAME_SPEC.md section 7.

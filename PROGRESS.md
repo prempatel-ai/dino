@@ -42,3 +42,10 @@ Agent appends here after every task. Newest at bottom. Never delete entries.
 - Tests: 18 unit tests passing across all suites; typecheck, test, build, lint all green.
 - Decisions: T03 — Preserved entire obstacle history in horizon for deterministic auditability and verified duplication limit <= 2.
 - Notes: Gap equations and obstacle spawn thresholds verified against Chromium values.
+
+### T04 — Core: Collision — DONE
+- Date: 2026-11-18
+- What changed: Implemented `src/core/collision.ts` with two-phase AABB collision detection: 1px-inset outer bounding box fast-reject followed by per-subbox intersection tests for standing dino (6 boxes), ducking dino (1 box), and obstacle multi-part boxes.
+- Tests: 23 unit tests passing; verified direct hit, jump apex clearance over small and large cacti, ducking under mid-level pterodactyl, and outer-overlap-subbox-miss edge cases.
+- Decisions: T04 — Implemented pure `boxCompare`, `checkCollision`, and `isNearMiss` helpers without mutations or allocations.
+- Notes: Hitboxes match GAME_SPEC.md section 7 exactly.
