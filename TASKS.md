@@ -269,7 +269,7 @@ Effects read core state only. Zero effect on physics.
 ---
 
 ## T09 — HUD, overlay, audio, storage
-Status: TODO | Depends: T08
+Status: DONE | Depends: T08
 
 **CONTEXT**
 product.md sections 6, 8, 10; ASSETS.md HUD and audio.

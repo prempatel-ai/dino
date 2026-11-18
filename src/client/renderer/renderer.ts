@@ -11,6 +11,8 @@ import {
 } from './palette';
 import { ParallaxLayers } from './layers';
 import { ParticleSystem } from './particles';
+import { Hud } from '../ui/hud';
+import { Overlay } from '../ui/overlay';
 
 export class Renderer {
   private ctx: CanvasRenderingContext2D;
@@ -18,6 +20,8 @@ export class Renderer {
   readonly atlas: SpriteAtlas;
   readonly layers: ParallaxLayers;
   readonly particles: ParticleSystem;
+  readonly hud: Hud;
+  readonly overlay: Overlay;
 
   showHitboxes: boolean = false;
   isRetro: boolean = false;
@@ -40,6 +44,8 @@ export class Renderer {
     this.atlas = new SpriteAtlas();
     this.layers = new ParallaxLayers();
     this.particles = new ParticleSystem();
+    this.hud = new Hud();
+    this.overlay = new Overlay();
 
     this.camera.onResize(() => {
       this.atlas.updateScale(this.camera.scale, this.camera.dpr);
@@ -98,7 +104,7 @@ export class Renderer {
       }
     }
 
-    // Mid dunes (in front of clouds, behind obstacles)
+    // Mid dunes
     if (!this.isRetro) {
       this.layers.drawMidDunes(ctx, this.camera.logicalWidth, palette);
     }
@@ -106,7 +112,7 @@ export class Renderer {
     // 3. Draw Ground
     this.drawGround(state, palette.ground);
 
-    // 4. Draw Particles (under dino & obstacles)
+    // 4. Draw Particles
     if (!this.isRetro && !this.reducedEffects) {
       this.particles.draw(ctx);
     }
@@ -118,10 +124,10 @@ export class Renderer {
     this.drawTrex(state, palette.dinoBody);
 
     // 7. Draw HUD (Scores)
-    this.drawHud(state, palette);
+    this.hud.draw(ctx, state, palette);
 
     // 8. Draw Overlays
-    this.drawOverlays(state, palette.dinoBody);
+    this.overlay.draw(ctx, state, this.atlas, palette.dinoBody, this.camera.logicalWidth);
 
     // 9. Death White Flash
     if (this.flashTimeMs > 0 && !this.reducedEffects && !this.isRetro) {
@@ -161,7 +167,6 @@ export class Renderer {
       }
     }
 
-    // Emitting running dust
     if (
       state.phase === 'RUNNING' &&
       !state.trex.jumping &&
@@ -175,22 +180,18 @@ export class Renderer {
   private updateVisualEffects(state: GameState): void {
     const frameMs = 1000 / 60;
 
-    // Decay screen shake
     if (this.screenShakeTimeMs > 0) {
       this.screenShakeTimeMs -= frameMs;
       this.screenShakeIntensity = Math.max(0, (this.screenShakeTimeMs / 300) * 6);
     }
 
-    // Decay death flash
     if (this.flashTimeMs > 0) {
       this.flashTimeMs -= frameMs;
     }
 
-    // Ease squash & stretch back to 1.0
     this.squashStretchX += (1.0 - this.squashStretchX) * 0.15;
     this.squashStretchY += (1.0 - this.squashStretchY) * 0.15;
 
-    // Advance particles and parallax layers
     if (state.phase === 'RUNNING' || state.phase === 'INTRO') {
       this.layers.update(state.speed, 1);
     }
@@ -306,7 +307,6 @@ export class Renderer {
     const sprite = this.atlas.getSprite(spriteKey, dinoColor, trex.w, trex.h);
 
     ctx.save();
-    // Visual-only squash/stretch around feet center
     if (!this.isRetro && !this.reducedEffects && (this.squashStretchX !== 1 || this.squashStretchY !== 1)) {
       ctx.translate(trex.x + trex.w / 2, trex.y + trex.h);
       ctx.scale(this.squashStretchX, this.squashStretchY);
@@ -325,47 +325,6 @@ export class Renderer {
       ctx.strokeStyle = '#00FF00';
       ctx.lineWidth = 1;
       ctx.strokeRect(trex.x, trex.y, trex.w, trex.h);
-    }
-  }
-
-  private drawHud(state: GameState, palette: PaletteTokens): void {
-    const ctx = this.ctx;
-    ctx.font = 'bold 11px ui-monospace, SF Mono, Menlo, monospace';
-
-    const scoreStr = String(state.score).padStart(5, '0');
-    const hiStr = `HI ${String(state.highScore).padStart(5, '0')}`;
-
-    ctx.fillStyle = state.isNight ? '#7A8499' : '#8A8A8A';
-    ctx.fillText(hiStr, 480, 20);
-
-    const showScore = !state.isFlashing || state.flashIterations % 2 === 0;
-    if (showScore) {
-      ctx.fillStyle = state.isFlashing ? palette.accent : palette.dinoBody;
-      ctx.fillText(scoreStr, 550, 20);
-    }
-  }
-
-  private drawOverlays(state: GameState, textColor: string): void {
-    const ctx = this.ctx;
-
-    if (state.phase === 'READY') {
-      ctx.fillStyle = textColor;
-      ctx.font = '12px ui-monospace, SF Mono, Menlo, monospace';
-      ctx.textAlign = 'center';
-      ctx.fillText('PRESS SPACE OR TAP TO PLAY', 300, 75);
-      ctx.textAlign = 'start';
-    } else if (state.phase === 'CRASHED') {
-      ctx.fillStyle = textColor;
-      ctx.font = 'bold 16px ui-monospace, SF Mono, Menlo, monospace';
-      ctx.textAlign = 'center';
-      ctx.fillText('G A M E   O V E R', 300, 65);
-
-      const restartSprite = this.atlas.getSprite('restart', textColor, 36, 32);
-      if (restartSprite) {
-        ctx.drawImage(restartSprite, 282, 80, 36, 32);
-      }
-
-      ctx.textAlign = 'start';
     }
   }
 }

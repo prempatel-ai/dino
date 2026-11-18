@@ -77,3 +77,10 @@ Agent appends here after every task. Newest at bottom. Never delete entries.
 - Tests: 29 unit tests passing including `effects_equivalence.test.ts` (verifying identical simulation state with visual effects on vs off); Playwright smoke test passing.
 - Decisions: T08 — Applied squash/stretch and screen shake purely via canvas context matrix transformations so physics and core state remain completely untouched.
 - Notes: Pre-allocated object pools ensure zero garbage collection churn during active 60 FPS gameplay.
+
+### T09 — HUD, overlay, audio, storage — DONE
+- Date: 2026-11-18
+- What changed: Implemented `src/client/audio/synth.ts` with WebAudio synthesis (jump square blip 440->880Hz, milestone two-tone chime 880/1320Hz, crash 300->80Hz + noise burst, landing thud, near-miss whoosh, and high score fanfare), `src/client/ui/hud.ts`, `src/client/ui/overlay.ts` with interactive mute & retro UI controls, and `src/client/storage.ts` with resilient localStorage wrapper.
+- Tests: 30 unit tests passing, Playwright e2e test passing.
+- Decisions: T09 — AudioContext created only upon first user interaction to comply with modern browser autoplay policies.
+- Notes: High scores and settings persist safely and gracefully fall back to an in-memory dictionary if localStorage is restricted.
