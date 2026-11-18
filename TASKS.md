@@ -173,7 +173,7 @@ No DOM. Deterministic.
 ---
 
 ## T06 — Client: loop, input, canvas scaling
-Status: TODO | Depends: T05
+Status: DONE | Depends: T05
 
 **CONTEXT**
 ARCHITECTURE.md Loop and Rendering.

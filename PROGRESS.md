@@ -56,3 +56,10 @@ Agent appends here after every task. Newest at bottom. Never delete entries.
 - Tests: 28 unit tests passing; verified deterministic replay over 5000 steps, automated unassisted crash, milestone events, and restart locking.
 - Decisions: T05 — Emitted discrete step events (`jump`, `land`, `crash`, `milestone`, `nearMiss`, `highScore`, `biomeChange`) for clean client-side audio and particle reaction without coupling.
 - Notes: Headless core is completely pure, deterministic, and free of DOM/canvas dependencies.
+
+### T06 — Client: loop, input, canvas scaling — DONE
+- Date: 2026-11-18
+- What changed: Implemented `src/client/renderer/camera.ts` (600x150 logical 4:1 viewport, DPR-aware, resize handling), `src/client/input.ts` (desktop keys Space/Up/Down/Enter/W/S/M/R/H, mobile touch tap/swipe/lower-half-hold, single-frame action consumption), `src/client/loop.ts` (fixed 60 Hz accumulator, 100ms dt clamp, pause on tab visibility change), and `src/client/renderer/renderer.ts`.
+- Tests: 28 unit tests passing, Playwright e2e smoke test passing with live canvas inspection.
+- Decisions: T06 — Added debug hitbox visualization toggle (H key) directly in the renderer for visual validation against GAME_SPEC.md hitboxes.
+- Notes: Verified responsive 4:1 aspect ratio scaling without stretching on high-DPI displays.
