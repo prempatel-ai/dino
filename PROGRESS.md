@@ -63,3 +63,10 @@ Agent appends here after every task. Newest at bottom. Never delete entries.
 - Tests: 28 unit tests passing, Playwright e2e smoke test passing with live canvas inspection.
 - Decisions: T06 — Added debug hitbox visualization toggle (H key) directly in the renderer for visual validation against GAME_SPEC.md hitboxes.
 - Notes: Verified responsive 4:1 aspect ratio scaling without stretching on high-DPI displays.
+
+### T07 — Sprites (SVG) — DONE
+- Date: 2026-11-18
+- What changed: Authored 18 clean, lightweight SVGs (< 1.5 KB each) for Trex (idle, run 1 & 2, duck 1 & 2, dead), Small Cacti (1-3), Large Cacti (1-3), Pterodactyls (wings up & down), Cloud, Moon phases (0-6), Stars, and Restart icon. Implemented `SpriteAtlas` with dynamic DPR/scale rasterization, `currentColor` palette swapping, and integrated into `Renderer`.
+- Tests: 28 unit tests passing, Playwright e2e smoke test verified sprite loading and rendering.
+- Decisions: T07 — Bundled SVGs via Vite raw imports to guarantee zero network latency and synchronous offline canvas availability.
+- Notes: Verified exact alignment of SVG silhouettes with collision boxes from GAME_SPEC.md.

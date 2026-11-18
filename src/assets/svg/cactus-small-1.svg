@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 17 35" width="17" height="35">
+  <!-- Cactus Small 1: 17x35 -->
+  <g fill="currentColor">
+    <!-- Center Stem (x:4..10, y:0..34) -->
+    <path d="M5 0h4v35H5V0z" />
+    <!-- Left Arm (x:0..5, y:7..34) -->
+    <path d="M1 8h3v14H1V8z M1 22h4v3H1z" />
+    <!-- Right Arm (x:10..17, y:4..18) -->
+    <path d="M13 5h3v10h-3V5z M9 15h5v3H9z" />
+    <!-- Subtle rib shading -->
+    <rect x="7" y="2" width="1" height="31" fill="#FFFFFF" opacity="0.2" />
+  </g>
+</svg>

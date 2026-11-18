@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 47" width="44" height="47">
+  <!-- Trex Idle: 44x47 -->
+  <g fill="currentColor">
+    <!-- Head & Snout (x:22..39, y:0..16) -->
+    <path d="M22 0h17v3h2v10h-2v3H22V0z" />
+    <!-- Eye cutout -->
+    <rect x="25" y="2" width="2" height="2" fill="#F7F7F2" class="dino-eye" />
+    <!-- Teeth / Mouth slit -->
+    <path d="M29 11h9v2H29z" fill="#F7F7F2" opacity="0.3" />
+    <!-- Neck & Chest -->
+    <rect x="22" y="16" width="6" height="5" />
+    <!-- Body & Back (x:1..31, y:18..34) -->
+    <path d="M1 18h30v9H28v5H21v3H9v-5H5v-4H1V18z" />
+    <!-- Belly soft tone highlight -->
+    <path d="M16 22h10v6H16z" fill="#FFFFFF" opacity="0.15" />
+    <!-- Arms -->
+    <path d="M29 20h4v2h-2v2h-2z" />
+    <!-- Legs & Feet (standing) -->
+    <!-- Left Leg -->
+    <path d="M12 34h4v7h3v2h-7v-9z" />
+    <!-- Right Leg -->
+    <path d="M20 34h4v7h3v2h-7v-9z" />
+  </g>
+</svg>

@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 36 32" width="36" height="32">
+  <!-- Restart arrow icon: 36x32 -->
+  <g fill="currentColor">
+    <!-- Curved arrow arc -->
+    <path d="M18 4a12 12 0 1 0 12 12h-4a8 8 0 1 1-8-8c2.2 0 4.2.9 5.7 2.3L20 14h12V2l-4.5 4.5A15.9 15.9 0 0 0 18 4z" />
+  </g>
+</svg>

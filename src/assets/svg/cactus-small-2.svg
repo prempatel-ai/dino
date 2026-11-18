@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 34 35" width="34" height="35">
+  <!-- Cactus Small 2: 34x35 -->
+  <g fill="currentColor">
+    <!-- Unit 1 -->
+    <path d="M5 0h4v35H5V0z" />
+    <path d="M1 8h3v14H1V8z M1 22h4v3H1z" />
+    <path d="M9 15h5v3H9z M13 5h3v10h-3V5z" />
+    <rect x="7" y="2" width="1" height="31" fill="#FFFFFF" opacity="0.2" />
+
+    <!-- Unit 2 -->
+    <path d="M22 2h4v33h-4V2z" />
+    <path d="M18 10h3v12h-3v-12z M18 22h4v3h-4z" />
+    <path d="M26 13h5v3h-5z M30 7h3v8h-3V7z" />
+    <rect x="24" y="4" width="1" height="29" fill="#FFFFFF" opacity="0.2" />
+  </g>
+</svg>

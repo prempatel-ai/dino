@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 9 9" width="9" height="9">
+  <!-- Star: 9x9 -->
+  <path d="M4 0h1v9H4V0z M0 4h9v1H0V4z" fill="currentColor" />
+  <rect x="3" y="3" width="3" height="3" fill="#FFFFFF" opacity="0.6" />
+</svg>

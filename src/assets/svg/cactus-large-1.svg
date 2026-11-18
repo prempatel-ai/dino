@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 25 50" width="25" height="50">
+  <!-- Cactus Large 1: 25x50 -->
+  <g fill="currentColor">
+    <!-- Main stem (x:8..15, y:0..50) -->
+    <path d="M9 0h6v50H9V0z" />
+    <!-- Left branch (x:0..7, y:12..50) -->
+    <path d="M1 12h5v22H1V12z M1 34h8v5H1z" />
+    <!-- Right branch (x:13..23, y:10..48) -->
+    <path d="M15 25h9v5h-9z M19 11h5v16h-5V11z" />
+    <!-- Modern rib highlight -->
+    <rect x="12" y="2" width="1" height="46" fill="#FFFFFF" opacity="0.25" />
+    <rect x="3" y="14" width="1" height="18" fill="#FFFFFF" opacity="0.2" />
+  </g>
+</svg>

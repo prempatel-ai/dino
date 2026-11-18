@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46 40" width="46" height="40">
+  <!-- Pterodactyl Wing Down: 46x40 -->
+  <g fill="currentColor">
+    <!-- Beak, Head & Crest -->
+    <path d="M2 14h4v3H2z M6 10h4v7H6z M10 8h6v9h-6z" />
+    <rect x="9" y="9" width="2" height="2" fill="#F7F7F2" />
+    <!-- Body & Tail -->
+    <path d="M16 15h16v5H16z M18 20h24v6H18z" />
+    <!-- Wing DOWN -->
+    <path d="M16 20h12v18H16V20z M22 20h10v14H22z M28 20h10v9H28z" opacity="0.9" />
+    <path d="M18 22l12 14" stroke="#FFFFFF" stroke-width="1" opacity="0.3" />
+  </g>
+</svg>

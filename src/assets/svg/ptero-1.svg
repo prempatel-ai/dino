@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46 40" width="46" height="40">
+  <!-- Pterodactyl Wing Up: 46x40 -->
+  <g fill="currentColor">
+    <!-- Beak, Head & Crest -->
+    <path d="M2 14h4v3H2z M6 10h4v7H6z M10 8h6v9h-6z" />
+    <!-- Eye -->
+    <rect x="9" y="9" width="2" height="2" fill="#F7F7F2" />
+    <!-- Body & Tail -->
+    <path d="M16 15h16v5H16z M18 20h24v6H18z" />
+    <!-- Wing UP -->
+    <path d="M14 0h12v15H14V0z M20 3h12v12H20z M26 7h10v8H26z" opacity="0.9" />
+    <!-- Wing highlight line -->
+    <path d="M16 2l12 12" stroke="#FFFFFF" stroke-width="1" opacity="0.3" />
+  </g>
+</svg>

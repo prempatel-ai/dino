@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 44 47" width="44" height="47">
+  <!-- Trex Run 1: 44x47 -->
+  <g fill="currentColor">
+    <!-- Head & Snout -->
+    <path d="M22 0h17v3h2v10h-2v3H22V0z" />
+    <rect x="25" y="2" width="2" height="2" fill="#F7F7F2" class="dino-eye" />
+    <path d="M29 11h9v2H29z" fill="#F7F7F2" opacity="0.3" />
+    <!-- Neck & Chest -->
+    <rect x="22" y="16" width="6" height="5" />
+    <!-- Body & Back -->
+    <path d="M1 18h30v9H28v5H21v3H9v-5H5v-4H1V18z" />
+    <path d="M16 22h10v6H16z" fill="#FFFFFF" opacity="0.15" />
+    <!-- Arm -->
+    <path d="M29 20h4v2h-2v2h-2z" />
+    <!-- Leg 1: Back/trailing -->
+    <path d="M11 34h4v5h-4z M10 39h3v2h-3z" />
+    <!-- Leg 2: Forward step -->
+    <path d="M19 34h4v9h4v2h-8v-2h2v-9z" />
+  </g>
+</svg>

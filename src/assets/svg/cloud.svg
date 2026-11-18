@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 46 14" width="46" height="14">
+  <!-- Cloud: 46x14 -->
+  <g fill="currentColor">
+    <!-- Puffy pixel-crisp cloud segments -->
+    <path d="M12 2h14v12H12V2z M18 0h12v14H18V0z M28 4h12v10H28V4z M4 6h12v8H4V6z M0 9h8v5H0V9z M38 8h8v6h-8V8z" />
+    <!-- Fluffy highlight -->
+    <rect x="18" y="1" width="10" height="2" fill="#FFFFFF" opacity="0.3" />
+  </g>
+</svg>

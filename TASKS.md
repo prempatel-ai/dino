@@ -204,7 +204,7 @@ Rendering must not mutate core state.
 ---
 
 ## T07 — Sprites (SVG)
-Status: TODO | Depends: T06
+Status: DONE | Depends: T06
 
 **CONTEXT**
 ASSETS.md sprite rules and animation set.
