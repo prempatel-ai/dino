@@ -167,66 +167,47 @@ export class Overlay {
   private drawAIDebug(
     ctx: CanvasRenderingContext2D,
     state: GameState,
-    mode: AIMode,
+    _mode: AIMode,
     decision: AIDecision | null,
-    stats: AIEvaluationStats | null,
+    _stats: AIEvaluationStats | null,
   ): void {
     const trex = state.trex;
     const dinoFront = trex.x + trex.w;
-    const dinoCenterY = trex.y + trex.h / 2;
+    const dinoCenterY = trex.y + 14; // Dino eye level
 
     ctx.save();
 
-    // Raycast Line to incoming obstacle
+    // Subtle holographic lock-on tracer to incoming obstacle
     if (decision?.targetObs && decision.distance !== undefined && decision.distance > 0) {
       const obs = decision.targetObs;
-      const obsCenterY = obs.y + obs.h / 2;
       const isDangerous = decision.action === 'JUMP' || decision.action === 'DUCK';
 
-      // Laser line
+      // Soft holographic beam
       ctx.beginPath();
-      ctx.setLineDash([3, 3]);
-      ctx.strokeStyle = isDangerous ? 'rgba(239, 68, 68, 0.85)' : 'rgba(16, 185, 129, 0.75)';
-      ctx.lineWidth = isDangerous ? 2 : 1;
+      ctx.strokeStyle = isDangerous ? 'rgba(239, 68, 68, 0.45)' : 'rgba(56, 189, 248, 0.35)';
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 4]);
       ctx.moveTo(dinoFront, dinoCenterY);
-      ctx.lineTo(obs.x, obsCenterY);
+      ctx.lineTo(obs.x, obs.y + 6);
       ctx.stroke();
       ctx.setLineDash([]);
 
-      // Distance indicator tag
-      const midX = (dinoFront + obs.x) / 2;
-      const midY = (dinoCenterY + obsCenterY) / 2 - 6;
-      ctx.fillStyle = isDangerous ? '#ef4444' : '#10b981';
-      ctx.font = '9px ui-monospace, SF Mono, Menlo, monospace';
+      // Sleek holographic lock-on bracket around obstacle
+      ctx.strokeStyle = isDangerous ? '#ef4444' : '#38bdf8';
+      ctx.lineWidth = 1.2;
+      const bW = 5;
+      ctx.beginPath();
+      ctx.moveTo(obs.x - 3, obs.y + bW);
+      ctx.lineTo(obs.x - 3, obs.y - 3);
+      ctx.lineTo(obs.x + bW, obs.y - 3);
+      ctx.stroke();
+
+      // Mini distance tag above obstacle
+      ctx.fillStyle = isDangerous ? '#ef4444' : '#38bdf8';
+      ctx.font = 'bold 8px ui-monospace, SF Mono, Menlo, monospace';
       ctx.textAlign = 'center';
-      const label = `d: ${Math.round(decision.distance)}px` + (decision.threshold ? ` | t: ${Math.round(decision.threshold)}px` : '');
-      ctx.fillText(label, midX, midY);
+      ctx.fillText(`${Math.round(decision.distance)}px`, obs.x + obs.w / 2, obs.y - 6);
     }
-
-    // Top-left AI badge
-    const badgeX = 14;
-    const badgeY = 24;
-    ctx.fillStyle = 'rgba(15, 23, 42, 0.65)';
-    ctx.fillRect(badgeX, badgeY - 14, 160, 20);
-
-    ctx.fillStyle = mode === 'NAIVE' ? '#f59e0b' : mode === 'LINEAR' ? '#38bdf8' : mode === 'ANN' ? '#a855f7' : '#10b981';
-    ctx.font = 'bold 9px ui-monospace, SF Mono, Menlo, monospace';
-    ctx.textAlign = 'left';
-    
-    let modeText = `AI: ${mode}`;
-    if (mode === 'NAIVE') modeText = '📏 NAIVE (11*S)';
-    else if (mode === 'LINEAR') modeText = '⚡ 3-BYTE LINEAR';
-    else if (mode === 'ANN') modeText = '🧠 NEURAL NET';
-    else if (mode === 'EVOLUTION') modeText = `🧬 GEN ${stats?.generation || 1} [GHOST]`;
-
-    ctx.fillText(modeText, badgeX + 6, badgeY);
-
-    // Action indicator: JUMP, DUCK, RUN
-    const action = decision?.action || 'NONE';
-    const actionText = action === 'JUMP' ? '⬆ JUMP' : action === 'DUCK' ? '⬇ DUCK' : '➡ RUN';
-    ctx.fillStyle = action === 'JUMP' ? '#ef4444' : action === 'DUCK' ? '#eab308' : '#22c55e';
-    ctx.textAlign = 'right';
-    ctx.fillText(actionText, badgeX + 154, badgeY);
 
     ctx.restore();
   }

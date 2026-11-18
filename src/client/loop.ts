@@ -2,6 +2,7 @@ import type { Game } from '../core/game';
 import type { InputHandler } from './input';
 import type { Renderer } from './renderer/renderer';
 import type { AIController } from '../ai/controller';
+import type { NeuralPanel } from './ui/neural_panel';
 
 export class GameLoop {
   private readonly STEP_MS = 1000 / 60;
@@ -11,6 +12,7 @@ export class GameLoop {
   private input: InputHandler;
   private renderer: Renderer;
   private aiController: AIController | null;
+  private neuralPanel: NeuralPanel | null;
 
   private accumulator: number = 0;
   private lastTime: number = 0;
@@ -22,11 +24,13 @@ export class GameLoop {
     input: InputHandler,
     renderer: Renderer,
     aiController: AIController | null = null,
+    neuralPanel: NeuralPanel | null = null,
   ) {
     this.game = game;
     this.input = input;
     this.renderer = renderer;
     this.aiController = aiController;
+    this.neuralPanel = neuralPanel;
 
     document.addEventListener('visibilitychange', this.handleVisibilityChange);
   }
@@ -92,6 +96,7 @@ export class GameLoop {
     const stats = this.aiController?.getEvolutionStats() || null;
 
     this.renderer.draw(this.game.state, alpha, aiMode, decision, stats);
+    this.neuralPanel?.update(aiMode, decision, stats, dt);
   };
 
   destroy(): void {

@@ -183,12 +183,6 @@ export class Renderer {
 
     // 8. Draw Badges & Overlays
     this.badges.draw(ctx, this.camera.logicalWidth, this.isRetro);
-
-    // Live Neural Network Brain Visualizer (Matching reference image)
-    if (aiMode !== 'OFF' && decision?.networkState) {
-      this.neuralViz.draw(ctx, decision.networkState, 230, 8, 225, 84);
-    }
-
     this.overlay.draw(
       ctx,
       state,

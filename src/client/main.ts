@@ -8,6 +8,7 @@ import { SoundSynth } from './audio/synth';
 import { AmbientAudio } from './audio/ambient';
 import { Storage } from './storage';
 import { AIController } from '../ai/controller';
+import { NeuralPanel } from './ui/neural_panel';
 
 function bootstrap(): void {
   const canvas = document.getElementById('game') as HTMLCanvasElement;
@@ -22,6 +23,7 @@ function bootstrap(): void {
   const renderer = new Renderer(canvas, camera);
   const input = new InputHandler(window);
   const aiController = new AIController();
+  const neuralPanel = new NeuralPanel();
 
   // Load saved high score
   const savedHighScore = Storage.getNumber('dino_high_score', 0);
@@ -98,8 +100,8 @@ function bootstrap(): void {
     console.log('Easter egg unlocked: Dino Sunglasses!');
   };
 
-  // Create loop with event dispatcher and AI controller
-  const loop = new GameLoop(game, input, renderer, aiController);
+  // Create loop with event dispatcher, AI controller, and Neural Panel
+  const loop = new GameLoop(game, input, renderer, aiController, neuralPanel);
 
   const originalStep = game.step.bind(game);
   game.step = (inp, frames = 1) => {
