@@ -130,7 +130,7 @@ export class Renderer {
       if (!this.isRetro && (state.isNight || state.nightFade > 0.1)) {
         ctx.globalAlpha = Math.max(0.3, 1 - state.nightFade * 0.55);
       }
-      const sprite = this.atlas.getSprite('cloud', palette.skyBottom, 46, 14);
+      const sprite = this.atlas.getSprite('cloud', '#FFFFFF', 46, 14);
       if (sprite) {
         ctx.drawImage(sprite, cloud.x, cloud.y, 46, 14);
       }

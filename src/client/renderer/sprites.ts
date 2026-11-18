@@ -122,6 +122,29 @@ export class SpriteAtlas {
     this.scale = scale;
     this.dpr = dpr;
     this.cache.clear();
+    this.prewarmCommonSprites();
+  }
+
+  private prewarmCommonSprites(): void {
+    // Pre-rasterize standard sprites once so gameplay never has asynchronous decodes or frame drops
+    this.getSprite('trex-idle', '#535353', 44, 47);
+    this.getSprite('trex-run1', '#535353', 44, 47);
+    this.getSprite('trex-run2', '#535353', 44, 47);
+    this.getSprite('trex-duck1', '#535353', 59, 25);
+    this.getSprite('trex-duck2', '#535353', 59, 25);
+    this.getSprite('cactus-small-1', '#4F6F52', 17, 35);
+    this.getSprite('cactus-small-2', '#4F6F52', 34, 35);
+    this.getSprite('cactus-small-3', '#4F6F52', 51, 35);
+    this.getSprite('cactus-large-1', '#4F6F52', 25, 50);
+    this.getSprite('cactus-large-2', '#4F6F52', 50, 50);
+    this.getSprite('cactus-large-3', '#4F6F52', 75, 50);
+    this.getSprite('ptero-1', '#535353', 46, 40);
+    this.getSprite('ptero-2', '#535353', 46, 40);
+    this.getSprite('cloud', '#FFFFFF', 46, 14);
+    this.getSprite('star', '#FFFFFF', 9, 9);
+    for (let i = 0; i < 7; i++) {
+      this.getSprite(`moon-${i}` as SpriteKey, '#F8FAFC', 32, 32);
+    }
   }
 
   getSprite(
@@ -130,21 +153,25 @@ export class SpriteAtlas {
     width: number,
     height: number,
   ): HTMLCanvasElement | null {
+    const rawSvg = RAW_SVGS[key];
+    if (!rawSvg) {
+      return null;
+    }
+
     const targetW = Math.max(1, Math.round(width * this.scale * this.dpr));
     const targetH = Math.max(1, Math.round(height * this.scale * this.dpr));
-    const cacheKey = `${key}_${color}_${targetW}_${targetH}`;
+
+    const usesCurrentColor = rawSvg.includes('currentColor');
+    // If SVG doesn't use currentColor, ignore dynamic tint strings to guarantee 100% cache hit
+    const colorKey = usesCurrentColor ? color : 'default';
+    const cacheKey = `${key}_${colorKey}_${targetW}_${targetH}`;
 
     const cached = this.cache.get(cacheKey);
     if (cached) {
       return cached;
     }
 
-    const rawSvg = RAW_SVGS[key];
-    if (!rawSvg) {
-      return null;
-    }
-
-    const coloredSvg = rawSvg.replace(/currentColor/g, color);
+    const coloredSvg = usesCurrentColor ? rawSvg.replace(/currentColor/g, color) : rawSvg;
     const encoded = encodeURIComponent(coloredSvg);
     const dataUri = `data:image/svg+xml;charset=utf-8,${encoded}`;
 

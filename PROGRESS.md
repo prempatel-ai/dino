@@ -153,4 +153,15 @@ Agent appends here after every task. Newest at bottom. Never delete entries.
 - Decisions: Anchored night celestial coordinates away from score HUD while preserving 100% core physics independence.
 - Notes: Live preview running on localhost:3000.
 
+### Performance — Day/Night Transition Stutter & Texture Cache Fix — DONE
+- Date: 2026-11-18
+- What changed:
+  - Identified root cause of day/night transition lag: `SpriteAtlas` cache keys included interpolated color strings (`${key}_${color}_...`). Because `dinoColor`, `cactusColor`, and `skyBottom` interpolated to unique hex values on every single frame over 60–120 frames, hundreds of redundant `<canvas>` elements, data URIs, and asynchronous `Image()` decoders were created per second, thrashing the browser thread and memory.
+  - Optimized `SpriteAtlas.getSprite`: Checked `rawSvg.includes('currentColor')`. For all vector SVGs with built-in styling/gradients, color is ignored in the cache key (`${key}_default_${targetW}_${targetH}`), resulting in 100% cache hits and zero runtime allocations.
+  - Added `prewarmCommonSprites()` to pre-rasterize all standard gameplay sprites into memory at startup/resize.
+  - Streamlined `renderer.ts` to pass static colors for non-tinted sprites (`cloud`, `trex`, standard obstacles).
+- Tests: 38 unit & snapshot tests passing; Playwright desktop and mobile e2e tests passing; typecheck, build, and lint green.
+- Decisions: Decoupled palette interpolation from static sprite cache keys, locking active gameplay at a constant 60 FPS.
+- Notes: Live preview running smoothly at 60 FPS on localhost:3000.
+
 COMPLETE
