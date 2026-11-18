@@ -38,7 +38,7 @@ No runtime deps. TS strict. No `any`.
 ---
 
 ## T02 — Core: Trex physics
-Status: TODO | Depends: T01
+Status: DONE | Depends: T01
 
 **CONTEXT**
 GAME_SPEC.md section 2.

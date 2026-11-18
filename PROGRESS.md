@@ -28,3 +28,10 @@ Agent appends here after every task. Newest at bottom. Never delete entries.
 - Tests: 2 unit tests passing, 1 e2e test passing, typecheck/build/lint clean.
 - Decisions: T01 — Configured Vitest to target `tests/core/**/*.test.ts` so unit runner does not conflict with Playwright test files.
 - Notes: Verified GAME_SPEC.md constants against Chromium offline.js source. All match.
+
+### T02 — Core: Trex physics — DONE
+- Date: 2026-11-18
+- What changed: Implemented `src/core/trex.ts` with exact Chromium jump velocity, gravity, short hop via early release, fast drop via down key in air, and ground ducking (59x25 dimension switch and top Y offset).
+- Tests: 9 unit tests passing (full hold apex = 2, airFrames = 35 at speed 6), all typecheck, build, and lint checks green.
+- Decisions: T02 — Preserved duck input during airborne state as pending duck so landing smoothly transitions to ducking if down key remains held.
+- Notes: Full jump holds, early release hops, speed drops, and ground ducks match GAME_SPEC.md.
