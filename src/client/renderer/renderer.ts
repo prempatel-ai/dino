@@ -1,5 +1,6 @@
 import type { GameState } from '../../core/types';
 import type { Camera } from './camera';
+import type { AIMode, AIDecision, AIEvaluationStats } from '../../ai/types';
 import { SpriteAtlas, type SpriteKey } from './sprites';
 import {
   RETRO_DAY_PALETTE,
@@ -65,7 +66,13 @@ export class Renderer {
     });
   }
 
-  draw(state: GameState, _alpha: number = 1): void {
+  draw(
+    state: GameState,
+    _alpha: number = 1,
+    aiMode: AIMode = 'OFF',
+    decision: AIDecision | null = null,
+    stats: AIEvaluationStats | null = null,
+  ): void {
     const ctx = this.ctx;
     const frameMs = 1000 / 60;
     this.atlas.updateScale(this.camera.scale, this.camera.dpr);
@@ -172,7 +179,16 @@ export class Renderer {
 
     // 8. Draw Badges & Overlays
     this.badges.draw(ctx, this.camera.logicalWidth, this.isRetro);
-    this.overlay.draw(ctx, state, this.atlas, palette.dinoBody, this.camera.logicalWidth);
+    this.overlay.draw(
+      ctx,
+      state,
+      this.atlas,
+      palette.dinoBody,
+      this.camera.logicalWidth,
+      aiMode,
+      decision,
+      stats,
+    );
 
     // 9. Death White Flash
     if (this.flashTimeMs > 0 && !this.reducedEffects && !this.isRetro) {

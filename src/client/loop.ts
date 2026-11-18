@@ -1,6 +1,7 @@
 import type { Game } from '../core/game';
 import type { InputHandler } from './input';
 import type { Renderer } from './renderer/renderer';
+import type { AIController } from '../ai/controller';
 
 export class GameLoop {
   private readonly STEP_MS = 1000 / 60;
@@ -9,16 +10,23 @@ export class GameLoop {
   private game: Game;
   private input: InputHandler;
   private renderer: Renderer;
+  private aiController: AIController | null;
 
   private accumulator: number = 0;
   private lastTime: number = 0;
   private animationFrameId: number | null = null;
   private isPaused: boolean = false;
 
-  constructor(game: Game, input: InputHandler, renderer: Renderer) {
+  constructor(
+    game: Game,
+    input: InputHandler,
+    renderer: Renderer,
+    aiController: AIController | null = null,
+  ) {
     this.game = game;
     this.input = input;
     this.renderer = renderer;
+    this.aiController = aiController;
 
     document.addEventListener('visibilitychange', this.handleVisibilityChange);
   }
@@ -60,13 +68,30 @@ export class GameLoop {
     this.accumulator += dt;
 
     while (this.accumulator >= this.STEP_MS) {
-      const inputState = this.input.consume();
+      let inputState = this.input.consume();
+
+      if (this.aiController && this.aiController.mode !== 'OFF') {
+        const aiInput = this.aiController.update(this.game.state);
+        if (aiInput) {
+          inputState = {
+            jumpPressed: inputState.jumpPressed || aiInput.jumpPressed,
+            jumpHeld: inputState.jumpHeld || aiInput.jumpHeld,
+            duckHeld: inputState.duckHeld || aiInput.duckHeld,
+            restartPressed: inputState.restartPressed || aiInput.restartPressed,
+          };
+        }
+      }
+
       this.game.step(inputState, 1);
       this.accumulator -= this.STEP_MS;
     }
 
     const alpha = this.accumulator / this.STEP_MS;
-    this.renderer.draw(this.game.state, alpha);
+    const aiMode = this.aiController?.mode || 'OFF';
+    const decision = this.aiController?.getLastDecision() || null;
+    const stats = this.aiController?.getEvolutionStats() || null;
+
+    this.renderer.draw(this.game.state, alpha, aiMode, decision, stats);
   };
 
   destroy(): void {

@@ -25,6 +25,7 @@ export class InputHandler {
   onRetroToggle?: () => void;
   onHitboxToggle?: () => void;
   onKonamiCode?: () => void;
+  onAIToggle?: () => void;
 
   constructor(targetElement: HTMLElement | Window = window) {
     targetElement.addEventListener('keydown', this.handleKeyDown as EventListener);
@@ -71,6 +72,8 @@ export class InputHandler {
       this.onRetroToggle?.();
     } else if (e.code === 'KeyH') {
       this.onHitboxToggle?.();
+    } else if (e.code === 'KeyA') {
+      this.onAIToggle?.();
     }
   };
 

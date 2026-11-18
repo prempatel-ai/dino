@@ -7,6 +7,7 @@ import { SettingsManager } from './ui/settings';
 import { SoundSynth } from './audio/synth';
 import { AmbientAudio } from './audio/ambient';
 import { Storage } from './storage';
+import { AIController } from '../ai/controller';
 
 function bootstrap(): void {
   const canvas = document.getElementById('game') as HTMLCanvasElement;
@@ -20,6 +21,7 @@ function bootstrap(): void {
   const camera = new Camera(canvas);
   const renderer = new Renderer(canvas, camera);
   const input = new InputHandler(window);
+  const aiController = new AIController();
 
   // Load saved high score
   const savedHighScore = Storage.getNumber('dino_high_score', 0);
@@ -29,7 +31,7 @@ function bootstrap(): void {
   renderer.isRetro = settings.isRetro;
   renderer.reducedEffects = settings.reducedEffects;
   renderer.showHitboxes = settings.showHitboxes;
-  renderer.overlay.updateButtons(settings.isMuted, settings.isRetro);
+  renderer.overlay.updateButtons(settings.isMuted, settings.isRetro, aiController.mode);
 
   // Audio start on first user interaction
   let userInteracted = false;
@@ -64,7 +66,7 @@ function bootstrap(): void {
     const muted = settings.toggleMute();
     synth.setMuted(muted);
     ambient.setMuted(muted);
-    renderer.overlay.updateButtons(muted, settings.isRetro);
+    renderer.overlay.updateButtons(muted, settings.isRetro, aiController.mode);
   };
   input.onMuteToggle = toggleMute;
   renderer.overlay.onMuteClick = toggleMute;
@@ -73,10 +75,18 @@ function bootstrap(): void {
   const toggleRetro = (): void => {
     const retro = settings.toggleRetro();
     renderer.isRetro = retro;
-    renderer.overlay.updateButtons(settings.isMuted, retro);
+    renderer.overlay.updateButtons(settings.isMuted, retro, aiController.mode);
   };
   input.onRetroToggle = toggleRetro;
   renderer.overlay.onRetroClick = toggleRetro;
+
+  // AI Auto-Pilot mode handlers (Cycle: OFF -> NAIVE -> LINEAR -> ANN -> EVOLUTION)
+  const toggleAI = (): void => {
+    const mode = aiController.cycleMode();
+    renderer.overlay.updateButtons(settings.isMuted, settings.isRetro, mode);
+  };
+  input.onAIToggle = toggleAI;
+  renderer.overlay.onAIClick = toggleAI;
 
   input.onHitboxToggle = () => {
     renderer.showHitboxes = settings.toggleHitboxes();
@@ -88,8 +98,8 @@ function bootstrap(): void {
     console.log('Easter egg unlocked: Dino Sunglasses!');
   };
 
-  // Create loop with event dispatcher
-  const loop = new GameLoop(game, input, renderer);
+  // Create loop with event dispatcher and AI controller
+  const loop = new GameLoop(game, input, renderer, aiController);
 
   const originalStep = game.step.bind(game);
   game.step = (inp, frames = 1) => {
@@ -99,7 +109,7 @@ function bootstrap(): void {
 
   loop.start();
 
-  console.log('Dino Run engine initialized with biomes, skins, ambient audio, and creative layer.');
+  console.log('Dino Run engine initialized with biomes, skins, ambient audio, and AI Auto-Pilot.');
 }
 
 if (document.readyState === 'loading') {
