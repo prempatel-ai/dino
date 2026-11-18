@@ -129,4 +129,14 @@ Agent appends here after every task. Newest at bottom. Never delete entries.
 - Decisions: Preserved required test selectors and text contents (`#btn-mute`, `#btn-retro`) while completely upgrading visual ergonomics.
 - Notes: Changes live-reloaded on localhost:3000.
 
+### UI — Menu jump lane clearance fix — DONE
+- Date: 2026-11-18
+- What changed:
+  - Repositioned `.ui-bar` floating dock above the game canvas (`bottom: calc(100% + 12px); left: 12px;`) so the canvas playfield is 100% unobstructed.
+  - Adjusted `#game-container` to `max-height: calc(100vh - 80px)` ensuring comfortable vertical breathing room above the canvas on all screen sizes.
+  - Added ultra-compact viewport fallback `@media (max-height: 260px)` tucking the dock to `left: 140px` (well to the right of Dino's jump column at `x=50..94`), completely preventing Dino's head from ever being cut off or overlapped at jump apex.
+- Tests: 38 unit & snapshot tests passing; Playwright desktop and mobile e2e tests passing; typecheck, build, and lint green.
+- Decisions: Relocated toolbar outside the canvas viewport boundary so Dino's full jump arc reaches its apex (`y=2`) with zero occlusion.
+- Notes: Live preview running on localhost:3000.
+
 COMPLETE

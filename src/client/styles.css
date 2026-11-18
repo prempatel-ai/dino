@@ -23,7 +23,7 @@ html, body {
   position: relative;
   width: 100%;
   max-width: 1200px;
-  max-height: 100vh;
+  max-height: calc(100vh - 80px);
   aspect-ratio: 4 / 1;
   display: flex;
   justify-content: center;
@@ -51,7 +51,7 @@ html, body {
 /* Modern Frosted Glass Floating Toolbar */
 .ui-bar {
   position: absolute;
-  top: 10px;
+  bottom: calc(100% + 12px);
   left: 12px;
   display: inline-flex;
   align-items: center;
@@ -180,4 +180,16 @@ html, body {
   height: 12px;
   background: rgba(15, 23, 42, 0.12);
   margin: 0 2px;
+}
+
+/* Fallback for ultra-compact viewports: tuck into middle sky clear of Dino's jump lane */
+@media (max-height: 260px) {
+  #game-container {
+    max-height: 100vh;
+  }
+  .ui-bar {
+    bottom: auto;
+    top: 8px;
+    left: 140px; /* Dino jumps at x=50..94, so x=140px is completely clear */
+  }
 }
