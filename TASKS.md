@@ -372,7 +372,7 @@ No change to speed, gravity, spawn, hitboxes, score. Weather max 60 particles. F
 ---
 
 ## T12 — Tests, fidelity check, polish
-Status: TODO | Depends: T11
+Status: DONE | Depends: T11
 
 **CONTEXT**
 TESTING.md.

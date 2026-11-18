@@ -1,0 +1,60 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Golden-State Simulation Tests > reproduces exact deterministic state at steps 100, 1000, and 5000 1`] = `
+{
+  "100": {
+    "biomeIndex": 0,
+    "distance": 60,
+    "isNight": false,
+    "obstaclesCount": 0,
+    "phase": "RUNNING",
+    "score": 2,
+    "speed": 6.01,
+    "step": 100,
+    "trex": {
+      "ducking": false,
+      "h": 47,
+      "jumping": false,
+      "w": 44,
+      "x": 50,
+      "y": 93,
+    },
+  },
+  "1000": {
+    "biomeIndex": 0,
+    "distance": 973,
+    "isNight": false,
+    "obstaclesCount": 0,
+    "phase": "RUNNING",
+    "score": 24,
+    "speed": 6.16,
+    "step": 1000,
+    "trex": {
+      "ducking": false,
+      "h": 47,
+      "jumping": true,
+      "w": 44,
+      "x": 50,
+      "y": 51,
+    },
+  },
+  "5000": {
+    "biomeIndex": 0,
+    "distance": 1613,
+    "isNight": false,
+    "obstaclesCount": 2,
+    "phase": "CRASHED",
+    "score": 40,
+    "speed": 6.263,
+    "step": 5000,
+    "trex": {
+      "ducking": true,
+      "h": 25,
+      "jumping": false,
+      "w": 59,
+      "x": 50,
+      "y": 115,
+    },
+  },
+}
+`;

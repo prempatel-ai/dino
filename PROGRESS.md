@@ -98,3 +98,12 @@ Agent appends here after every task. Newest at bottom. Never delete entries.
 - Tests: 32 unit tests passing, Playwright e2e tests passing with touch emulation.
 - Decisions: T11 — Readability rules manually verified: obstacle skins adhere strictly to base collision box boundaries; props and weather stay outside play lane (x=50..110, y=93..140); flash effects constrained to <= 1/sec; reduced effects toggle cleanly bypasses all auxiliary particle, shake, and banner layers.
 - Notes: Visual upgrades are 100% decoupling-compliant: physics state and RNG remain entirely unaffected whether biomes/effects are active or disabled.
+
+### T12 — Tests, fidelity check, polish — DONE
+- Date: 2026-11-18
+- What changed: Added golden-state simulation test (`golden.test.ts`) validating deterministic state snapshots at steps 100, 1000, and 5000; added automated jump/duck bot survival test (`bot.test.ts`) surviving > 3000 steps across 5 unique seeds; enhanced Playwright end-to-end tests for full boot/play/crash/restart lifecycle; confirmed static production build bundle is ~18.5 KB gzip (well within the 300 KB limit); ticked all items in `TESTING.md` checklist; and documented architecture, controls, and mechanics in `README.md`.
+- Tests: 38 unit and snapshot tests passing in Vitest; all Playwright desktop and mobile e2e tests passing; typecheck, build, and lint green.
+- Decisions: T12 — Golden snapshots and bot tests locked in with deterministic seeds to prevent mechanical regressions in future iterations.
+- Notes: Project meets all acceptance criteria.
+
+COMPLETE

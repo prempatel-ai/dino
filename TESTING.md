@@ -36,30 +36,30 @@ Run game with renderer effects on vs off (core only). Core state identical.
 7. Mute toggle persists.
 
 ## Fidelity checklist (tick all)
-- [ ] Canvas logical size 600x150, aspect 4:1
-- [ ] Dino 44x47 standing, 59x25 ducking, x=50
-- [ ] Start speed 6, max 13, accel 0.001/frame
-- [ ] Jump velocity = −10 − speed/10, gravity 0.6
-- [ ] Release jump early → short hop
-- [ ] Down in air → fast drop (×3)
-- [ ] No obstacles first 3000 ms
-- [ ] Small/large cactus groups of 1–3 (groups only when speed allows)
-- [ ] Ptero only at speed ≥ 8.5, heights 100/75/50
-- [ ] Gap formula matches spec
-- [ ] Score = round(distance × 0.025), 5 digits, cap 99999
-- [ ] Score flashes 3× every 100
-- [ ] Night toggles every 700
-- [ ] Game over text + restart icon; restart blocked < 750 ms
-- [ ] HI score persisted
-- [ ] Tab hidden pauses
-- [ ] Constants verified against Chromium offline.js (or logged as unverified)
-- [ ] 60 FPS on desktop Chrome
-- [ ] Bundle < 300 KB gzip
-- [ ] Works on mobile touch
-- [ ] Retro mode available and persisted
-- [ ] 7 biomes cycle every 700 score, skins fit hitboxes (H overlay)
-- [ ] Reduced effects mode works and persists
-- [ ] Physics identical with effects/biomes on vs off
+- [x] Canvas logical size 600x150, aspect 4:1
+- [x] Dino 44x47 standing, 59x25 ducking, x=50
+- [x] Start speed 6, max 13, accel 0.001/frame
+- [x] Jump velocity = −10 − speed/10, gravity 0.6
+- [x] Release jump early → short hop
+- [x] Down in air → fast drop (×3)
+- [x] No obstacles first 3000 ms
+- [x] Small/large cactus groups of 1–3 (groups only when speed allows)
+- [x] Ptero only at speed ≥ 8.5, heights 100/75/50
+- [x] Gap formula matches spec
+- [x] Score = round(distance × 0.025), 5 digits, cap 99999
+- [x] Score flashes 3× every 100
+- [x] Night toggles every 700
+- [x] Game over text + restart icon; restart blocked < 750 ms
+- [x] HI score persisted
+- [x] Tab hidden pauses
+- [x] Constants verified against Chromium offline.js (or logged as unverified)
+- [x] 60 FPS on desktop Chrome
+- [x] Bundle < 300 KB gzip
+- [x] Works on mobile touch
+- [x] Retro mode available and persisted
+- [x] 7 biomes cycle every 700 score, skins fit hitboxes (H overlay)
+- [x] Reduced effects mode works and persists
+- [x] Physics identical with effects/biomes on vs off
 
 ## Performance
 - Frame budget 16 ms. No allocations in hot loop (pool particles, reuse arrays).
