@@ -15,8 +15,8 @@ export class NeuralPanel {
   private tabsContainer: HTMLElement | null = null;
 
   onModeSelect?: (mode: AIMode) => void;
-  onLoadWeights?: (payload: any) => { success: boolean; modelType: string; message: string };
-  onExportWeights?: () => Record<string, any>;
+  onLoadWeights?: (payload: unknown) => { success: boolean; modelType: string; message: string };
+  onExportWeights?: () => Record<string, unknown>;
 
   private readonly inputNodes = [
     { label: 'distance', key: 'dist' },
@@ -271,8 +271,9 @@ export class NeuralPanel {
             statusMsg.className = 'weights-status-msg is-error';
           }
         }
-      } catch (err: any) {
-        statusMsg.textContent = `JSON Parse Error: ${err.message}`;
+      } catch (err: unknown) {
+        const msg = err instanceof Error ? err.message : String(err);
+        statusMsg.textContent = `JSON Parse Error: ${msg}`;
         statusMsg.className = 'weights-status-msg is-error';
       }
     });

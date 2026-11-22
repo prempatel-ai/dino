@@ -114,21 +114,23 @@ export class AIController {
     return null;
   }
 
-  loadWeights(payload: any): AILoadResult {
+  loadWeights(payload: unknown): AILoadResult {
     if (!payload || typeof payload !== 'object') {
       return { success: false, modelType: 'UNKNOWN', message: 'Invalid payload: expected JSON object.' };
     }
 
+    const data = payload as Record<string, unknown>;
+
     // Check if master bundle
-    if (payload.mlp || payload.linear || payload.neuroevo) {
-      if (payload.linear) {
-        MathPolicies.setLinearParameters(payload.linear);
+    if (data.mlp || data.linear || data.neuroevo) {
+      if (data.linear && typeof data.linear === 'object') {
+        MathPolicies.setLinearParameters(data.linear as Partial<import('./policies').LinearParameters>);
       }
-      if (payload.mlp) {
-        this.ann.loadWeights(payload.mlp);
+      if (data.mlp && typeof data.mlp === 'object') {
+        this.ann.loadWeights(data.mlp as import('./ann').NetworkWeights);
       }
-      if (payload.neuroevo) {
-        this.evolution.loadBestWeights(payload.neuroevo);
+      if (data.neuroevo && typeof data.neuroevo === 'object') {
+        this.evolution.loadBestWeights(data.neuroevo as import('./ann').NetworkWeights);
       }
       return {
         success: true,
@@ -138,9 +140,9 @@ export class AIController {
     }
 
     // Check if MLP weights: w1, b1, w2, b2
-    if (payload.w1 && payload.b1 && payload.w2 && payload.b2) {
-      if (payload.type === 'neuroevo') {
-        this.evolution.loadBestWeights(payload);
+    if (data.w1 && data.b1 && data.w2 && data.b2) {
+      if (data.type === 'neuroevo') {
+        this.evolution.loadBestWeights(data as unknown as import('./ann').NetworkWeights);
         this.setMode('EVOLUTION');
         return {
           success: true,
@@ -148,7 +150,7 @@ export class AIController {
           message: 'Loaded Neuroevolution elite genome weights into current generation.',
         };
       } else {
-        this.ann.loadWeights(payload);
+        this.ann.loadWeights(data as unknown as import('./ann').NetworkWeights);
         this.setMode('ANN');
         return {
           success: true,
@@ -159,13 +161,13 @@ export class AIController {
     }
 
     // Check if 3-byte linear: a, c
-    if (typeof payload.a === 'number' && typeof payload.c === 'number') {
-      MathPolicies.setLinearParameters(payload);
+    if (typeof data.a === 'number' && typeof data.c === 'number') {
+      MathPolicies.setLinearParameters(data as Partial<import('./policies').LinearParameters>);
       this.setMode('LINEAR');
       return {
         success: true,
         modelType: 'LINEAR',
-        message: `Loaded 3-byte linear parameters: ${payload.a} * speed + (${payload.c}).`,
+        message: `Loaded 3-byte linear parameters: ${data.a} * speed + (${data.c}).`,
       };
     }
 
@@ -176,7 +178,7 @@ export class AIController {
     };
   }
 
-  exportAllWeights(): Record<string, any> {
+  exportAllWeights(): Record<string, unknown> {
     return {
       version: '1.0',
       exportedAt: new Date().toISOString(),
