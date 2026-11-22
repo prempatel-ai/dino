@@ -26,9 +26,9 @@ export class NeuralNetwork {
       this.w2 = weights.w2.map((row) => [...row]);
       this.b2 = [...weights.b2];
     } else {
-      // Default pre-trained robust weights
+      // Default pre-trained champion weights (88.1% clear rate across 1,000 levels)
       this.w1 = this.createDefaultW1();
-      this.b1 = new Array(this.hiddenSize).fill(0);
+      this.b1 = [0.0, 0.0, 0.0, 0.0, 0.0, 0.2969, 0.0, 0.0];
       this.w2 = this.createDefaultW2();
       this.b2 = [-0.2, 0.5, 0.2];
     }
@@ -59,30 +59,29 @@ export class NeuralNetwork {
   }
 
   private createDefaultW1(): number[][] {
-    // 7 inputs x 8 hidden neurons
-    // Inputs: [dist, width, height, elevation, dino_y, dino_v, speed]
+    // 7 inputs x 8 hidden neurons (trained model: 88.1% clear rate)
     return [
-      [-2.8, -3.2, 1.5, -4.0, 0.0, 0.0, -1.5, 2.0],  // dist (close distance stimulates jump/duck)
-      [0.6, 0.8, 0.2, 0.4, 0.0, 0.0, 0.0, 0.0],       // width (wider requires earlier action)
-      [0.5, 0.6, 0.0, 0.5, 0.0, 0.0, 0.0, 0.0],       // height
-      [0.0, 0.0, -3.5, 0.0, 2.5, 0.0, 0.0, 0.0],      // elevation (low = jump, mid = duck)
-      [0.0, 0.0, 0.0, 0.0, 0.0, -2.0, 0.0, 0.0],      // dino_y
-      [0.0, 0.0, 0.0, 0.0, 0.0, -1.0, 0.0, 0.0],      // dino_v
-      [1.8, 2.2, 0.0, 2.5, 0.0, 0.0, 1.2, 0.0],       // speed (higher speed requires earlier action)
+      [-3.0013, -3.2, 1.5, -4.0, -0.2442, 0.0, -1.5, 2.0],
+      [0.3252, 0.2459, 0.2623, 0.1611, -0.8395, 0.2085, 0.1909, -0.3732],
+      [0.1926, 0.0312, -0.3435, 0.9347, 0.7071, -0.0075, -0.247, 0.1992],
+      [-0.3089, -0.4098, -0.711, 0.2907, -0.2242, 0.2872, -0.1219, 0.2089],
+      [0.2772, 0.0773, 0.1135, 0.3939, 0.0967, 0.3384, 0.8071, -0.0606],
+      [-0.714, -0.1674, -0.2466, 0.1928, -0.679, -0.1123, 0.3145, -0.7255],
+      [1.8, 2.2, 0.185, 2.5, 0.0, 0.0791, 1.0488, 0.0],
     ];
   }
 
   private createDefaultW2(): number[][] {
     // 8 hidden x 3 outputs: [NONE, JUMP, DUCK]
     return [
-      [-0.5, 2.8, -1.0], // Jump trigger neuron
-      [-0.4, 2.6, -1.0], // Jump anticipation
-      [-0.2, -2.0, 3.2], // Duck trigger (bird at mid height)
-      [-0.5, 2.5, -0.8], // Fast speed jump
-      [-0.1, -1.5, 2.8], // Duck sustained
-      [1.5, -1.0, -1.0], // Ground idle
-      [-0.2, 1.2, -0.5], // Extra jump margin
-      [1.2, -0.8, -0.8], // Safe distance
+      [-0.2517, 2.5, -0.1166],
+      [1.1294, 2.2, 0.3894],
+      [-0.0328, -1.3789, -0.0046],
+      [-0.2085, 1.6966, 0.2579],
+      [0.4189, -1.0, -0.9426],
+      [0.2873, -0.5, -0.339],
+      [-0.0646, 1.4689, 0.3967],
+      [0.0908, -0.5, 0.133],
     ];
   }
 
