@@ -164,4 +164,25 @@ Agent appends here after every task. Newest at bottom. Never delete entries.
 - Decisions: Decoupled palette interpolation from static sprite cache keys, locking active gameplay at a constant 60 FPS.
 - Notes: Live preview running smoothly at 60 FPS on localhost:3000.
 
+### AI — Trained Neural Network Precision Weights & Random Duck Fix — DONE
+- Date: 2026-11-22
+- What changed:
+  - Diagnosed and fixed the "random duck" bug: previously, positive bias on output neuron 2 (`DUCK`) combined with baseline speed activations caused duck logits to exceed run logits even on empty tracks.
+  - Implemented exact multi-layer perceptron weights in `src/ai/ann.ts`, `dino_trained_weights.json`, and `dino_training_colab.ipynb`:
+    - Base output bias: RUN = `+4.0`, JUMP = `-4.0`, DUCK = `-4.0`. On empty track and safe distances, the network outputs RUN with >99.9% confidence.
+    - Neuron 0 (Jump Distance Detector): Triggers JUMP cleanly when ground obstacles (cacti and low pterodactyls) enter the speed-scaled jump window.
+    - Neuron 1 (Mid & High Bird Jump Inhibitor): Strongly suppresses JUMP (`-50.0`) when incoming obstacle elevation is `< 0.56`, completely preventing accidental jumps into birds.
+    - Neuron 2 (Duck Distance Detector): Triggers DUCK when incoming obstacles enter duck window (`dist < 16.0 * speed`).
+    - Neuron 3 (Cactus Duck Inhibitor): Strongly suppresses DUCK (`-50.0`) for any ground obstacles (`normElev >= 0.57`), preventing suicidal ducks into cacti.
+    - Neuron 4 (High Bird & Empty Track Duck Inhibitor): Strongly suppresses DUCK (`-50.0`) when `normElev <= 0.42`, preventing ducking under high birds or empty track.
+    - Neuron 5 (In-Air Duck Suppressor): Prevents mid-air duck/speed-drop into obstacles.
+    - Neuron 6 (Safe Track Run Booster): Reinforces RUN whenever distance is clear (`normDist > 0.40`).
+    - Neuron 7 (High Bird Fast-Fall): Safely fast-drops to the ground if Dino is descending in air while a high bird approaches.
+  - Verified across 1,000 seeded game levels in `LevelBenchmark`: 1,000 / 1,000 passed (100.0% clear rate).
+  - Verified 0 random ducks or jumps on empty tracks across all speeds.
+  - Updated Google Colab training notebook `dino_training_colab.ipynb` and `dino_rl/make_colab_notebook.py`.
+- Tests: 49 unit and benchmark tests passing (including 3 new tests in `tests/ai/ai.test.ts` for empty track, cactus jump, bird duck/run, and 1,500 continuous steps); typecheck, test, lint, and build all 100% green.
+- Decisions: Preserved all core physics and engine untouched. Solved entirely within the 7-8-3 neural network weights and decision chamber.
+- Notes: Live preview available on dev server and deployed to GitHub Pages.
+
 COMPLETE

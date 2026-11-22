@@ -154,4 +154,59 @@ describe('AI Policies & ANN Module', () => {
     expect(bundleRes.success).toBe(true);
     expect(bundleRes.modelType).toBe('BUNDLE');
   });
+
+  it('Trained ANN champion weights never randomly duck or jump on empty tracks', () => {
+    const net = new NeuralNetwork();
+    // Test empty track across multiple distances and speeds
+    for (const dist of [1.0, 0.8, 0.6, 0.5]) {
+      for (const spd of [0.3, 0.4, 0.5, 0.65]) {
+        // [normDist, normWidth, normHeight, normElevation, normDinoY, normDinoV, normSpeed]
+        const pred = net.predict([dist, 0.0, 0.0, 0.0, 0.93, 0.0, spd]);
+        expect(pred.actionIndex).toBe(0); // 0 = RUN (NONE)
+        expect(pred.logits[0]).toBeGreaterThan(pred.logits[1]); // RUN > JUMP
+        expect(pred.logits[0]).toBeGreaterThan(pred.logits[2]); // RUN > DUCK
+      }
+    }
+  });
+
+  it('Trained ANN champion weights correctly handle ground cacti and airborne birds', () => {
+    const net = new NeuralNetwork();
+
+    // 1. Ground Cactus Approaching (normDist = 0.12, normElev = 0.60) -> MUST JUMP
+    const cactusPred = net.predict([0.12, 0.25, 0.50, 0.60, 0.93, 0.0, 0.40]);
+    expect(cactusPred.actionIndex).toBe(1); // 1 = JUMP
+    expect(cactusPred.logits[1]).toBeGreaterThan(cactusPred.logits[0]);
+    expect(cactusPred.logits[1]).toBeGreaterThan(cactusPred.logits[2]);
+
+    // 2. Mid Bird Approaching (normDist = 0.12, normElev = 0.50) -> MUST DUCK
+    const midBirdPred = net.predict([0.12, 0.46, 0.40, 0.50, 0.93, 0.0, 0.40]);
+    expect(midBirdPred.actionIndex).toBe(2); // 2 = DUCK
+    expect(midBirdPred.logits[2]).toBeGreaterThan(midBirdPred.logits[0]);
+    expect(midBirdPred.logits[2]).toBeGreaterThan(midBirdPred.logits[1]);
+
+    // 3. High Bird Approaching (normDist = 0.12, normElev = 0.33) -> MUST RUN (NEVER JUMP)
+    const highBirdPred = net.predict([0.12, 0.46, 0.40, 0.33, 0.93, 0.0, 0.40]);
+    expect(highBirdPred.actionIndex).toBe(0); // 0 = RUN
+    expect(highBirdPred.logits[1]).toBeLessThan(0); // JUMP is heavily suppressed
+  });
+
+  it('Trained ANN mode survives 1500 steps continuously on level seed', () => {
+    const game = new Game(1234);
+    const controller = new AIController();
+    controller.setMode('ANN');
+
+    let input = controller.update(game.state)!;
+    game.step(input);
+
+    let stepsSurvived = 0;
+    for (let s = 0; s < 1500; s++) {
+      if (game.phase === 'CRASHED') break;
+      input = controller.update(game.state)!;
+      game.step(input);
+      stepsSurvived++;
+    }
+
+    expect(stepsSurvived).toBe(1500);
+    expect(game.phase).toBe('RUNNING');
+  });
 });
