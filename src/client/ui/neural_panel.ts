@@ -55,8 +55,6 @@ export class NeuralPanel {
     panel.innerHTML = `
       <div class="deck-header">
         <div class="deck-title-group">
-          <span class="deck-indicator-dot"></span>
-          <span class="deck-badge">PILOT DECK</span>
           <span class="deck-title">Game Pilot &amp; Decision Deck</span>
         </div>
         <div class="deck-mode-tabs" role="tablist" aria-label="Game Mode Selector">

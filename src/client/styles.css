@@ -291,26 +291,6 @@ html, body {
   gap: 8px;
 }
 
-.deck-indicator-dot {
-  width: 7px;
-  height: 7px;
-  border-radius: 50%;
-  background: #10b981;
-  box-shadow: 0 0 6px #10b981;
-}
-
-.deck-badge {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 0.04em;
-  padding: 2px 7px;
-  border-radius: 4px;
-  background: #f0f9ff;
-  color: #0284c7;
-  border: 1px solid #bae6fd;
-  font-family: ui-monospace, SF Mono, Menlo, monospace;
-}
-
 .deck-title {
   font-size: 12px;
   font-weight: 700;
