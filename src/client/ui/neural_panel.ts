@@ -1,5 +1,4 @@
 import type { AIMode, AIDecision, AIEvaluationStats, NetworkState } from '../../ai/types';
-import { LevelBenchmark } from '../../ai/benchmark';
 
 export class NeuralPanel {
   private panelEl: HTMLElement | null = null;
@@ -8,6 +7,10 @@ export class NeuralPanel {
   private pulseTime = 0;
   private isVisible = false;
   private currentMode: AIMode = 'OFF';
+
+  get mode(): AIMode {
+    return this.currentMode;
+  }
 
   private policyDescEl: HTMLElement | null = null;
   private distValEl: HTMLElement | null = null;
@@ -82,50 +85,6 @@ export class NeuralPanel {
         </div>
       </div>
 
-      <div class="deck-benchmark-bar">
-        <div class="bench-actions-group">
-          <button id="btn-run-benchmark" class="deck-bench-btn" title="Run 1,000-level benchmark across reproducible seeds">
-            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
-            <span class="bench-btn-text">Run 1,000-Level Test Suite</span>
-          </button>
-          <button id="btn-toggle-weights" class="deck-bench-btn" title="Load or export trained weights from Google Colab">
-            <svg viewBox="0 0 24 24" width="13" height="13" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
-            <span class="bench-btn-text">Weights Manager</span>
-          </button>
-        </div>
-        <span class="bench-result" id="bench-result-text">Click to simulate and test active policy across 1,000 seeds</span>
-      </div>
-
-      <div class="deck-weights-drawer is-hidden" id="deck-weights-drawer">
-        <div class="weights-drawer-header">
-          <span class="weights-drawer-title">Trained Model Weights (Google Colab / Custom JSON)</span>
-          <button class="weights-close-btn" id="btn-close-weights" title="Close">&times;</button>
-        </div>
-        <div class="weights-drawer-body">
-          <div class="weights-presets-row">
-            <span class="weights-label">PRESETS:</span>
-            <button class="weights-preset-btn" data-preset="mlp">Pre-trained MLP Champion</button>
-            <button class="weights-preset-btn" data-preset="linear">3-Byte Linear (14.5*S - 12.9)</button>
-            <button class="weights-preset-btn" data-preset="export">Export Current JSON</button>
-          </div>
-          <div class="weights-input-group">
-            <div class="weights-file-row">
-              <label class="weights-file-label" for="weights-file-input">
-                <svg viewBox="0 0 24 24" width="14" height="14" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="12" y1="18" x2="12" y2="12"></line><line x1="9" y1="15" x2="15" y2="15"></line></svg>
-                <span>Upload Colab JSON File</span>
-              </label>
-              <input type="file" id="weights-file-input" accept=".json" class="weights-hidden-file">
-              <span class="weights-file-hint" id="weights-filename-hint">or paste JSON directly below:</span>
-            </div>
-            <textarea id="weights-json-area" class="weights-textarea" placeholder="Paste trained JSON weights from Google Colab (e.g. { w1: [...], b1: [...], w2: [...], b2: [...] } or { a: 14.5, c: -12.9 })..."></textarea>
-            <div class="weights-footer-row">
-              <button id="btn-apply-weights" class="weights-apply-btn">Apply &amp; Play with Weights</button>
-              <span class="weights-status-msg" id="weights-status-msg"></span>
-            </div>
-          </div>
-        </div>
-      </div>
-
       <div class="neural-deck-content">
         <canvas id="neural-canvas" width="640" height="200"></canvas>
       </div>
@@ -144,137 +103,6 @@ export class NeuralPanel {
       const mode = target.getAttribute('data-mode') as AIMode;
       if (mode && this.onModeSelect) {
         this.onModeSelect(mode);
-      }
-    });
-
-    const benchBtn = panel.querySelector('#btn-run-benchmark') as HTMLButtonElement | null;
-    const benchResultEl = panel.querySelector('#bench-result-text') as HTMLElement | null;
-
-    benchBtn?.addEventListener('click', () => {
-      if (!benchBtn || !benchResultEl) return;
-      benchBtn.disabled = true;
-      const originalText = benchBtn.innerHTML;
-      benchBtn.textContent = 'Simulating 1,000 Levels...';
-      benchResultEl.textContent = 'Running test suite across seeds 1 to 1000...';
-
-      setTimeout(() => {
-        const bench = new LevelBenchmark();
-        const mode = this.currentMode === 'OFF' ? 'LINEAR' : this.currentMode;
-        const res = bench.run(mode, 1000, 1200);
-        benchBtn.disabled = false;
-        benchBtn.innerHTML = originalText;
-        benchResultEl.innerHTML = `<strong>${mode} Result:</strong> Passed <strong>${res.passedCount} / 1000</strong> (${res.passPercentage}%) &bull; Avg Score: ${res.avgScore} pts &bull; Simulated in ${res.durationMs}ms`;
-      }, 50);
-    });
-
-    // Weights Drawer wiring
-    const toggleWeightsBtn = panel.querySelector('#btn-toggle-weights') as HTMLButtonElement | null;
-    const closeWeightsBtn = panel.querySelector('#btn-close-weights') as HTMLButtonElement | null;
-    const weightsDrawer = panel.querySelector('#deck-weights-drawer') as HTMLElement | null;
-    const fileInput = panel.querySelector('#weights-file-input') as HTMLInputElement | null;
-    const fileHint = panel.querySelector('#weights-filename-hint') as HTMLElement | null;
-    const jsonArea = panel.querySelector('#weights-json-area') as HTMLTextAreaElement | null;
-    const applyBtn = panel.querySelector('#btn-apply-weights') as HTMLButtonElement | null;
-    const statusMsg = panel.querySelector('#weights-status-msg') as HTMLElement | null;
-
-    toggleWeightsBtn?.addEventListener('click', () => {
-      weightsDrawer?.classList.toggle('is-hidden');
-    });
-
-    closeWeightsBtn?.addEventListener('click', () => {
-      weightsDrawer?.classList.add('is-hidden');
-    });
-
-    // Preset buttons
-    panel.querySelectorAll('.weights-preset-btn').forEach((btn) => {
-      btn.addEventListener('click', () => {
-        const preset = btn.getAttribute('data-preset');
-        if (preset === 'export') {
-          if (this.onExportWeights) {
-            const data = this.onExportWeights();
-            const jsonStr = JSON.stringify(data, null, 2);
-            if (jsonArea) jsonArea.value = jsonStr;
-            // Also trigger file download
-            const blob = new Blob([jsonStr], { type: 'application/json' });
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url;
-            a.download = `dino_trained_weights_${Date.now()}.json`;
-            a.click();
-            URL.revokeObjectURL(url);
-            if (statusMsg) {
-              statusMsg.textContent = 'Exported current model weights to JSON!';
-              statusMsg.className = 'weights-status-msg is-success';
-            }
-          }
-        } else if (preset === 'linear') {
-          if (jsonArea) {
-            jsonArea.value = JSON.stringify({ a: 14.5, c: -12.9, duckElev: 75, duckDist: 16 }, null, 2);
-          }
-          if (statusMsg) {
-            statusMsg.textContent = 'Loaded 3-Byte Linear preset into editor.';
-            statusMsg.className = 'weights-status-msg';
-          }
-        } else if (preset === 'mlp') {
-          if (this.onExportWeights) {
-            const data = this.onExportWeights();
-            if (jsonArea) {
-              jsonArea.value = JSON.stringify(data.mlp, null, 2);
-            }
-            if (statusMsg) {
-              statusMsg.textContent = 'Loaded Pre-trained MLP weights into editor.';
-              statusMsg.className = 'weights-status-msg';
-            }
-          }
-        }
-      });
-    });
-
-    // File input handling
-    fileInput?.addEventListener('change', (e) => {
-      const file = (e.target as HTMLInputElement).files?.[0];
-      if (!file) return;
-      if (fileHint) fileHint.textContent = `Selected: ${file.name}`;
-      const reader = new FileReader();
-      reader.onload = (ev) => {
-        const text = ev.target?.result as string;
-        if (jsonArea) jsonArea.value = text;
-        if (statusMsg) {
-          statusMsg.textContent = `Loaded ${file.name} into editor. Click Apply to activate!`;
-          statusMsg.className = 'weights-status-msg';
-        }
-      };
-      reader.readAsText(file);
-    });
-
-    // Apply button
-    applyBtn?.addEventListener('click', () => {
-      if (!jsonArea || !statusMsg) return;
-      const text = jsonArea.value.trim();
-      if (!text) {
-        statusMsg.textContent = 'Please paste JSON or upload a file first.';
-        statusMsg.className = 'weights-status-msg is-error';
-        return;
-      }
-      try {
-        const parsed = JSON.parse(text);
-        if (this.onLoadWeights) {
-          const res = this.onLoadWeights(parsed);
-          if (res.success) {
-            statusMsg.textContent = res.message;
-            statusMsg.className = 'weights-status-msg is-success';
-            if (benchResultEl) {
-              benchResultEl.innerHTML = `<strong>Weights Activated:</strong> ${res.message}`;
-            }
-          } else {
-            statusMsg.textContent = res.message;
-            statusMsg.className = 'weights-status-msg is-error';
-          }
-        }
-      } catch (err: unknown) {
-        const msg = err instanceof Error ? err.message : String(err);
-        statusMsg.textContent = `JSON Parse Error: ${msg}`;
-        statusMsg.className = 'weights-status-msg is-error';
       }
     });
 
