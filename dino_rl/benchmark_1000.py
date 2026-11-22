@@ -33,12 +33,12 @@ class NaiveIfPolicy:
 
 
 class Linear3BytePolicy:
-    """Stage 3: 3-Byte Linear Model (14.5 * speed - 12.9)"""
+    """Pure Logic Policy (15.5 * speed - 10.0 + bird ducking)"""
     def act(self, obs) -> int:
         dist, w, h, elev, dino_y, dino_vy, speed = obs
-        if elev > 40 and elev < 85 and dist < speed * 16:
+        if 40 < elev < 85 and dist < speed * 14.0 and dist > -w:
             return 2  # Duck
-        if dist < (14.5 * speed - 12.9):
+        if dist < (15.5 * speed - 10.0):
             return 1  # Jump
         return 0
 
@@ -160,9 +160,9 @@ if __name__ == "__main__":
     parser.add_argument(
         "--policy",
         type=str,
-        default="custom",
-        choices=["custom", "naive", "linear", "rl"],
-        help="Policy to evaluate: 'custom' (from custom_policy.py), 'naive', 'linear', or 'rl'"
+        default="logic",
+        choices=["logic", "ai", "custom", "linear", "rl", "naive"],
+        help="Policy to evaluate: 'logic' (Pure Math Logic), 'ai' (Trained AI Model), 'custom' (custom_policy.py)"
     )
     parser.add_argument("--levels", type=int, default=1000, help="Number of levels to test (default: 1000)")
     parser.add_argument("--steps", type=int, default=1500, help="Max steps per level (default: 1500)")
@@ -179,13 +179,14 @@ if __name__ == "__main__":
         except Exception as e:
             print(f"[!] Error loading custom_policy.py: {e}")
             sys.exit(1)
+    elif args.policy in ["logic", "linear"]:
+        policy = Linear3BytePolicy()
+        print("[*] Loaded Pure Logic Policy (15.5 * speed - 10.0)")
+    elif args.policy in ["ai", "rl"]:
+        policy = PyTorchRLPolicy(model_path=args.model)
+        print(f"[*] Loaded Trained AI Model from '{args.model}'")
     elif args.policy == "naive":
         policy = NaiveIfPolicy()
-        print("[*] Loaded Stage 1 Naive Heuristic (11 * speed)")
-    elif args.policy == "linear":
-        policy = Linear3BytePolicy()
-        print("[*] Loaded Stage 3 Evolved 3-Byte Model (14.5 * speed - 12.9)")
-    elif args.policy == "rl":
-        policy = PyTorchRLPolicy(model_path=args.model)
+        print("[*] Loaded Naive Jump Heuristic")
 
     run_1000_benchmark(policy, num_levels=args.levels, max_steps=args.steps, start_speed=args.speed)

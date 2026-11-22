@@ -31,9 +31,9 @@ export class AIController {
   }
 
   cycleMode(): AIMode {
-    const modes: AIMode[] = ['OFF', 'NAIVE', 'LINEAR', 'ANN', 'EVOLUTION'];
+    const modes: AIMode[] = ['OFF', 'LINEAR', 'ANN'];
     const idx = modes.indexOf(this.mode);
-    const nextMode = modes[(idx + 1) % modes.length];
+    const nextMode = idx === -1 ? 'LINEAR' : modes[(idx + 1) % modes.length];
     this.setMode(nextMode);
     return nextMode;
   }

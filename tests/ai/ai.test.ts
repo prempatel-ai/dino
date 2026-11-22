@@ -85,10 +85,8 @@ describe('AI Policies & ANN Module', () => {
   it('AIController cycles modes correctly', () => {
     const controller = new AIController();
     expect(controller.mode).toBe('OFF');
-    expect(controller.cycleMode()).toBe('NAIVE');
     expect(controller.cycleMode()).toBe('LINEAR');
     expect(controller.cycleMode()).toBe('ANN');
-    expect(controller.cycleMode()).toBe('EVOLUTION');
     expect(controller.cycleMode()).toBe('OFF');
   });
 

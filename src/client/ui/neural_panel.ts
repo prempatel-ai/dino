@@ -53,15 +53,13 @@ export class NeuralPanel {
       <div class="deck-header">
         <div class="deck-title-group">
           <span class="deck-indicator-dot"></span>
-          <span class="deck-badge">NPU COPILOT</span>
-          <span class="deck-title">Neural Network &amp; Decision Chamber</span>
+          <span class="deck-badge">PILOT DECK</span>
+          <span class="deck-title">Game Pilot &amp; Decision Deck</span>
         </div>
-        <div class="deck-mode-tabs" role="tablist" aria-label="AI Policy Selector">
-          <button class="deck-tab" data-mode="NAIVE">11&times;S Heuristic</button>
-          <button class="deck-tab" data-mode="LINEAR">3-Byte Linear</button>
-          <button class="deck-tab" data-mode="ANN">Neural Net (MLP)</button>
-          <button class="deck-tab" data-mode="EVOLUTION">Neuroevolution</button>
-          <button class="deck-tab" data-mode="OFF">Manual Play</button>
+        <div class="deck-mode-tabs" role="tablist" aria-label="Game Mode Selector">
+          <button class="deck-tab" data-mode="OFF">🎮 Visitor Play (Manual)</button>
+          <button class="deck-tab" data-mode="LINEAR">📐 Pure Logic Policy</button>
+          <button class="deck-tab" data-mode="ANN">🧠 Trained AI Model</button>
         </div>
       </div>
 
@@ -291,7 +289,7 @@ export class NeuralPanel {
   update(
     aiMode: AIMode,
     decision: AIDecision | null,
-    stats: AIEvaluationStats | null,
+    _stats: AIEvaluationStats | null,
     dtMs: number,
   ): void {
     this.currentMode = aiMode;
@@ -315,33 +313,23 @@ export class NeuralPanel {
 
     // Update Policy Description
     if (this.policyDescEl) {
-      if (aiMode === 'NAIVE') {
+      if (aiMode === 'LINEAR' || aiMode === 'NAIVE') {
         this.policyDescEl.innerHTML = `
-          <span class="badge-naive">HEURISTIC</span>
-          <span class="policy-formula">if (distance &lt; 11 * speed) jump()</span>
-          <span class="policy-note">Single-variable linear threshold &bull; 71% benchmark clearance rate</span>
+          <span class="badge-linear">PURE LOGIC</span>
+          <span class="policy-formula">if (distance &lt; 14.5 * speed - 12.0) jump()</span>
+          <span class="policy-note">Deterministic math rules &bull; Ducks mid-air pterodactyls &bull; Zero weights</span>
         `;
-      } else if (aiMode === 'LINEAR') {
+      } else if (aiMode === 'ANN' || aiMode === 'EVOLUTION') {
         this.policyDescEl.innerHTML = `
-          <span class="badge-linear">3-BYTE MODEL</span>
-          <span class="policy-formula">if (distance &lt; 14.5 * speed - 12.9) jump()</span>
-          <span class="policy-note">3-number linear model &bull; 18 bits = 3 Bytes storage &bull; 100% clearance across 30,000 runs</span>
-        `;
-      } else if (aiMode === 'ANN') {
-        this.policyDescEl.innerHTML = `
-          <span class="badge-ann">NEURAL POLICY</span>
+          <span class="badge-ann">TRAINED AI</span>
           <span class="policy-formula">7 Inputs &rarr; 8 Hidden (ReLU) &rarr; 3 Outputs (Softmax)</span>
-          <span class="policy-note">7 inputs (dist, obs_w, obs_h, elev, dino_y, dino_v, speed) &bull; 88 weights</span>
+          <span class="policy-note">Neural network policy running trained weights &bull; Real-time decisions</span>
         `;
-      } else if (aiMode === 'EVOLUTION') {
-        const gen = stats?.generation ?? 1;
-        const fit = Math.round(stats?.bestFitness ?? 0);
-        const alive = stats?.aliveCount ?? 1;
-        const pop = stats?.totalPopulation ?? 20;
+      } else {
         this.policyDescEl.innerHTML = `
-          <span class="badge-evo">NEUROEVOLUTION</span>
-          <span class="policy-formula">Gen ${gen} &bull; Peak Fitness ${fit} &bull; Genomes: ${alive}/${pop}</span>
-          <span class="policy-note">Ghost-mode non-fatal collision training &bull; Continuous mutation</span>
+          <span class="badge-naive">VISITOR PLAY</span>
+          <span class="policy-formula">Space / &uarr; to Jump &bull; &darr; to Duck &bull; Tap on Screen</span>
+          <span class="policy-note">Manual control active &bull; AI is offline &bull; Visitor controls dinosaur</span>
         `;
       }
     }

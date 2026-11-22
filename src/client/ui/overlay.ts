@@ -51,11 +51,9 @@ export class Overlay {
     }
 
     if (this.aiBtn) {
-      let label = 'AI Autopilot: OFF';
-      if (aiMode === 'NAIVE') label = '11×S Heuristic';
-      else if (aiMode === 'LINEAR') label = '3-Byte Linear';
-      else if (aiMode === 'ANN') label = 'Neural Net';
-      else if (aiMode === 'EVOLUTION') label = 'Neuroevolution';
+      let label = 'Visitor Play';
+      if (aiMode === 'LINEAR' || aiMode === 'NAIVE') label = 'Pure Logic';
+      else if (aiMode === 'ANN' || aiMode === 'EVOLUTION') label = 'Trained AI';
 
       const isActive = aiMode !== 'OFF';
       this.aiBtn.classList.toggle('is-ai-active', isActive);
